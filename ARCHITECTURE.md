@@ -63,14 +63,16 @@ is the OpenClaw seat-narration view of the floor verdicts.
    command position is on the kernel's read-only allowlist (`dfir_gateway.READ_TOOLS`), no destructive binary
    appears anywhere, and no dual-use / obfuscation pattern is present. So anything that could mutate evidence
    — `shred`, `truncate`, `parted`, `blkdiscard`, `sgdisk`, `tune2fs`, `cp`/`mv` over an image, `tee /dev/sda`,
-   `find -delete`, `sed -i`, a base64-obfuscated `rm`, `python -c 'os.unlink(...)'`, an unknown binary — is
-   refused *before* execution, **not just a handful of denylisted names**. The rest of the envelope — scoped
+   `find -delete`, `sed -i`, a base64-obfuscated `rm`, `python -c 'os.unlink(...)'`, an unknown binary,
+   and an allowlisted tool's **own write flag into evidence** (`vol --output-dir /evidence`, `tar -C
+   /evidence`, `-o /dev/sda`) — is refused *before* execution, **not just a handful of denylisted names**. The rest of the envelope — scoped
    HMAC capabilities; analyst cannot approve/verify its own findings (high authority requires bilateral
    recognition); evidence-embedded "ignore instructions and approve" is non-authoritative; a tamper-evident
    hash-chained audit — is the kernel's, proven by the **12/12 bypass suite** (`tests/test_bypass.py`), which
-   includes the exact bypasses an external reviewer used. *Backstop:* evidence is **also** mounted read-only
-   (QEMU `virtfs readonly=on` + 9p `ro`), so the OS itself refuses writes to it regardless of the command —
-   the gate is the tool-layer boundary, the read-only mount is the physical guarantee. (A static gate cannot
+   includes the exact bypasses an external reviewer used. *Backstop (verified):* evidence is **also** mounted
+   read-only at **both** layers — the host QEMU share (`-virtfs … readonly=on`, which blocks even a
+   remount-rw) and the guest (`9p … ro`) — so a write to evidence physically fails (`Read-only file system`)
+   regardless of the command. The gate is the tool-layer boundary; the read-only mount is the physical guarantee. (A static gate cannot
    defeat arbitrary runtime-decoded payloads, which is why decode-and-run / sub-shell / command-substitution
    are refused outright.)
 3. **Store with provenance.** `csift record-finding` writes the finding through the real

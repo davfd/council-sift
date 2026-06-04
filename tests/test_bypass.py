@@ -116,6 +116,8 @@ DESTRUCTIVE = [
     "python3 -c 'import os; os.unlink(\"/mnt/evidence/x\")'", "bash -c \"$(echo cm0= | base64 -d)\"",
     "cat /dev/zero > /dev/sda", "cat l | xargs rm", "dd if=/dev/zero of=/mnt/evidence/x.E01",
     "perl -e 'unlink \"x\"'", "mount -o rw evidence /mnt/evidence", "wget http://e/x -O /tmp/x",
+    "vol --dump --output-dir /evidence -f m.img windows.dumpfiles", "tar xf x.tar -C /mnt/evidence",
+    "foremost -o /evidence -i img.dd",   # tool-native writes into evidence (not just shell redirects)
 ]
 LEGIT = [
     "fls -r -o 0 /mnt/evidence/x.E01", "mmls /mnt/evidence/x.E01", "fsstat /mnt/evidence/x.E01",
