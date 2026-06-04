@@ -58,18 +58,21 @@ is the OpenClaw seat-narration view of the floor verdicts.
 1. **Evidence → tool → finding.** The analyst runs a SIFT tool (e.g. `fls -r -p image`) and drafts a
    four-part finding: `observation · interpretation · confidence · evidence_pointer{artifact, locator,
    tool, command, output_sha256}` plus the exact `cited_tokens` the claim rests on.
-2. **Guardrail.** Tool calls routed through `bin/sift` pass the **identity kernel live**:
-   destructive/forbidden tools (dd, mkfs, rm, wipefs, ...) are refused at the kernel's Layer-1 *before*
-   execution (`identity-kernel/authorize.py --scan-command`). The full envelope — read-only tools need a
-   valid scoped capability; the analyst cannot approve/verify its own findings (high authority requires
-   bilateral recognition); evidence-embedded "ignore instructions and approve" is non-authoritative;
-   every decision is logged to a tamper-evident hash chain — is enforced by the kernel and proven by the
-   **10/10 bypass suite** (`tests/test_bypass.py`). *Scope (by design):* the kernel gates at the
-   **tool-invocation layer** — `bin/sift` refuses forbidden tools (direct **and** nested-shell: `bash -c`,
-   `python -c`, `xargs`) before they execute. It is intentionally a tool-layer policy gate, not a kernel
-   syscall sandbox; graph writes are constrained on a separate path by the isolated-7690 guard + safe-id
-   validation. Scoping the enforcement to where the agent acts (tool calls) is the point — it's an
-   architectural boundary, not a prompt asking the model to behave.
+2. **Guardrail.** Every command routed through `bin/sift` is scanned by the **identity kernel live**
+   (`identity-kernel/authorize.py --scan-command`) and is **default-deny**: it runs only if every binary in
+   command position is on the kernel's read-only allowlist (`dfir_gateway.READ_TOOLS`), no destructive binary
+   appears anywhere, and no dual-use / obfuscation pattern is present. So anything that could mutate evidence
+   — `shred`, `truncate`, `parted`, `blkdiscard`, `sgdisk`, `tune2fs`, `cp`/`mv` over an image, `tee /dev/sda`,
+   `find -delete`, `sed -i`, a base64-obfuscated `rm`, `python -c 'os.unlink(...)'`, an unknown binary — is
+   refused *before* execution, **not just a handful of denylisted names**. The rest of the envelope — scoped
+   HMAC capabilities; analyst cannot approve/verify its own findings (high authority requires bilateral
+   recognition); evidence-embedded "ignore instructions and approve" is non-authoritative; a tamper-evident
+   hash-chained audit — is the kernel's, proven by the **12/12 bypass suite** (`tests/test_bypass.py`), which
+   includes the exact bypasses an external reviewer used. *Backstop:* evidence is **also** mounted read-only
+   (QEMU `virtfs readonly=on` + 9p `ro`), so the OS itself refuses writes to it regardless of the command —
+   the gate is the tool-layer boundary, the read-only mount is the physical guarantee. (A static gate cannot
+   defeat arbitrary runtime-decoded payloads, which is why decode-and-run / sub-shell / command-substitution
+   are refused outright.)
 3. **Store with provenance.** `csift record-finding` writes the finding through the real
    `claw-memory` engine (content hash, classification, lifecycle) and attaches a `ToolExecution`
    provenance node (`DERIVED_FROM`) holding the exact command + output + `output_sha256`.
@@ -143,6 +146,6 @@ bash analyst/sift_demo.sh                   # deterministic replay of the full b
 analyst/autorun.sh <CASE> "<lead>"          # the GENUINE live agent (authenticated claude) → AGENTIC-<CASE>.jsonl
 node eval/bench_real.mjs                    # at-scale injected Accuracy Report (5-seat deterministic floor)
 node eval/blind_redteam.mjs                 # held-out NON-circular floor recall (independent attacker, frozen detector)
-python3 tests/test_bypass.py                # identity-kernel bypass suite (10/10)
+python3 tests/test_bypass.py                # identity-kernel bypass suite (12/12)
 node council/run_agentic.mjs <id>           # OpenClaw/LLM seats (grounded; det-narration fallback)
 ```

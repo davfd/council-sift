@@ -135,7 +135,7 @@ with `node eval/bench_real.mjs`.
 | **Autonomous Execution Quality** | The analyst (Claude Code) drafts → Council refutes → analyst **self-corrects with no human** → re-review → Receipt. Demonstrated on synthetic + official disk + official memory. |
 | **IR Accuracy** | Findings split into observation / interpretation / confidence; hallucinations are **caught and recorded** (not silently dropped); 4 distinct error classes detected (below). Benchmarked **at scale on real evidence across all 3 official scenarios** — zero false positives on real findings (see the Accuracy Report). |
 | **Breadth & Depth** | Depth over breadth: deep on **memory (Volatility 3)** and **disk (Sleuth Kit)** against the official ROCBA + SRL-2018 datasets, with an evidence-type-agnostic Council. |
-| **Constraint Implementation** | An **architectural** identity kernel, enforced **live at `bin/sift`** (destructive tools like `dd`/`mkfs`/`rm` refused *before* execution): HMAC-scoped capabilities; analyst *cannot* self-approve; evidence-prompt-injection refusal; tamper-evident audit — with a **10/10 bypass test suite**. |
+| **Constraint Implementation** | An **architectural, default-deny** identity kernel enforced **live at `bin/sift`**: a command runs only if every binary is on the read-only allowlist — everything else (`shred`, `truncate`, `parted`, `cp`/`mv` over an image, `find -delete`, `sed -i`, an obfuscated `rm`, an unknown binary) is refused *before* execution, with dual-use + obfuscation guards. Plus HMAC-scoped capabilities, no self-approval, prompt-injection refusal, tamper-evident audit. Evidence is **also** mounted read-only (OS-enforced backstop). **12/12 bypass suite** — incl. the exact bypasses a reviewer used. |
 | **Audit Trail Quality** | Every finding → `DERIVED_FROM` tool-execution node (+ `output_sha256`); `csift trace` re-hashes the stored output and `csift trace --rerun` **independently re-executes** the recorded command through the SIFT VM to compare a fresh hash; timestamped execution logs; hash-chained Receipts. |
 | **Usability & Documentation** | One-command demos; reproducible core needs no API key; clean, seed-free MIT repo; this README. |
 
@@ -192,7 +192,7 @@ evidence → analyst drafts a 4-part finding (observation / interpretation / con
 | `eval/blind_redteam.mjs` | **held-out, non-circular** — independent LLM attacker, frozen detector, 130 unseen findings | deterministic floor **~65–69% recall @ ~93–96% precision** (the floor's *true* recall; misses listed) |
 | `eval/skeptic_panel_test.mjs` | additive-panel gate logic (mocked votes, no API key) | 2/3→bounce · 1/3→pass · abstains w/o auth · additive-only |
 | `eval/skeptic_live_demo.mjs` | **live** LLM panel on second-order evasions that pass the hardened floor | majority **bounces over-reads the floor missed**; **0 FP** on disciplined findings |
-| `tests/test_bypass.py` | identity kernel | **10/10** (self-approve blocked, evidence prompt-injection refused, forged/expired/scope caps, tamper-evident audit) |
+| `tests/test_bypass.py` | identity kernel | **12/12** (self-approve blocked, evidence prompt-injection refused, forged/expired/scope caps, tamper-evident audit) |
 
 ---
 
@@ -232,7 +232,7 @@ node eval/adversarial_evasions.mjs   # red-team the floor: 12/12 caught, 0 FP (t
 node eval/skeptic_panel_test.mjs     # additive-panel gate logic with mocked votes (2/3→bounce, 1/3→pass)
 # at-scale Accuracy Report on REAL evidence (needs the corpus pulled from SIFT — see evidence-docs):
 #   node eval/bench_real.mjs
-python3 tests/test_bypass.py         # identity-kernel bypass suite (10/10)
+python3 tests/test_bypass.py         # identity-kernel bypass suite (12/12)
 ```
 
 **Forensic demos — point the analyst at your SIFT Workstation.** Edit `bin/sift` so it SSHes to your
@@ -294,7 +294,7 @@ node council/run_agentic.mjs <finding_id>    # OpenClaw seat narration view (Cla
 | `bridge/csift.mjs` | `record-finding` / `trace [--rerun]` / `refute` / `list` over the engine (`--rerun` independently re-executes the recorded tool command). |
 | `bin/` | `sift` (live identity-kernel gate) / `csift` / `council` PATH wrappers for the agent. |
 | `eval/` | `smoke_lifecycle` · `ablation` (incl. the timestomp **Contradiction** case) · `bench_real` (at-scale injected bench) · **`blind_redteam.mjs`** (held-out non-circular floor recall) · `adversarial_evasions.mjs` (floor regression, 12/12) · `skeptic_panel_test`/`skeptic_live_demo` (panel) · `vigia_score.mjs` (external benchmark) · `narrative_report.mjs` · `redact_agentic.mjs` · `export_execution_log.mjs`. |
-| `tests/test_bypass.py` | Identity-kernel bypass suite (10/10). |
+| `tests/test_bypass.py` | Identity-kernel bypass suite (12/12). |
 | `evidence-docs/`, `accuracy-report/`, `execution-logs/`, `docs/` | The submission deliverables. |
 
 ## The forensic seats

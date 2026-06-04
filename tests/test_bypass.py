@@ -98,6 +98,40 @@ check("REFUSALS_LOGGED_AND_AUDIT_CHAIN_TAMPER_EVIDENT",
       len(refusals) == 2 and chain_ok and tamper_detected,
       f"refusals={len(refusals)} chain_ok={chain_ok} tamper_detected={tamper_detected}")
 
+# 11 + 12 — the LIVE scan gate (what bin/sift runs) is DEFAULT-DENY: evidence-destruction is refused
+# (not just a few denylisted names), and read-only forensics still passes. Verified against the exact
+# bypasses an external reviewer used.
+import authorize  # noqa: E402
+
+def _scan(cmd):
+    gw_s, iss_s = fresh()
+    ok, _info = authorize.scan(cmd, gw_s, iss_s, "agent:analyst")
+    return ok
+
+DESTRUCTIVE = [
+    "shred -u /mnt/evidence/x.E01", "truncate -s 0 /mnt/evidence/x.E01", "wipe /mnt/evidence/x",
+    "parted /dev/sda mklabel gpt", "blkdiscard /dev/sda", "sgdisk --zap-all /dev/sda",
+    "tune2fs -L x /dev/sda1", "sed -i s/a/b/ /mnt/evidence/f", "cp /dev/null /mnt/evidence/x.E01",
+    "mv /tmp/x /mnt/evidence/x.E01", "tee /dev/sda < /dev/zero", "find /mnt/evidence -delete",
+    "python3 -c 'import os; os.unlink(\"/mnt/evidence/x\")'", "bash -c \"$(echo cm0= | base64 -d)\"",
+    "cat /dev/zero > /dev/sda", "cat l | xargs rm", "dd if=/dev/zero of=/mnt/evidence/x.E01",
+    "perl -e 'unlink \"x\"'", "mount -o rw evidence /mnt/evidence", "wget http://e/x -O /tmp/x",
+]
+LEGIT = [
+    "fls -r -o 0 /mnt/evidence/x.E01", "mmls /mnt/evidence/x.E01", "fsstat /mnt/evidence/x.E01",
+    "icat -o 0 /mnt/evidence/x.E01 12", "istat /mnt/evidence/x.E01 99",
+    "vol -q -f /tmp/m.img windows.netscan | grep -E \"a|b\" | head -6",
+    "echo forensics | sudo -S mount -t 9p -o trans=virtio,ro evidence /mnt/evidence",
+    "echo forensics | sudo -S chmod -R a+rwx /opt/volatility3/symbols",
+    "7z x -y -o/tmp/m /mnt/evidence/m.7z", "grep -E \"a|b\" /tmp/p.txt | head", "python3 /tmp/build.py",
+]
+_d_refused = [c for c in DESTRUCTIVE if _scan(c)]      # any that slipped through (should be none)
+_l_refused = [c for c in LEGIT if not _scan(c)]        # any legit wrongly blocked (should be none)
+check("LIVE_GATE_REFUSES_EVIDENCE_DESTRUCTION (default-deny)",
+      len(_d_refused) == 0, f"{len(DESTRUCTIVE)-len(_d_refused)}/{len(DESTRUCTIVE)} refused; leaked={_d_refused}")
+check("LIVE_GATE_ALLOWS_READONLY_FORENSICS (no false-deny)",
+      len(_l_refused) == 0, f"{len(LEGIT)-len(_l_refused)}/{len(LEGIT)} allowed; blocked={_l_refused}")
+
 # ── report ──
 passed = sum(1 for _, ok, _ in results if ok)
 for name, ok, detail in results:

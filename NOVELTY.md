@@ -22,7 +22,7 @@ during the hackathon window.
 - The **forensic verifier Council** — the Citation seat (deterministic cited-token-resolution against
   tool output), Synthesis adjudication, and the **self-correction bounce** loop.
 - The **Council Receipt** — a hash-chained, machine-re-verifiable certificate per finding.
-- The **DFIR identity envelope + bypass suite** (`tests/test_bypass.py`, 10/10): analyst-cannot-self-
+- The **DFIR identity envelope + bypass suite** (`tests/test_bypass.py`, 12/12): analyst-cannot-self-
   approve, evidence-prompt-injection refusal, forbidden-tool refusal, capability forgery/expiry/scope.
 - The **Council-OFF vs Council-ON ablation** + Accuracy Report, and integration with the
   SIFT Workstation toolchain (real `fls`/Sleuth Kit execution in the VM).
