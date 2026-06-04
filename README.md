@@ -154,7 +154,7 @@ self-correction record, each claim linked to its receipt + `trace --rerun`), dis
 flowchart LR
   EV["Evidence<br/>disk · memory · logs"] --> TOOLS["SIFT tools<br/>vol3 · plaso · Sleuth Kit · yara"]
   TOOLS --> ANALYST["Analyst agent<br/>(Claude Code)"]
-  ANALYST -- "tool calls via bin/sift" --> KERNEL["Identity Kernel (live at bin/sift)<br/>forbidden-tool gate · HMAC caps · refusals · hash-chain audit"]
+  ANALYST -- "tool calls via bin/sift" --> KERNEL["Identity Kernel (live at bin/sift)<br/>default-deny tool gate · HMAC caps · refusals · hash-chain audit"]
   KERNEL --> BRIDGE["csift bridge<br/>record · trace · refute"]
   BRIDGE --> MEM[("claw-memory-core<br/>Neo4j @7690<br/>MemoryClaim · ToolExecution<br/>ConflictRecord · Receipt")]
   MEM --> COUNCIL["Council seats<br/>Citation · Tool-semantics<br/>Contradiction · Inference · Synthesis"]

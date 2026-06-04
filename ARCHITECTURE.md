@@ -17,7 +17,7 @@ flowchart TB
   end
 
   subgraph HOST["Council-SIFT (host; containerizable into SIFT)"]
-    KERNEL["Identity Kernel<br/>(HMAC capabilities · forbidden-tool &<br/>prompt-injection refusal · hash-chained audit)"]
+    KERNEL["Identity Kernel<br/>(HMAC capabilities · default-deny tool gate &<br/>prompt-injection refusal · hash-chained audit)"]
     BRIDGE["csift bridge<br/>record-finding · trace · refute"]
     MEM[("claw-memory-core<br/>Neo4j @ 7690<br/>MemoryClaim · ToolExecution<br/>ConflictRecord · CouncilReceipt")]
     subgraph COUNCIL["Council seats (5, deterministic)"]
