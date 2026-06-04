@@ -1,0 +1,72 @@
+{
+  "finding_id": "F-analyst-SRL-MEM-002",
+  "nodeId": "de6b869c-da20-586d-a141-29f88c983508",
+  "case": "SRL-MEM",
+  "claim": {
+    "observation": "vol3 windows.psscan shows Rar.exe PID 2524 (parent PID 6352) executed 2018-09-05 on the file server",
+    "interpretation": "Rar.exe is an archiving utility; its execution is a data-staging indicator that warrants disk/timeline correlation — exfiltration is NOT established from a process listing alone",
+    "confidence": "MEDIUM",
+    "content_sha256": "4c3e2bdcde1c7018f2718f4cbd6b1c8ebbf13a24ae8ded9debb3061d6fa5497d"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/srlmem/base-file-memory.img",
+    "locator": "windows.psscan:PID=2524",
+    "tool": "vol3",
+    "command": "vol -q -f /tmp/srlmem/base-file-memory.img windows.psscan | grep -E \"Rar.exe|rdpclip.exe|subject_srv|reg.exe\" | head -6",
+    "output_sha256": "931cf671eece509e4eec669dc0b673a3e361a1af939abe114a919842b5e54f2d"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 3 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "2524",
+          "present": true
+        },
+        {
+          "token": "Rar.exe",
+          "present": true
+        },
+        {
+          "token": "6352",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-02T23:22:51.179Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "e1d79971537e067697f2c5c2e8df175bcd7f7bf8df9880e1165693506e27ad8a"
+}

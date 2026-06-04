@@ -1,0 +1,22 @@
+# Council-SIFT DFIR scope authorization for classify writes.
+# Schema: {authorizations: [{identity: string, authorized_scopes: string[]}]}
+# Scopes: case-findings (analyst findings), case-review (Council seat deposits/verdicts),
+#         analysis-log (free-form reasoning notes).
+
+authorizations:
+  - identity: "operator:examiner"
+    authorized_scopes: ["case-findings", "case-review", "analysis-log"]
+  - identity: "operator:orchestrator"
+    authorized_scopes: ["case-findings", "case-review", "analysis-log"]
+  - identity: "agent:analyst"
+    authorized_scopes: ["case-findings", "analysis-log"]
+  - identity: "seat:citation"
+    authorized_scopes: ["case-review"]
+  - identity: "seat:contradiction"
+    authorized_scopes: ["case-review"]
+  - identity: "seat:synthesis"
+    authorized_scopes: ["case-review", "case-findings"]
+  - identity: "seat:inference"
+    authorized_scopes: ["case-review"]
+  - identity: "seat:tool-semantics"
+    authorized_scopes: ["case-review"]

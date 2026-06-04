@@ -1,0 +1,92 @@
+{
+  "finding_id": "F-analyst-SRL-LIVE-001",
+  "nodeId": "093c47fb-44db-53b1-89b9-b643dae180c8",
+  "case": "SRL-LIVE",
+  "claim": {
+    "observation": "Volatility 3 windows.psscan output (Framework 2.27.0) lists a process with ImageFileName 'subject_srv.ex' at PID 6160, PPID 536, Offset(V) 0x3adf6080, 12 threads, SessionId 0, Wow64 True, CreateTime 2018-09-06 19:25:36.000000 UTC, and ExitTime N/A. It is the only process in this output whose Wow64 column reads True.",
+    "interpretation": "The image name 'subject_srv.ex' (truncated by psscan's fixed-width ImageFileName field) does not match a standard Windows system binary, and the process is a 32-bit (Wow64 True) process under SessionId 0 with 12 threads and no recorded exit time (ExitTime N/A) -- anomalous relative to every other process in this listing. This makes it the strongest candidate for follow-up (image path / on-disk location, loaded DLLs, network handles, and the identity of PPID 536). psscan alone does NOT establish malware, C2, exfiltration, or persistence; those claims would require additional evidence.",
+    "confidence": "MEDIUM",
+    "content_sha256": "5ef49f988a9cb950ad2f4714f018776d0b0b5571f59269f72bda0a3e3e0d48c3"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/srlmem/psscan.txt (host base-file memory image; windows.psscan output)",
+    "locator": "PID 6160 / Offset(V) 0x3adf6080",
+    "tool": "Volatility 3 (windows.psscan)",
+    "command": "sift \"sed -n 1,45p /tmp/srlmem/psscan.txt\"",
+    "output_sha256": "5f6c26447c72de13a6743fc362bbbc0d0adbb1eb15b39878ec30006c9c9e48fc"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 8 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "subject_srv.ex",
+          "present": true
+        },
+        {
+          "token": "6160",
+          "present": true
+        },
+        {
+          "token": "536",
+          "present": true
+        },
+        {
+          "token": "0x3adf6080",
+          "present": true
+        },
+        {
+          "token": "12",
+          "present": true
+        },
+        {
+          "token": "True",
+          "present": true
+        },
+        {
+          "token": "2018-09-06 19:25:36.000000 UTC",
+          "present": true
+        },
+        {
+          "token": "N/A",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-02T21:06:01.691Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "f88c38659804b078b846b5c58428e82c857178d37446e5560ce4dce34fbf2517"
+}

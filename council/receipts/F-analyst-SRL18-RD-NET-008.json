@@ -1,0 +1,109 @@
+{
+  "finding_id": "F-analyst-SRL18-RD-NET-008",
+  "nodeId": "cf2b44bf-1c1b-5bdd-b207-382d6680e4e4",
+  "case": "SRL18-RD-NET",
+  "claim": {
+    "observation": "windows.netscan records an ESTABLISHED TCPv4 session (offset 0xbdee9cf0) from 10.10.6.15:59486 to foreign address 10.10.254.1 foreign port 61613, owned by PID 19688 rubyw.exe. The same scan also records an ESTABLISHED TCPv4 session (offset 0xbc1024d0) from 10.10.6.15:49203 to 10.10.200.207:5672 owned by PID 1736 java.exe.",
+    "interpretation": "rubyw.exe (PID 19688) is the windowless Ruby interpreter; netscan shows it holding a live outbound TCP session from this host to internal host 10.10.254.1 on port 61613. A general-purpose scripting interpreter holding a network session is an artifact worth reviewing, because such interpreters can host either legitimate automation or attacker tooling. Port 61613 is commonly associated with STOMP messaging and the co-resident java.exe session to 10.10.200.207:5672 is commonly AMQP, so the two may belong to a message-bus client stack. This netscan output reflects only the socket endpoints and their live state; it does not reveal the data carried or whether the activity is benign, and is recorded as a lead for corroboration rather than a conclusion.",
+    "confidence": "LOW",
+    "content_sha256": "e2cfc97c5e76bf0c89770dcc731bae3ad7d904444793fb4299be77cf5b58b4aa"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/rd05/base-rd-05-memory.img",
+    "locator": "netscan offset 0xbdee9cf0 (10.10.6.15:59486 -> 10.10.254.1:61613, PID 19688 rubyw.exe); cf. 0xbc1024d0 (java.exe PID 1736 -> 10.10.200.207:5672)",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -f /tmp/rd05/base-rd-05-memory.img windows.netscan",
+    "output_sha256": "974fc6d7847b1a77af92f7e3d405623c5c8adcc3dbb4f7de28b1ca721f0e5c67"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 10 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "rubyw.exe",
+          "present": true
+        },
+        {
+          "token": "19688",
+          "present": true
+        },
+        {
+          "token": "10.10.6.15",
+          "present": true
+        },
+        {
+          "token": "59486",
+          "present": true
+        },
+        {
+          "token": "10.10.254.1",
+          "present": true
+        },
+        {
+          "token": "61613",
+          "present": true
+        },
+        {
+          "token": "ESTABLISHED",
+          "present": true
+        },
+        {
+          "token": "java.exe",
+          "present": true
+        },
+        {
+          "token": "10.10.200.207",
+          "present": true
+        },
+        {
+          "token": "5672",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:32:45.978Z",
+  "prev_receipt_sha256": "caf4428ba9f445a3fd5cde267ab7aea0e2fdea12a7415b526c190e81f1784a8e",
+  "receipt_sha256": "9f0570de4239d46fc6250fda1d967978ed3e4d4f1dddc183b3dc80f0240916a6"
+}

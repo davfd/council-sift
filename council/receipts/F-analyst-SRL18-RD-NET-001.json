@@ -1,0 +1,105 @@
+{
+  "finding_id": "F-analyst-SRL18-RD-NET-001",
+  "nodeId": "c942968d-1509-52f5-bf97-2d5260f95166",
+  "case": "SRL18-RD-NET",
+  "claim": {
+    "observation": "windows.netscan shows local sockets on this host bound to two distinct private IPv4 addresses: 10.10.6.15 (e.g. ncpa_listener. LISTENING on 10.10.6.15:5693; java.exe ESTABLISHED 10.10.6.15:49203 -> 10.10.200.207:5672) and 172.16.6.15 (e.g. System NetBIOS UDP on 172.16.6.15:137 and :138; and 172.16.6.15:3262 ESTABLISHED to 172.16.5.50). svchost.exe PID 392 is LISTENING on 0.0.0.0:3389 (TCPv4 and TCPv6) and System (PID 4) is LISTENING on 0.0.0.0:445.",
+    "interpretation": "The host is dual-homed, with interfaces in both the 10.10.6.0 and 172.16.6.0 segments, and exposes the RDP service (TCP 3389) and SMB (TCP 445). A machine straddling two subnets that also serves RDP/SMB is well positioned to bridge the segments and act as a lateral-movement pivot. No ESTABLISHED inbound session on 3389 appears in this scan, so an active interactive RDP session at the moment of capture is NOT evidenced by netscan alone.",
+    "confidence": "MEDIUM",
+    "content_sha256": "204940388ecb8505c342388e1cf7571f9ae1b1bd364152f03f6914c0982d7345"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/rd05/base-rd-05-memory.img",
+    "locator": "netscan offsets 0x33d4310, 0xbc1024d0, 0xbbf88a30, 0x3392800, 0xbc0ae9e0; IPs 10.10.6.15 and 172.16.6.15",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -f /tmp/rd05/base-rd-05-memory.img windows.netscan",
+    "output_sha256": "974fc6d7847b1a77af92f7e3d405623c5c8adcc3dbb4f7de28b1ca721f0e5c67"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 9 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "10.10.6.15",
+          "present": true
+        },
+        {
+          "token": "172.16.6.15",
+          "present": true
+        },
+        {
+          "token": "5693",
+          "present": true
+        },
+        {
+          "token": "10.10.200.207",
+          "present": true
+        },
+        {
+          "token": "172.16.5.50",
+          "present": true
+        },
+        {
+          "token": "3389",
+          "present": true
+        },
+        {
+          "token": "445",
+          "present": true
+        },
+        {
+          "token": "LISTENING",
+          "present": true
+        },
+        {
+          "token": "svchost.exe",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:26:40.701Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "920601971fc74e4243978f271ab32a148fdfed89368ffa9ac88da9f28836143a"
+}

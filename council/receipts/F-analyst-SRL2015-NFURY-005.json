@@ -1,0 +1,93 @@
+{
+  "finding_id": "F-analyst-SRL2015-NFURY-005",
+  "nodeId": "261f5363-83e9-561b-b820-be411e26f792",
+  "case": "SRL2015-NFURY",
+  "claim": {
+    "observation": "fls of NTFS inode 92258 (Users/vibranium/AppData/Local/Temp/_MEI65402) lists python27.dll, pywintypes27.dll, win32api.pyd, _socket.pyd, _ssl.pyd, _hashlib.pyd, select.pyd, unicodedata.pyd, bz2.pyd, msvcr90.dll and a shell.exe.manifest.",
+    "interpretation": "_MEI65402 is the runtime self-extraction directory of a PyInstaller 'onefile' executable: the _MEI<digits> naming convention plus a bundled CPython 2.7 runtime (python27.dll) and its dependency .pyd/.dll modules are produced only when such a packaged executable is run. The bundle includes networking and TLS modules (_socket.pyd, _ssl.pyd, _hashlib.pyd) and Windows API access (win32api.pyd, pywintypes27.dll), and the embedded application manifest identifies the original program as 'shell' (shell.exe.manifest). This indicates a packaged Python remote-shell/agent was extracted and run under the vibranium profile. The directory does not by itself reveal the C2 address or the shell's exact capabilities.",
+    "confidence": "MEDIUM",
+    "content_sha256": "3f1b3f7ae2ff6c0c549e543d977d9035d61513cf3c36c52361db8c901a8cdde1"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/nfury/win7-64-nfury-c-drive/win7-64-nfury-c-drive.E01",
+    "locator": "NTFS inode 92258; Users/vibranium/AppData/Local/Temp/_MEI65402",
+    "tool": "sleuthkit fls",
+    "command": "fls -p /tmp/nfury/win7-64-nfury-c-drive/win7-64-nfury-c-drive.E01 92258",
+    "output_sha256": "07663299fd86dbbb67823b002582c7aaf9747741844f8eb14213bfffa7407ffb"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 6 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "python27.dll",
+          "present": true
+        },
+        {
+          "token": "pywintypes27.dll",
+          "present": true
+        },
+        {
+          "token": "win32api.pyd",
+          "present": true
+        },
+        {
+          "token": "_socket.pyd",
+          "present": true
+        },
+        {
+          "token": "_ssl.pyd",
+          "present": true
+        },
+        {
+          "token": "shell.exe.manifest",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:49:57.608Z",
+  "prev_receipt_sha256": "cd7e5b6035061151998d3d1025d7f3d4ca588b24823881ff5fe539ee56326d6c",
+  "receipt_sha256": "48493870fb824564228f3139a5b1bc52fc7cf571b486a6fe45e1d4533b39327c"
+}

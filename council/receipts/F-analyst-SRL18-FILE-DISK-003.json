@@ -1,0 +1,93 @@
+{
+  "finding_id": "F-analyst-SRL18-FILE-DISK-003",
+  "nodeId": "a1532688-a730-5542-b6f7-5dc490ba60e8",
+  "case": "SRL18-FILE-DISK",
+  "claim": {
+    "observation": "istat of MFT entry 124753 reports 'Not Allocated File' with a non-resident $DATA stream of Actual Size 203196174 bytes (~194 MB). Recorded names include the 8.3 name 'WINDOW~1.ZZZ' and a long name composed of repeated 'Z' characters ending in a .ZZZ extension. Created 2018-09-05 13:21:53 (UTC), File Modified 2018-09-06 16:22:14 (UTC). icat of the first 16 data bytes returns all zeros.",
+    "interpretation": "Inode 124753 is a deleted ~194 MB file. Reading the start of its $DATA stream with icat returns zero bytes, so the content is not recoverable from these clusters. Its recorded name has been changed to a non-descriptive string of repeated 'Z' characters with a .ZZZ extension. fls reconstructs this same inode's path from the parent directory index as '...\\research\\Rare-Earth Elements\\M&A Targets.zip', placing it as a sibling of the staged M&A research directory (see related finding). So a ~194 MB file associated by path with that M&A research directory was created 2018-09-05 and deleted with its content overwritten by 2018-09-06. The file's actual contents cannot be confirmed because the data is zeroed; this finding establishes only the existence, size, timing, deletion, name change, and content-overwrite of the file -- not the identity of any tool or actor responsible, nor that data left the host.",
+    "confidence": "MEDIUM",
+    "content_sha256": "e44d2356c754bdd634229cfb29e2fee8a5c8daa96253ebcfb9b8aec34c83caa5"
+  },
+  "evidence_pointer": {
+    "artifact": "base-file-cdrive.E01 -- NTFS volume (offset 0), deleted file inode 124753 (fls path: Windows/Logs/WindowsServerBackup/7.15/research/Rare-Earth Elements/M&A Targets.zip)",
+    "locator": "MFT 124753; $DATA actual size 203196174; Created 2018-09-05 13:21:53 UTC",
+    "tool": "istat + icat (The Sleuth Kit)",
+    "command": "istat -o 0 IMG 124753 | grep -E 'Not Allocated File|Actual Size|Created:|File Modified:|Name:' ; icat -o 0 IMG 124753 | head -c 16 | xxd",
+    "output_sha256": "30cfb60736cc19bff093d6f1c35065b35413c687cad5994f99288b936a222847"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 6 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "Not Allocated File",
+          "present": true
+        },
+        {
+          "token": "Actual Size: 203196174",
+          "present": true
+        },
+        {
+          "token": "2018-09-05 13:21:53.240167900 (UTC)",
+          "present": true
+        },
+        {
+          "token": "2018-09-06 16:22:14.756551100 (UTC)",
+          "present": true
+        },
+        {
+          "token": "WINDOW~1.ZZZ",
+          "present": true
+        },
+        {
+          "token": "0000 0000 0000 0000",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:08:20.957Z",
+  "prev_receipt_sha256": "a78dc236fccad682f6be3725541285bfde15992db40dc349d6bbaf1e03c81f93",
+  "receipt_sha256": "0931122c6e01fdf8ef15bedef7e38c8677a2a74b4ed24977b8cae7ee81ef0042"
+}

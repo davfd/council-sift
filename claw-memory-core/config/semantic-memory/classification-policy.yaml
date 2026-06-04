@@ -1,0 +1,33 @@
+# Council-SIFT DFIR classification policy.
+# Schema: {rules: [{source_pattern, memory_types[], confidenceScore?}], unlisted_source_defaults}
+# DFIR findings and seat deposits are MemoryClaims; synthesis may also produce SummaryMemory.
+
+rules:
+  - source_pattern: "agent:analyst"
+    memory_types: ["MemoryClaim"]
+  - source_pattern: "seat:citation"
+    memory_types: ["MemoryClaim"]
+  - source_pattern: "seat:contradiction"
+    memory_types: ["MemoryClaim"]
+  - source_pattern: "seat:inference"
+    memory_types: ["MemoryClaim"]
+  - source_pattern: "seat:tool-semantics"
+    memory_types: ["MemoryClaim"]
+  - source_pattern: "seat:synthesis"
+    memory_types: ["MemoryClaim", "SummaryMemory"]
+  - source_pattern: "operator:examiner"
+    memory_types: ["MemoryClaim"]
+
+unlisted_source_defaults:
+  unlisted_operator:
+    confidenceScore: 0.80
+    status: provisional
+    recalibration_trigger: "first DFIR ablation pass complete"
+  unlisted_agent:
+    confidenceScore: 0.75
+    status: provisional
+    recalibration_trigger: "first DFIR ablation pass complete"
+  unlisted_system:
+    confidenceScore: 0.70
+    status: provisional
+    recalibration_trigger: "first DFIR ablation pass complete"

@@ -1,0 +1,101 @@
+{
+  "finding_id": "F-analyst-SRL18-FILE-DISK-006",
+  "nodeId": "3900cf59-b47b-5590-bea3-7e0bbd393ab5",
+  "case": "SRL18-FILE-DISK",
+  "claim": {
+    "observation": "fls shows two files named StarFury.zip: an allocated (live) file at Shares/shieldbase-share/R&D/StarFury.zip (inode 120557-128-1) and a deleted file at Windows/Logs/WindowsServerBackup/7.13/R&D/StarFury.zip (inode 124702-128-1). istat of the live copy reports 'Allocated File', Created 2018-07-11 16:16:06 (UTC), File Modified 2012-03-12 20:49:00 (UTC), Actual Size 724919. istat of the deleted copy reports 'Not Allocated File', Created 2018-09-05 13:24:07 (UTC), File Modified 2018-09-06 16:22:02 (UTC), Actual Size 724919.",
+    "interpretation": "A file with the same name and identical byte size (724919) as the legitimate R&D-share file StarFury.zip was present, deleted, in the WindowsServerBackup\\7.13\\R&D staging subtree, created 2018-09-05 and deleted 2018-09-06 -- the same window as the M&A research tree and WinRAR tooling. The matching size indicates the staging-tree file is a copy of the genuine R&D share content, showing that the WindowsServerBackup subtree held copies of real file-share data, not just downloaded research. The live R&D-share StarFury.zip (created 2018-07-11, content dated 2012) is still allocated and its timestamps predate the September 2018 activity, so the original share file is intact and is NOT itself an attacker artifact -- only the deleted staging copy is. Identical size is strong but not cryptographic proof of identical content, and this finding does not establish off-host transfer.",
+    "confidence": "MEDIUM",
+    "content_sha256": "ad8cff10c5f9d4a03cf576ea2cb4701633bd881f66f1418813e98d4e506bf065"
+  },
+  "evidence_pointer": {
+    "artifact": "base-file-cdrive.E01 -- NTFS volume (offset 0); live inode 120557 (Shares/shieldbase-share/R&D/StarFury.zip) vs deleted inode 124702 (Windows/Logs/WindowsServerBackup/7.13/R&D/StarFury.zip)",
+    "locator": "MFT 120557 (live, allocated) and MFT 124702 (deleted); both Actual Size 724919",
+    "tool": "fls + istat (The Sleuth Kit)",
+    "command": "fls -r -p -o 0 IMG | grep StarFury.zip ; istat -o 0 IMG 120557 ; istat -o 0 IMG 124702",
+    "output_sha256": "7ae2c713331f93a3f945995031c5c88687ce21bf2bdad4db44532681d8011bcf"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 8 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "Shares/shieldbase-share/R&D/StarFury.zip",
+          "present": true
+        },
+        {
+          "token": "Windows/Logs/WindowsServerBackup/7.13/R&D/StarFury.zip",
+          "present": true
+        },
+        {
+          "token": "Not Allocated File",
+          "present": true
+        },
+        {
+          "token": "Actual Size: 724919",
+          "present": true
+        },
+        {
+          "token": "2018-07-11 16:16:06.501542000 (UTC)",
+          "present": true
+        },
+        {
+          "token": "2012-03-12 20:49:00.000000000 (UTC)",
+          "present": true
+        },
+        {
+          "token": "2018-09-05 13:24:07.257129200 (UTC)",
+          "present": true
+        },
+        {
+          "token": "2018-09-06 16:22:02.115333800 (UTC)",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:13:33.193Z",
+  "prev_receipt_sha256": "ae68bf235cbe60b9095d48f15d4a2c52347d521443840688a47d3e6466c925d2",
+  "receipt_sha256": "9c48d16b65aefd2580fe346e8b684a4c91fb17479ef79f9099a4dd63125edb78"
+}

@@ -1,0 +1,85 @@
+{
+  "finding_id": "F-analyst-ROCBA-DISK-004",
+  "nodeId": "5f4d904c-8c7b-5e4c-a3df-b46c978166a3",
+  "case": "ROCBA-DISK",
+  "claim": {
+    "observation": "fls of 'Users/fredr/Stark Research Labs/Maria Hill - WorkingFiles' (inode 159702) lists research documents including RareEarthDeposits_Confidential.jpg, German-KITT-Specs.docx, German-KITT-Specs-CMDRHill-Laptop.docx, Chord_Spacetime.pdf, Heisenberg_Uncertainty_Principle_and_the.pdf, and SO_5_non_Fermi_liquid_in_a_Coulomb_box_d.pdf. The directory carries a '.SyncRootIdentity' alternate data stream.",
+    "interpretation": "fredr's profile contains a company-context folder ('Stark Research Labs/Maria Hill - WorkingFiles') holding technical research files, one of which is explicitly named RareEarthDeposits_Confidential.jpg and another German-KITT-Specs.docx. The '.SyncRootIdentity' ADS marks the folder as a cloud-synced (OneDrive) location. This places sensitive, named-as-confidential company material in the user's profile; it does not by itself show the material was sent off the host.",
+    "confidence": "HIGH",
+    "content_sha256": "2bbd1ece8b3e23fd181c0bc2b55949ab3faffccdf851e093f777b21719e44046"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01",
+    "locator": "inode 159702 (Users/fredr/Stark Research Labs/Maria Hill - WorkingFiles)",
+    "tool": "fls",
+    "command": "fls \"/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01\" 159702",
+    "output_sha256": "813a9e4577f499c6610bbc766fab275594d511cb36155babaee8f62f099a4d57"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 4 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "RareEarthDeposits_Confidential.jpg",
+          "present": true
+        },
+        {
+          "token": "German-KITT-Specs.docx",
+          "present": true
+        },
+        {
+          "token": "Chord_Spacetime.pdf",
+          "present": true
+        },
+        {
+          "token": ".SyncRootIdentity",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:10:46.833Z",
+  "prev_receipt_sha256": "9653b18d5168e0d952f8d623f0d74cf2060cebd9c778f87a4679e4fb4c7b8468",
+  "receipt_sha256": "e1ab563016221d9353b2359dd8a6dc154bd35c0b30649b620eefc0035039dace"
+}

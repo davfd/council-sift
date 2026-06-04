@@ -1,0 +1,27 @@
+# Council-SIFT DFIR identity registry (seed-free; purpose-built for DFIR).
+# Canonical formats: operator:<id>, seat:<name>, agent:<name>, user:<id>
+
+operators:
+  - stable_id: operator:examiner       # the human DFIR examiner (HITL approver)
+    aliases: [examiner, human]
+  - stable_id: operator:orchestrator   # the Council dispatch orchestrator
+    aliases: [orchestrator]
+
+seats:
+  # Forensic verifier seats — each a distinct refutation lens.
+  - stable_id: seat:citation           # does the evidence pointer resolve to the claimed bytes?
+    aliases: [citation]
+  - stable_id: seat:contradiction      # is there an artifact that disproves this?
+    aliases: [contradiction]
+  - stable_id: seat:synthesis          # adjudicate verdicts + emit the Council Receipt
+    aliases: [synthesis]
+  - stable_id: seat:inference          # does the observation support the interpretation?
+    aliases: [inference]
+  - stable_id: seat:tool-semantics     # is the tool output read correctly?
+    aliases: [tool-semantics, toolsemantics]
+
+agents:
+  - stable_id: agent:analyst           # the Claude Code SIFT analyst that drafts findings
+    aliases: [analyst, claude-analyst]
+
+users: []

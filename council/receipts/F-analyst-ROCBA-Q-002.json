@@ -1,0 +1,76 @@
+{
+  "finding_id": "F-analyst-ROCBA-Q-002",
+  "nodeId": "60e9b48f-1f6f-5d24-883c-196eee7b5f31",
+  "case": "ROCBA-Q",
+  "claim": {
+    "observation": "fls of Users/fredr shows corporate 'OneDrive - Stark Research Labs' plus personal Google Drive, iCloudDrive and 'ROCBA Dropbox' sync folders",
+    "interpretation": "Fred's profile carries the corporate SRL OneDrive and multiple personal cloud-sync clients; these personal sync folders are candidate exfiltration vectors that warrant cloud-log and $MFT timeline correlation (what/where is NOT established from a directory listing)",
+    "confidence": "MEDIUM",
+    "content_sha256": "3a7761833a49da5078ad8c3fe1ce62c3749d233636d5a369b73f2583523c3a7f"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01",
+    "locator": "ntfs:Users/fredr (inode 154910)",
+    "tool": "fls",
+    "command": "fls -f ntfs rocba-cdrive.e01 154910",
+    "output_sha256": "93268eb9b48dddbce2315f07bf98770eabc8a2c9bf2e8f5afb100c251757d9ca"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 4 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "Google Drive",
+          "present": true
+        },
+        {
+          "token": "iCloudDrive",
+          "present": true
+        },
+        {
+          "token": "ROCBA Dropbox",
+          "present": true
+        },
+        {
+          "token": "OneDrive - Stark Research Labs",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-02T20:26:24.785Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "569ead9e6d8d15ccd3590a524906169e56919c165d5746e171e1d9cda38ee6de"
+}

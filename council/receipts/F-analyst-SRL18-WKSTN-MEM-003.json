@@ -1,0 +1,101 @@
+{
+  "finding_id": "F-analyst-SRL18-WKSTN-MEM-003",
+  "nodeId": "a245db32-833a-5f68-bda8-ff25f4e96f0a",
+  "case": "SRL18-WKSTN-MEM",
+  "claim": {
+    "observation": "Volatility3 windows.netscan output contains an ESTABLISHED TCPv4 row with local endpoint 172.16.7.11:3262 and foreign endpoint 172.16.5.50:56722 (PID/Owner fields shown as '-'). The same netscan output also contains a LISTENING TCPv4 row on 0.0.0.0:3262 owned by PID 12528 subject_srv.ex.",
+    "interpretation": "There is an active (ESTABLISHED) TCP session whose local endpoint is 172.16.7.11 port 3262 — the same port on which subject_srv.ex (PID 12528) is LISTENING in the same output — with internal peer 172.16.5.50:56722. This indicates an inbound session from host 172.16.5.50 to the subject_srv.ex listener on the workstation (172.16.7.11) at acquisition time. The connection record does not bind a PID (Owner '-'), so attribution to subject_srv.ex is by local-port correlation rather than direct process ownership; 172.16.5.50 is the apparent remote peer of the backdoor.",
+    "confidence": "MEDIUM",
+    "content_sha256": "18223e6e4bac9e6684d7673d1ab16ca3c67ce5b446c72c80a87de8d0ddd61892"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/wkstn01/base-wkstn-01-memory.img",
+    "locator": "netscan offset 0x8702b325f810; TCP 172.16.7.11:3262 <-> 172.16.5.50:56722 ESTABLISHED",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -q -f /tmp/wkstn01/base-wkstn-01-memory.img windows.netscan",
+    "output_sha256": "4c3f5b487f37a4790d6b47e1406c0cd531bde350071c7883c358c1296592d8df"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 8 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "172.16.7.11",
+          "present": true
+        },
+        {
+          "token": "3262",
+          "present": true
+        },
+        {
+          "token": "172.16.5.50",
+          "present": true
+        },
+        {
+          "token": "56722",
+          "present": true
+        },
+        {
+          "token": "ESTABLISHED",
+          "present": true
+        },
+        {
+          "token": "LISTENING",
+          "present": true
+        },
+        {
+          "token": "subject_srv.ex",
+          "present": true
+        },
+        {
+          "token": "12528",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:21:02.322Z",
+  "prev_receipt_sha256": "8955c9bf834478e4ff52f915bc02a431a29588ed76659531eb689961a864ef88",
+  "receipt_sha256": "43e124b9d74bee4ff2fdce9a0d42e7a20fdfa31d40fb07b6be9432ec8232a735"
+}

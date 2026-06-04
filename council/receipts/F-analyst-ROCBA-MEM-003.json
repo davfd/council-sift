@@ -1,0 +1,101 @@
+{
+  "finding_id": "F-analyst-ROCBA-MEM-003",
+  "nodeId": "1247030f-418c-5366-92ce-7ae82ba72ac8",
+  "case": "ROCBA-MEM",
+  "claim": {
+    "observation": "vol3 windows.netscan shows 118 inbound TCPv4 connection records to local address 192.168.1.5 port 3389, owned by svchost.exe PID 1248, with foreign (source) addresses 81.30.144.115, 213.202.233.104, 201.193.188.114 and 81.19.209.101. States across these records are 113 CLOSED, 4 ESTABLISHED and 1 SYN_RCVD, and the Created timestamps span 2020-11-16 02:30:05 to 2020-11-16 02:36:24 UTC. Four records are ESTABLISHED: 213.202.233.104:45753, 81.30.144.115:51048, 81.30.144.115:5067, and 213.202.233.104:40876.",
+    "interpretation": "Within an approximately six-minute window the workstation (LAN address 192.168.1.5) received a high volume of inbound RDP connections to its port-3389 Terminal Services listener from a small set of non-RFC1918 (external/public) source IP addresses, dominated by 81.30.144.115 and 213.202.233.104. The large number of rapidly cycled CLOSED connections from these two source IPs is characteristic of automated RDP brute-force / password-spray activity against the exposed Remote Desktop service, and the 4 ESTABLISHED records show that TCP-level RDP sessions from those external IPs were live at the time of capture. This is external remote-access activity against the host and a plausible intrusion vector. NOTE: netscan establishes the TCP sessions and their endpoints only; it does not by itself prove that RDP authentication succeeded.",
+    "confidence": "MEDIUM",
+    "content_sha256": "78f9461b763203b106337248b5b7e6cb21c85446a8eabaf843bb1d63b6601f01"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/rocbamem/Rocba-Memory.raw",
+    "locator": "Local 192.168.1.5:3389, PID 1248; 118 records; window 2020-11-16 02:30:05-02:36:24 UTC",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -f /tmp/rocbamem/Rocba-Memory.raw windows.netscan",
+    "output_sha256": "05da6f12765bc64151e74a3f48a2b9116ccb74f672e1f79d2b09e28a1af8d4da"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 8 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "192.168.1.5\t3389\t213.202.233.104\t45753\tESTABLISHED\t1248\tsvchost.exe",
+          "present": true
+        },
+        {
+          "token": "192.168.1.5\t3389\t81.30.144.115\t51048\tESTABLISHED\t1248\tsvchost.exe",
+          "present": true
+        },
+        {
+          "token": "192.168.1.5\t3389\t81.30.144.115\t5067\tESTABLISHED\t1248\tsvchost.exe",
+          "present": true
+        },
+        {
+          "token": "192.168.1.5\t3389\t213.202.233.104\t40876\tESTABLISHED\t1248\tsvchost.exe",
+          "present": true
+        },
+        {
+          "token": "192.168.1.5\t3389\t81.19.209.101\t50424\tSYN_RCVD\t1248\tsvchost.exe",
+          "present": true
+        },
+        {
+          "token": "192.168.1.5\t3389\t201.193.188.114\t63385\tCLOSED\t1248\tsvchost.exe",
+          "present": true
+        },
+        {
+          "token": "2020-11-16 02:30:05.000000 UTC",
+          "present": true
+        },
+        {
+          "token": "2020-11-16 02:36:24.000000 UTC",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:33:33.024Z",
+  "prev_receipt_sha256": "2501f3fda015830f6650d3c5131149c52b7728df31637718db280b6a8ab282b6",
+  "receipt_sha256": "6261559cdbcf1f1ff39fc446974cd6dace4f58fb84f8440f102c0264c125413d"
+}

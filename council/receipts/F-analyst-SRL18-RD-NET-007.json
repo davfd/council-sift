@@ -1,0 +1,93 @@
+{
+  "finding_id": "F-analyst-SRL18-RD-NET-007",
+  "nodeId": "93eb46df-c1e3-5134-8afb-d4a233693d36",
+  "case": "SRL18-RD-NET",
+  "claim": {
+    "observation": "windows.psscan lists PID 17612 powershell.exe with parent PID 3416 (CreateTime 2018-08-31 00:55:20 UTC), and lists PID 3416 as WmiPrvSE.exe with parent PID 796. The same scan lists a further powershell.exe PID 17144 whose parent PID is 17612.",
+    "interpretation": "WmiPrvSE.exe (PID 3416) is the WMI Provider Host. In this scan powershell.exe (PID 17612) is recorded as its child, and a second powershell.exe (PID 17144) as a child of 17612. The presence of PowerShell beneath the WMI Provider Host is an artifact worth examining when assessing whether WMI was used to create processes on this host, and is recorded here as an investigative lead. This output reflects process parent/child lineage only; it does not show the command line that ran, where any request originated, or whether the activity was benign or malicious, so it is reported for corroboration rather than as a conclusion.",
+    "confidence": "MEDIUM",
+    "content_sha256": "3256d2c130d19f367740e730767730e84ab29d77060a377a303429d2fd39f25f"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/rd05/base-rd-05-memory.img",
+    "locator": "psscan PIDs 17612 (powershell, offset 0xbd420500), 3416 (WmiPrvSE, offset 0xbb4f2690), 17144 (powershell, offset 0xbc95b060)",
+    "tool": "volatility3 windows.psscan",
+    "command": "vol -f /tmp/rd05/base-rd-05-memory.img windows.psscan",
+    "output_sha256": "6b8dac2f0149ec843ca33f9e156b260b09a51c6d3d9abacc11784368c353add3"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 6 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "powershell.exe",
+          "present": true
+        },
+        {
+          "token": "17612",
+          "present": true
+        },
+        {
+          "token": "3416",
+          "present": true
+        },
+        {
+          "token": "WmiPrvSE.exe",
+          "present": true
+        },
+        {
+          "token": "796",
+          "present": true
+        },
+        {
+          "token": "17144",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:31:27.919Z",
+  "prev_receipt_sha256": "99991e753d49a0f76157d5df6e33e84b7f17c49143b1bed95b77ef3b95f6aee5",
+  "receipt_sha256": "caf4428ba9f445a3fd5cde267ab7aea0e2fdea12a7415b526c190e81f1784a8e"
+}

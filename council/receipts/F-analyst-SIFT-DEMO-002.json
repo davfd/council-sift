@@ -1,0 +1,68 @@
+{
+  "finding_id": "F-analyst-SIFT-DEMO-002",
+  "nodeId": "3aa5129e-78a7-59b0-9dd0-07abbbe1f1c0",
+  "case": "SIFT-DEMO",
+  "claim": {
+    "observation": "fls -r -p shows a suspiciously named p.exe recovered at inode 12 under the lost+found tree",
+    "interpretation": "Suspicious file present; no rootkit claim is supported by this artifact",
+    "confidence": "MEDIUM",
+    "content_sha256": "843ae09d0698e05102a0fb439ad977b505f157f0bcb0dffd67bbb1e97707da3f"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/case.img",
+    "locator": "fls:inode=12",
+    "tool": "fls",
+    "command": "fls -r -p /tmp/case.img",
+    "output_sha256": "fdf3d227c7fb9df353d3ea919393365dd9399f756fe462daca8410dec86b71b4"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 2 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "12",
+          "present": true
+        },
+        {
+          "token": "p.exe",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-02T20:24:42.187Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "57fa4c1eebf1562ff1225b2aadd8ab2cfff4464235a278772c87b5535ffc8d1e"
+}

@@ -1,0 +1,92 @@
+{
+  "finding_id": "F-analyst-SRL-LIVE2-002",
+  "nodeId": "9341d6ed-9705-5be0-8d05-ae8dba730f77",
+  "case": "SRL-LIVE2",
+  "claim": {
+    "observation": "windows.netscan shows TCPv4 offset 0x7b862500: LocalAddr 10.10.4.5 port 59361 -> ForeignAddr 10.10.254.1 port 61613, State ESTABLISHED, PID 1156, Owner rubyw.exe. A second entry (0x7ccda9d0) shows the same PID 1156 rubyw.exe with a 10.10.4.5 -> 10.10.254.1:61613 connection in state CLOSED.",
+    "interpretation": "At acquisition time the process rubyw.exe (PID 1156) on this host held an active (ESTABLISHED) outbound TCP socket from 10.10.4.5:59361 to 10.10.254.1:61613, and had a prior session to the same host:port that is now CLOSED. Both endpoints are RFC1918 internal addresses, so this is host-to-host internal traffic (not external egress). rubyw.exe is the console-less Ruby interpreter, not a standard Windows service binary, and a Ruby runtime maintaining a live outbound connection on a non-standard high port (61613) to another internal host is anomalous and is the highest-priority triage lead for a possible interactive remote-access/pivot channel. netscan establishes ONLY that this socket existed in this state; it does not establish the peer's role, that any data was transferred, or any tool/actor attribution. Corroboration required before classifying it (process command line, the on-disk rubyw.exe image and its hash, loaded modules/handles, and the role of 10.10.254.1).",
+    "confidence": "MEDIUM",
+    "content_sha256": "b3499b8c09f4f6410fb4fb1cc3f7c92e47dc7331cd0cae253f64d9901d946baf"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/srlmem/base-file-memory.img",
+    "locator": "TCPv4 0x7b862500 (PID 1156, 10.10.4.5:59361 -> 10.10.254.1:61613 ESTABLISHED); also 0x7ccda9d0 CLOSED",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -f /tmp/srlmem/base-file-memory.img windows.netscan",
+    "output_sha256": "40a7628c05abda2bfc7409e48ca005781bf2c2b66372239d35fc1ea7dd66b479"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 8 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "rubyw.exe",
+          "present": true
+        },
+        {
+          "token": "1156",
+          "present": true
+        },
+        {
+          "token": "10.10.4.5",
+          "present": true
+        },
+        {
+          "token": "10.10.254.1",
+          "present": true
+        },
+        {
+          "token": "61613",
+          "present": true
+        },
+        {
+          "token": "ESTABLISHED",
+          "present": true
+        },
+        {
+          "token": "CLOSED",
+          "present": true
+        },
+        {
+          "token": "0x7b862500",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-02T21:11:17.273Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "199102203d467adf83ec1058c66b1a982edc618c9cc1d537c5d28c6d6781e978"
+}

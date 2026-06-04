@@ -1,0 +1,219 @@
+{
+  "benchmark": "annatchijova/vigia-cases (external, held-out ground truth)",
+  "protocol": "case.json to agent (no ground truth); scored vs ground_truth.json (SCORING_GUIDE). Headline accuracy only on the score_against tier; build_and_test reported informational.",
+  "model": "claude-haiku-4-5-20251001 — same model on both arms (analyst baseline and Council); the only variable is the Council. (This is the LLM-driven benchmark; results move with the model.)",
+  "tiers_scored": {
+    "score_against": [
+      "VIGIA-REAL-001",
+      "VIGIA-REAL-002",
+      "VIGIA-REAL-007"
+    ],
+    "build_and_test": [
+      "VIGIA-REAL-003",
+      "VIGIA-REAL-005",
+      "VIGIA-REAL-009"
+    ]
+  },
+  "headline_verdict_accuracy_score_against": {
+    "council_off": 0.6666666666666666,
+    "council_on": 0.6666666666666666
+  },
+  "false_positive_gate_VIGIA_REAL_005": {
+    "expected": "SUSPICION",
+    "council_off": "SUSPICION",
+    "council_on": "SUSPICION",
+    "off_pass": true,
+    "on_pass": true
+  },
+  "mitre_ttp_coverage_score_against_on": {
+    "exact_subtechnique": 0.06666666666666667,
+    "parent_technique": 0.20000000000000004
+  },
+  "ioc_recall_score_against_on": 0.6833333333333332,
+  "peirce_classification": "present in ground truth as a qualitative semiotic breakdown (firstness/secondness/thirdness); not auto-graded here.",
+  "build_and_test_informational": [
+    {
+      "case_id": "VIGIA-REAL-003",
+      "truth": "MALICE",
+      "off": "MALICE",
+      "on": "MALICE"
+    },
+    {
+      "case_id": "VIGIA-REAL-005",
+      "truth": "SUSPICION",
+      "off": "SUSPICION",
+      "on": "SUSPICION"
+    },
+    {
+      "case_id": "VIGIA-REAL-009",
+      "truth": "MALICE",
+      "off": "MALICE",
+      "on": "MALICE"
+    }
+  ],
+  "rows": [
+    {
+      "case_id": "VIGIA-REAL-001",
+      "name": "NIST Hacking Case (Greg Schardt / Mr. Evil)",
+      "tier": "score_against",
+      "truth": "MALICE",
+      "off_verdict": "MALICE",
+      "on_verdict": "MALICE",
+      "off_correct": true,
+      "on_correct": true,
+      "ttps_emitted": [
+        "T1040",
+        "T1046",
+        "T1081",
+        "T1589.001"
+      ],
+      "ttps_truth": [
+        "T1040",
+        "T1552",
+        "T1567",
+        "T1071",
+        "T1018"
+      ],
+      "ttp_exact_on": 0.2,
+      "ttp_parent_on": 0.2,
+      "ioc_recall_on": 0.5,
+      "has_peirce": true,
+      "null_hypothesis": "Greg Schardt is a legitimate security researcher/pentester possessing dual-use network analysis tools for authorized testing with no intent to steal third-party credentials."
+    },
+    {
+      "case_id": "VIGIA-REAL-002",
+      "name": "NIST Data Leakage Case (Sr. Informant)",
+      "tier": "score_against",
+      "truth": "MALICE",
+      "off_verdict": "MALICE",
+      "on_verdict": "MALICE",
+      "off_correct": true,
+      "on_correct": true,
+      "ttps_emitted": [
+        "T1567.002",
+        "T1041",
+        "T1070.004",
+        "T1052"
+      ],
+      "ttps_truth": [
+        "T1048",
+        "T1567",
+        "T1078",
+        "T1070",
+        "T1564"
+      ],
+      "ttp_exact_on": 0,
+      "ttp_parent_on": 0.4,
+      "ioc_recall_on": 0.8,
+      "has_peirce": true,
+      "null_hypothesis": "Legitimate work activity: routine access to networked drives, accidental file management, personal cloud backup, standard tool installation."
+    },
+    {
+      "case_id": "VIGIA-REAL-003",
+      "name": "Ali Hadi Web Server Compromise",
+      "tier": "build_and_test",
+      "truth": "MALICE",
+      "off_verdict": "MALICE",
+      "on_verdict": "MALICE",
+      "off_correct": true,
+      "on_correct": true,
+      "ttps_emitted": [
+        "T1190",
+        "T1505.003",
+        "T1098.001",
+        "T1562.004",
+        "T1021.001"
+      ],
+      "ttps_truth": [
+        "T1190",
+        "T1059",
+        "T1136.001",
+        "T1021.001",
+        "T1505.003",
+        "T1070"
+      ],
+      "ttp_exact_on": 0.5,
+      "ttp_parent_on": 0.5,
+      "ioc_recall_on": 1,
+      "has_peirce": true,
+      "null_hypothesis": "Authorized penetration test of DVWA application with legitimate security testing of SQL injection, webshell deployment, and persistence mechanisms."
+    },
+    {
+      "case_id": "VIGIA-REAL-005",
+      "name": "Ali Hadi Encrypt Them All Case",
+      "tier": "build_and_test",
+      "truth": "SUSPICION",
+      "off_verdict": "SUSPICION",
+      "on_verdict": "SUSPICION",
+      "off_correct": true,
+      "on_correct": true,
+      "ttps_emitted": [
+        "T1027.010"
+      ],
+      "ttps_truth": [
+        "T1027",
+        "T1486",
+        "T1565",
+        "T1564"
+      ],
+      "ttp_exact_on": 0,
+      "ttp_parent_on": 0.25,
+      "ioc_recall_on": null,
+      "has_peirce": true,
+      "null_hypothesis": "Jane is a security-conscious user employing standard encryption tools (BitLocker, GPG, AES) for routine data protection and legitimate secure communication."
+    },
+    {
+      "case_id": "VIGIA-REAL-007",
+      "name": "Digital Corpora Nitroba Harassment",
+      "tier": "score_against",
+      "truth": "MALICE",
+      "off_verdict": "SUSPICION",
+      "on_verdict": "SUSPICION",
+      "off_correct": false,
+      "on_correct": false,
+      "ttps_emitted": [
+        "T1040.001",
+        "T1539"
+      ],
+      "ttps_truth": [
+        "T1566.001",
+        "T1585.001",
+        "T1071.001"
+      ],
+      "ttp_exact_on": 0,
+      "ttp_parent_on": 0,
+      "ioc_recall_on": 0.75,
+      "has_peirce": true,
+      "null_hypothesis": "Johnny Coach is innocent; someone else in the dormitory stole his credentials via plaintext HTTP capture on the unsecured WiFi network."
+    },
+    {
+      "case_id": "VIGIA-REAL-009",
+      "name": "DFRWS 2008 Linux Exfiltration",
+      "tier": "build_and_test",
+      "truth": "MALICE",
+      "off_verdict": "MALICE",
+      "on_verdict": "MALICE",
+      "off_correct": true,
+      "on_correct": true,
+      "ttps_emitted": [
+        "T1005.001",
+        "T1560.001",
+        "T1041",
+        "T1090.003",
+        "T1070.004"
+      ],
+      "ttps_truth": [
+        "T1048",
+        "T1041",
+        "T1071",
+        "T1068",
+        "T1070"
+      ],
+      "ttp_exact_on": 0.2,
+      "ttp_parent_on": 0.4,
+      "ioc_recall_on": 0.16666666666666666,
+      "has_peirce": true,
+      "null_hypothesis": "Stevev was authorized to legitimately copy, compress, and transfer administrative files to an external location for business purposes."
+    }
+  ]
+}

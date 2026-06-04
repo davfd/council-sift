@@ -1,0 +1,51 @@
+{
+  "finding_id": "F-analyst-DEMO-1-002",
+  "nodeId": "fed4d88e-c1a8-52a1-808b-6cead7099c1c",
+  "case": "DEMO-1",
+  "claim": {
+    "observation": "vol3 windows.psscan shows p.exe PID 8260 with parent cmd.exe PID 5948 in C:\\Windows\\Temp\\perfmon",
+    "interpretation": "Suspicious Temp-resident process with a cmd.exe parent; network attribution is not established by this artifact",
+    "confidence": "MEDIUM",
+    "content_sha256": "9142b35e5876d6b93d950c517c5f81515d26a320c96c98de50bcb26972a6ad48"
+  },
+  "evidence_pointer": {
+    "artifact": "/cases/mem/rd01-memory.img",
+    "locator": "windows.psscan:PID=8260",
+    "tool": "vol3",
+    "command": "vol -f /cases/mem/rd01-memory.img windows.psscan",
+    "output_sha256": "5d45720229fd4c0a1a980c20a55cf2458efeef79d145a973e684d99fddb71281"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 3 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "8260",
+          "present": true
+        },
+        {
+          "token": "5948",
+          "present": true
+        },
+        {
+          "token": "c:\\windows\\temp\\perfmon",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-02T16:26:14.534Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "0e9bf0b9575edc0621e2e647362651740c2ea15b60ea93b2604877d3df8e4180"
+}

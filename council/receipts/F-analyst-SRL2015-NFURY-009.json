@@ -1,0 +1,81 @@
+{
+  "finding_id": "F-analyst-SRL2015-NFURY-009",
+  "nodeId": "feeb9bf9-462c-584e-9580-c0a0f05c25cd",
+  "case": "SRL2015-NFURY",
+  "claim": {
+    "observation": "A recovered registry-import file (winclient.reg, NTFS inode 92256, recycled) contains: [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Netman\\domain] with values \"home\"=\"http://199.73.28.114/ads/\" and \"pause\"=dword:00000020.",
+    "interpretation": "This .reg file is structured to configure malware command-and-control by writing under the Netman service key (CurrentControlSet\\Services\\Netman\\domain): 'home' holds the C2 callback URL http://199.73.28.114/ads/ and 'pause' (0x20 = 32) appears to hold a beacon/sleep interval. Storing such settings under a legitimate service's subkey (Netman) is consistent with a concealment/persistence technique. This is consistent with http://199.73.28.114/ads/ being the C2 endpoint specified for the implant. As a standalone .reg artifact it documents an intended configuration only; it does not by itself establish that the key was applied to the live registry, nor that the host communicated with that address - corroboration from the implant binary and registry/network artifacts would be needed.",
+    "confidence": "HIGH",
+    "content_sha256": "05e9fccc6dce1e58c99fedec3cb284f4f8041a59fafb2dddaf3d2d75b198405c"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/nfury/win7-64-nfury-c-drive/win7-64-nfury-c-drive.E01",
+    "locator": "NTFS inode 92256; $Recycle.Bin/S-1-5-...-1673/$R6SODDB/winclient.reg",
+    "tool": "sleuthkit icat + strings -el",
+    "command": "icat /tmp/nfury/win7-64-nfury-c-drive/win7-64-nfury-c-drive.E01 92256 | strings -el",
+    "output_sha256": "d90cf223c7585a1c1cde4b957d1d8d38d3896535359bfd5fb2d1d4524f9148d5"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 3 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "[HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Netman\\domain]",
+          "present": true
+        },
+        {
+          "token": "\"home\"=\"http://199.73.28.114/ads/\"",
+          "present": true
+        },
+        {
+          "token": "\"pause\"=dword:00000020",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:53:45.890Z",
+  "prev_receipt_sha256": "66866b32a586fb068bd93727a21eef3d723761c98a8b2cd4bc2d40d2de7e8f42",
+  "receipt_sha256": "e5ae96abc830fb3627694c6973c72b0a1dbe565487d71df2889d33b4000432fe"
+}

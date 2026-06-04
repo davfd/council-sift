@@ -1,0 +1,101 @@
+{
+  "finding_id": "F-analyst-SRL18-FILE-DISK-005",
+  "nodeId": "4f130851-e38f-5d14-9400-2f7dfda577fe",
+  "case": "SRL18-FILE-DISK",
+  "claim": {
+    "observation": "istat of MFT entry 124824 reports 'Not Allocated File' with a $DATA Actual Size of 862864067 bytes (~823 MB). Two recorded names are the 8.3 name 'WINDOZ~1.ZZZ' and the long name 'windoZZZZZZZZZZZZZZZZZZZZZZZZZZZ.ZZZ'; both have Parent MFT Entry: 5. Created 2018-09-05 14:32:36 (UTC), File Modified 2018-09-06 16:33:25 (UTC). icat returned 0 bytes of recoverable data (recovered_bytes=0).",
+    "interpretation": "Inode 124824 is a deleted ~823 MB file located in the NTFS root directory (Parent MFT Entry 5 is the volume root), i.e. at C:\\. Its name has been changed to a non-descriptive run of repeated 'Z' characters with a .ZZZ extension, and icat recovers no data, so its content is overwritten and unrecoverable. Its creation (2018-09-05 14:32) and modification (2018-09-06 16:33) fall in the same window as the deleted WinRAR tooling (finding F-analyst-SRL18-FILE-DISK-001) and the ~194 MB deleted file (F-analyst-SRL18-FILE-DISK-003). This is a second large file with an obfuscated name and overwritten content. The finding establishes the file's existence, size, root location, timing, name change, and content-overwrite only -- not the responsible tool or actor, the original contents, nor any transfer off the host.",
+    "confidence": "MEDIUM",
+    "content_sha256": "e63a2fd6d9cbd4f0a11d0b43dd9de7c6ca699c1edff24af9de8a668169d3bde6"
+  },
+  "evidence_pointer": {
+    "artifact": "base-file-cdrive.E01 -- NTFS volume (offset 0), deleted file inode 124824 at volume root (C:\\)",
+    "locator": "MFT 124824; Parent MFT Entry 5 (root); $DATA actual size 862864067; Created 2018-09-05 14:32:36 UTC",
+    "tool": "istat + icat (The Sleuth Kit)",
+    "command": "istat -o 0 IMG 124824 | grep -E 'Not Allocated File|Actual Size|Created:|File Modified:|Name:|Parent MFT Entry:' ; echo -n recovered_bytes= ; icat -o 0 IMG 124824 | wc -c",
+    "output_sha256": "ab7ce7e02dd22ce56c3dfd549ae0a4a3f38e0774030f86ec80242476ee181e91"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 8 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "Not Allocated File",
+          "present": true
+        },
+        {
+          "token": "Actual Size: 862864067",
+          "present": true
+        },
+        {
+          "token": "2018-09-05 14:32:36.703124300 (UTC)",
+          "present": true
+        },
+        {
+          "token": "2018-09-06 16:33:25.296374000 (UTC)",
+          "present": true
+        },
+        {
+          "token": "WINDOZ~1.ZZZ",
+          "present": true
+        },
+        {
+          "token": "windoZZZZZZZZZZZZZZZZZZZZZZZZZZZ.ZZZ",
+          "present": true
+        },
+        {
+          "token": "Parent MFT Entry: 5",
+          "present": true
+        },
+        {
+          "token": "recovered_bytes=0",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:10:34.491Z",
+  "prev_receipt_sha256": "44947807e9f003331fc99cac20f88f0c1ba8c42de189654870946a7e31e56b2a",
+  "receipt_sha256": "ae68bf235cbe60b9095d48f15d4a2c52347d521443840688a47d3e6466c925d2"
+}

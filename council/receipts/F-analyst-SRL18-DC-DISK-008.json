@@ -1,0 +1,109 @@
+{
+  "finding_id": "F-analyst-SRL18-DC-DISK-008",
+  "nodeId": "16232a6c-8306-5c21-8e9a-092965aab5b1",
+  "case": "SRL18-DC-DISK",
+  "claim": {
+    "observation": "Counting account-management event IDs in the parsed Security.evtx (base-dc) gives: 4720 account-created=0, 4722 enabled=0, 4726 deleted=0, 4728 added-to-global-group=0, 4732 added-to-local-group=0, 4756 added-to-universal-group=0, 4741 computer-account-created=0, 4724 password-reset=1, 4738 account-changed=1. The single 4724 record (0x00001274) and single 4738 record (0x00001282) both target the domain account tyler.oslund and are both timestamped Sep 06 2018 01:37:23 UTC on base-dc.shieldbase.lan. In the 4724 record the subject-name string is rsydow-a; in the 4738 record the subject-name string is ANONYMOUS LOGON.",
+    "interpretation": "Within this Security log's retained window there is no record of any new domain account being created (4720=0) and no record of any security-group membership being added (4728/4732/4756=0), nor any computer account creation (4741=0). The only account-management actions recorded are one password reset (4724) and one account modification (4738), both against the pre-existing account tyler.oslund at the same instant (2018-09-06 01:37:23 UTC). The 4724 record's subject fields name rsydow-a as the account that performed the reset. A domain password reset is a privileged operation; this record does not indicate whether it was authorized. The practical bearing on the 'unauthorized accounts' lead: the retained Security log holds no evidence of new or newly-group-privileged accounts being created during its coverage, so the on-disk profiles for other accounts were not accompanied by account-creation events inside this window.",
+    "confidence": "MEDIUM",
+    "content_sha256": "6805f9583eae06b9b02e2d34dfc9ae2adcd5c37233341dc0d0be5c7f58d9fbe3"
+  },
+  "evidence_pointer": {
+    "artifact": "C:\\Windows\\System32\\winevt\\Logs\\Security.evtx (account-management EIDs 4720/4724/4738/4728/4732/4756/4741)",
+    "locator": "inode 103887; 4724+4738 records at 2018-09-06 01:37:23 UTC; target tyler.oslund (SID ...-1180)",
+    "tool": "grep/awk over evtxexport text of Security.evtx",
+    "command": "evtxexport -f text /tmp/sec.evtx ; grep -c per account-mgmt EID + awk RS extract of 0x1274 and 0x1282",
+    "output_sha256": "75d7743e4fb9863597b7a14fb3c544cee77bb615823fa6ba65ddfeb9417c06b8"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 10 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "4720_account_created=0",
+          "present": true
+        },
+        {
+          "token": "4728_added_to_global_group=0",
+          "present": true
+        },
+        {
+          "token": "4732_added_to_local_group=0",
+          "present": true
+        },
+        {
+          "token": "4756_added_to_universal_group=0",
+          "present": true
+        },
+        {
+          "token": "4724_password_reset=1",
+          "present": true
+        },
+        {
+          "token": "4738_account_changed=1",
+          "present": true
+        },
+        {
+          "token": "0x00001274 (4724)",
+          "present": true
+        },
+        {
+          "token": "tyler.oslund",
+          "present": true
+        },
+        {
+          "token": "rsydow-a",
+          "present": true
+        },
+        {
+          "token": "base-dc.shieldbase.lan",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:10:12.346Z",
+  "prev_receipt_sha256": "e98bfb60e0fb75a2c7d7d42dcde07bbc98e2dcbc703db6f9d516ca7da865ac26",
+  "receipt_sha256": "db7e7ba3de4876511a644134c52e5b32022f049e8dbb44f18f521b5c96b368ee"
+}

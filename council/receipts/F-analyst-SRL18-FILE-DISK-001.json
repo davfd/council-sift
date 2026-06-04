@@ -1,0 +1,89 @@
+{
+  "finding_id": "F-analyst-SRL18-FILE-DISK-001",
+  "nodeId": "ce1242db-e964-5d7e-baea-baf002cffc52",
+  "case": "SRL18-FILE-DISK",
+  "claim": {
+    "observation": "Recursive Sleuth Kit fls of the NTFS volume (offset 0), filtered to WinRAR file names, returned four entries, each carrying the '*' deletion marker: Rar.exe (MFT 124369-128-3), UnRAR.exe (MFT 124371-128-3), WinRAR.exe (MFT 124372-128-3), and WinRAR.chm (MFT 124377-128-3). The leading '-/r' type and '*' indicate deleted, unallocated files.",
+    "interpretation": "A WinRAR installation -- including the Rar.exe command-line archiver, which intruders routinely use to compress (stage) collected data prior to exfiltration -- was present on this file server and has been deleted (its parent directory C:\\Program Files (x86)\\WinRAR is also deleted, so these now appear as orphaned files). This corroborates, at the file-presence level, the memory-analysis flag that Rar.exe was used for staging on this host. The presence and deletion of the tool does NOT by itself prove the tool was executed; no Prefetch entry and no matching Amcache record were found to confirm execution.",
+    "confidence": "HIGH",
+    "content_sha256": "314d72d5db08ac8b36dd6849e26da7d8a5c8858fc4c33a4620a39abfc4525e8b"
+  },
+  "evidence_pointer": {
+    "artifact": "base-file-cdrive.E01 -- NTFS volume (offset 0), C:\\Program Files (x86)\\WinRAR (deleted)",
+    "locator": "MFT 124369 (Rar.exe), 124371 (UnRAR.exe), 124372 (WinRAR.exe), 124377 (WinRAR.chm)",
+    "tool": "fls (The Sleuth Kit)",
+    "command": "fls -r -o 0 \"/mnt/evidence/Compromised APT Attack Scenarios/SRL 2018/base-file-cdrive.E01\" | grep -E 'Rar\\.exe|UnRAR\\.exe|WinRAR\\.exe|WinRAR\\.chm'",
+    "output_sha256": "c908a5fd82c37778752830f1763b7ed758e1fcdbbbab2e0c471b7d49d0ade662"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 5 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "-/r * 124369-128-3:",
+          "present": true
+        },
+        {
+          "token": "Rar.exe",
+          "present": true
+        },
+        {
+          "token": "UnRAR.exe",
+          "present": true
+        },
+        {
+          "token": "WinRAR.exe",
+          "present": true
+        },
+        {
+          "token": "WinRAR.chm",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:07:02.049Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "a78dc236fccad682f6be3725541285bfde15992db40dc349d6bbaf1e03c81f93"
+}

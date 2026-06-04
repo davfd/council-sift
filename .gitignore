@@ -1,0 +1,26 @@
+node_modules/
+dist/
+*.log
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+.venv/
+
+# raw evidence is NEVER committed (images, E01, memory dumps)
+evidence/
+
+# derived tool output from the official organizer evidence — NOT redistributed.
+# regenerate locally from the SIFT VM with scripts/pull_corpus_from_sift.sh
+eval/corpus/
+
+# NOTE: council/receipts/*.json ARE committed (canonical proof deliverables) — not ignored, so a
+# clean orphan snapshot (PUBLISH.md Option B, git add -A) includes them without a force-add.
+
+*.bak
+*.tmp
+.DS_Store
+
+# full unredacted autonomous transcripts (local audit only)
+*.raw.jsonl

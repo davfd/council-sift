@@ -1,0 +1,89 @@
+{
+  "finding_id": "F-analyst-SRL2015-NFURY-001",
+  "nodeId": "82a4aded-fda4-5b39-b4b7-114d0d3e3fe7",
+  "case": "SRL2015-NFURY",
+  "claim": {
+    "observation": "Volatility3 windows.info on the nfury memory image reports NTBuildLab 7601.17727.amd64fre.win7sp1_gdr., Is64Bit True, KeNumberProcessors 1, NtSystemRoot C:\\Windows, NtProductType NtProductWinNt, and SystemTime 2012-04-06 21:28:39+00:00.",
+    "interpretation": "The acquired memory image is a single-CPU 64-bit Windows 7 SP1 (build 7601.17727) system whose in-image clock read 2012-04-06 21:28:39 UTC. This establishes the OS/build baseline and the reference time for all subsequent memory artifacts on host nfury (10.3.58.6).",
+    "confidence": "HIGH",
+    "content_sha256": "3863701747d682caedb81296feea54086eae65f67edec9af2853b0dbf24a5c45"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/nfury/win7-64-nfury-memory/win7-64-nfury-memory-raw.001",
+    "locator": "KUSER_SHARED_DATA / KdVersionBlock; SystemTime 2012-04-06 21:28:39+00:00",
+    "tool": "volatility3 windows.info",
+    "command": "vol -f /tmp/nfury/win7-64-nfury-memory/win7-64-nfury-memory-raw.001 windows.info",
+    "output_sha256": "f3d3de8185564f702bb6c4060afecd28ca77fcbf1826f5268f30c31dc20a44c2"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 5 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "NTBuildLab\t7601.17727.amd64fre.win7sp1_gdr.",
+          "present": true
+        },
+        {
+          "token": "Is64Bit\tTrue",
+          "present": true
+        },
+        {
+          "token": "SystemTime\t2012-04-06 21:28:39+00:00",
+          "present": true
+        },
+        {
+          "token": "NtSystemRoot\tC:\\Windows",
+          "present": true
+        },
+        {
+          "token": "NtProductType\tNtProductWinNt",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:41:20.027Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "748a3efd9c81c7c38bded152111d6885dd81161f097e9aeba33cac6d5f00946f"
+}
