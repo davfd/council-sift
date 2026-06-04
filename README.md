@@ -189,6 +189,7 @@ evidence → analyst drafts a 4-part finding (observation / interpretation / con
 | `eval/bench_real.mjs` | **real** Sleuth Kit + vol3 output, **all 3 official scenarios** (ROCBA + SRL-2015 + SRL-2018, many hosts) | Council **OFF: every injected hallucination reaches review → ON: caught**; **FP=0** on real findings — see the Accuracy Report |
 | `eval/ablation.mjs` | small labelled sanity set (memory/disk/hash) | Council **OFF 6/6 → ON 0/6** |
 | `eval/adversarial_evasions.mjs` | red-team evasions phrased to dodge the seat vocabulary + substring-citation exploits | floor **0/12 before hardening → 12/12 after, FP=0** (regression test) |
+| `eval/gate_redteam.py` | broad live-gate red-team — 43 evidence-destruction attempts across 9 evasion classes (encoding/eval, indirection, interpreters, wrappers, path-prefixed, quoting, archive-extract, tool-native writes, redirects) | **all 43 refused, 0 false-denies** |
 | `eval/blind_redteam.mjs` | **held-out, non-circular** — independent LLM attacker, frozen detector, 130 unseen findings | deterministic floor **~65–69% recall @ ~93–96% precision** (the floor's *true* recall; misses listed) |
 | `eval/skeptic_panel_test.mjs` | additive-panel gate logic (mocked votes, no API key) | 2/3→bounce · 1/3→pass · abstains w/o auth · additive-only |
 | `eval/skeptic_live_demo.mjs` | **live** LLM panel on second-order evasions that pass the hardened floor | majority **bounces over-reads the floor missed**; **0 FP** on disciplined findings |

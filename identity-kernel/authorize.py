@@ -46,12 +46,28 @@ _DANGER = [
     (re.compile(r">>?\s*/dev/"), "redirect to a device"),
     (re.compile(r">>?\s*[^\s|;&]*\.(E01|e01|aff|aff4|s01|l01|001|img|dd|raw|mem|vmem|bin)\b"), "redirect over an image/dump"),
     (re.compile(r">>?\s*[^\s|;&]*/(mnt/)?evidence\b"), "redirect into evidence"),
-    # tool-NATIVE write into evidence/device (an allowlisted tool's own output/extract flag), e.g.
-    # `vol --output-dir /evidence`, `tar -C /evidence`, `-o /dev/sda`. (Offsets like `fls -o 0` are
-    # numeric, so they don't match the path alternation.)
-    (re.compile(r"(--output-dir|--out-dir|--dump-dir|--output|--export-dir|--save-dir|--directory|-C|-o|-O)\s*=?\s*['\"]?/?(dev/|mnt/evidence/|mnt/evidence\b|evidence/|evidence\b)"), "tool-native write into evidence/device"),
+    (re.compile(r"\bsystem\s*\("), "shell-out via system() (awk/perl/tcl)"),
     (re.compile(r"\b(chmod|chown|chgrp|mkdir|rmdir|touch|fallocate)\b[^|;&]*\s/?(dev|mnt/evidence|evidence)\b"), "mutate device/evidence"),
 ]
+
+
+# A tool's own write/extract flag whose VALUE is a path (starts with /). Used to refuse writes that
+# target evidence or a device via the tool's native flag (vol --output-dir /evidence, tar -C /evidence,
+# unzip -d /evidence, -o/evidence). Numeric values (fls -o 0) don't start with / so they never match.
+_WRITE_FLAG = re.compile(
+    r"(?:--output-dir|--out-dir|--dump-dir|--output|--export-dir|--save-dir|--directory|--exdir"
+    r"|-C|-D|-d|-o|-O)\s*=?\s*['\"]?(/\S+)")
+# An evidence/device path that is OUTPUT (a dir/device), not an INPUT file being read (archive/image ext).
+_EVID_DEV = re.compile(r"^/?(dev/|mnt/evidence|evidence)")
+_INPUT_EXT = re.compile(r"\.(zip|7z|gz|bz2|xz|tar|tgz|tbz|e01|aff4?|s01|l01|img|dd|raw|mem|vmem|001|bin)$", re.I)
+
+
+def _writes_into_evidence(cmd):
+    for m in _WRITE_FLAG.finditer(cmd):
+        val = m.group(1).strip("'\"")
+        if _EVID_DEV.match(val) and not _INPUT_EXT.search(val):
+            return m.group(0)[:48]
+    return None
 
 
 def _command_words(cmd):
@@ -101,6 +117,10 @@ def scan(cmd, gw, iss, caller):
     for rx, why in _DANGER:
         if rx.search(cmd):
             return False, {"refused": why}
+    # tool-native write/extract into evidence or a device (distinguishes an output dir from an input file)
+    w = _writes_into_evidence(cmd)
+    if w:
+        return False, {"refused": f"tool-native write into evidence/device ({w})"}
     # mount must be read-only
     cmds = _command_words(cmd)
     if "mount" in cmds and not re.search(r"\bro\b|--read-only|-[a-zA-Z]*r\b", cmd):
