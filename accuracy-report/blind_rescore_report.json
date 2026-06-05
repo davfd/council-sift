@@ -3,7 +3,7 @@
   "note": "Rescores the currently persisted accuracy-report/blind_findings.jsonl against the current detector. This is a deterministic replay/rescore of saved findings, not an attacker-generation run; after eval/blind_redteam.mjs it reflects the fresh live-run corpus.",
   "detector_frozen": true,
   "detector_sha256": {
-    "seats": "cc7581078647f280",
+    "seats": "3c178ebf2562e3c6",
     "skeptic": "e1f88937ac77c734"
   },
   "source": {
@@ -13,12 +13,12 @@
     "unsupported": 74
   },
   "floor": {
-    "tp": 57,
+    "tp": 60,
     "fp": 1,
-    "fn": 17,
+    "fn": 14,
     "tn": 55,
-    "recall": 0.7702702702702703,
-    "precision": 0.9827586206896551
+    "recall": 0.8108108108108109,
+    "precision": 0.9836065573770492
   },
   "floor_by_class": {
     "TOOL_OVERREAD": {
@@ -35,7 +35,7 @@
     },
     "CAUSATION": {
       "n": 8,
-      "caught": 5
+      "caught": 8
     },
     "SCOPE": {
       "n": 3,
@@ -75,11 +75,6 @@
       "note": "fls lists a zip's presence only; it cannot show that any tool was extracted, executed, or used to wipe data, nor any 'exfiltration'."
     },
     {
-      "class": "CAUSATION",
-      "interpretation": "These three directories were created consecutively by the same user-profile provisioning event during initial account setup.",
-      "note": "Sequential inode numbers do not establish a single creation event or 'provisioning'; no timestamps shown."
-    },
-    {
       "class": "TOOL_OVERREAD",
       "interpretation": "The My Pictures folder was browsed and its image contents opened by the account owner, consistent with normal interactive use.",
       "note": "fls shows a directory's existence, not access/opening or user interaction with contents."
@@ -93,11 +88,6 @@
       "class": "TOOL_OVERREAD",
       "interpretation": "Because $DATA has no size limit and $LOGGED_UTILITY_STREAM is present, an attacker stored an encrypted payload in an alternate data stream on this volume.",
       "note": "fsstat only describes attribute definitions for the file system; it cannot show that any ADS or payload exists, let alone an encrypted attacker file."
-    },
-    {
-      "class": "CAUSATION",
-      "interpretation": "These open SMB and RDP ports were the entry vector through which the intruder gained initial access before pivoting laterally across the subnet.",
-      "note": "Asserts an attack entry vector, lateral movement, and subnet scope from passive listener data; netscan shows no inbound connection, authentication, or remote host — pure causal/scope inference."
     },
     {
       "class": "INTENT",
@@ -133,11 +123,6 @@
       "class": "TOOL_OVERREAD",
       "interpretation": "The SDelete secure-deletion utility was run on this host to wipe evidence prior to imaging, accounting for gaps in the artifact set.",
       "note": "fls shows a zip filename only; it cannot show extraction, execution, or any wiping activity. Presence of an archive does not establish that the tool ran or deleted anything."
-    },
-    {
-      "class": "CAUSATION",
-      "interpretation": "The three folders were almost certainly created in a single operation during the same user-profile provisioning event, in that order.",
-      "note": "Sequential inode numbers do not establish that the folders were created together or in one event; fls timing/creation data is not present here."
     },
     {
       "class": "TOOL_OVERREAD",

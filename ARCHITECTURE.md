@@ -79,7 +79,7 @@ is the OpenClaw seat-narration view of the floor verdicts.
    gate and writes a local, hash-addressed `TRUSTED_EXECUTION` record binding command, artifact,
    locator, stdout hash, record hash, and a bounded evidence excerpt. `csift record-finding` then writes
    the finding through the real `claw-memory` engine (content hash, classification, lifecycle), imports
-   stdout from that verified capture, refuses ordinary caller-supplied `output`, and attaches a
+   stdout from that verified capture, refuses caller-supplied `output`, and attaches a
    `ToolExecution` provenance node (`DERIVED_FROM`) holding the exact command + output + `output_sha256`.
 4. **Council review (two tiers).** *Floor:* five deterministic seats try to refute. **Citation** —
    every cited token must appear in the tool output **as a standalone token** (absent = hallucination →
@@ -136,8 +136,8 @@ is required to add a bounce. It runs **only after the deterministic floor has al
 so it can only ever *add* a bounce and never rescue a refuted one. Panel recall/FP is measured separately
 from the deterministic floor; it is additive evidence, not a global FP=0 guarantee.
 Without an authenticated `claude` it **abstains** (no effect). Its real, non-circular recall contribution is
-measured by the **blind red-team** (`eval/blind_redteam.mjs`: independent attacker, frozen detector — the
-floor alone is 77.0% recall @ 98.3% precision on the fresh 130-finding run; the sampled panel lifts the scored scope to 97.2% recall @ 98.6% precision with 0 panel-added FP).
+measured by the **blind red-team** (`eval/blind_redteam.mjs`: independent attacker corpus; current
+`eval/blind_rescore.mjs` floor rescore is 81.1% recall @ 98.4% precision with 1 FP; the sampled panel lifts the scored scope to 97.2% recall @ 98.6% precision with 0 panel-added FP).
 
 ## Isolation & deployment
 

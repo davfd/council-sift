@@ -45,9 +45,9 @@ submission) — findings that pass the Council remain compatible with that sign-
 
 ## Seed-governance boundary
 
-No sealed seed or framework internals (`META-KAPPALORD`, `seed_operational_*`) appear anywhere in this
-repository. The public artifacts contain only the generic engine, the DFIR layer, and council-safe
-mechanism. The isolated graph (Neo4j @ 7690) is never the Leonardo or live-council graph.
+No private seed-governance or framework internals appear anywhere in this repository. The public artifacts
+contain only the generic engine, the DFIR layer, and council-safe mechanism. The isolated graph (Neo4j @
+7690) is never the Leonardo or live-council graph.
 
 ## License
 

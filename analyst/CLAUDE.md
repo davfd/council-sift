@@ -37,7 +37,7 @@ findings reach the human examiner.
 
 1. **Observation ≠ interpretation.** `observation` is only what the tool printed. Inferences go in
    `interpretation`. Run the tool through `csift capture` first; `record-finding` imports the captured
-   stdout from `execution_ref` and refuses ordinary caller-supplied `output`. The Council's Citation seat checks every `cited_tokens` entry actually appears in
+   stdout from `execution_ref` and refuses caller-supplied `output`. The Council's Citation seat checks every `cited_tokens` entry actually appears in
    that captured output — so **never cite a value that isn't in the tool output** (that is a hallucination and
    will be refuted).
 2. **Cite the evidence you actually have.** If a tool can't establish something (e.g. a process list

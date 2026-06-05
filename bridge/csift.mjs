@@ -18,8 +18,8 @@
  *   { case, observation, interpretation, confidence(HIGH|MEDIUM|LOW|SPECULATIVE),
  *     execution_ref, cited_tokens }
  *
- * Legacy/stored-output-only findings must explicitly set provenance_tier=STORED_OUTPUT_ONLY. Ordinary
- * caller-supplied output is refused; use `capture` to bind stdout to an execution hash first.
+ * New findings must use `execution_ref` from `capture`; caller-supplied output is refused.
+ * STORED_OUTPUT_ONLY is a historical receipt/trace label only, not a record-finding bypass.
  */
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -288,6 +288,7 @@ async function list(svc, caseId) {
 
 async function main() {
   const [cmd, ...args] = process.argv.slice(2);
+  // capture writes local trusted-execution files only and does not touch Neo4j; DB commands below still guard the isolated graph.
   if (cmd === 'capture') { await captureExecution(); process.exit(0); }
   guardIsolated();
   const svc = new Neo4jService();

@@ -42,8 +42,8 @@ absent in the real output), not author opinion:
 | precision / recall · FP / FN | 1.000 / 1.000 · 0 / 0 |
 
 **Honest scope:** precision/FP=0 is measured on this injected-class regression set (template-scoped
-supported findings). The blind red-team report is the unseen precision signal and records 1 FP in the
-fresh run. Recall here is measured against **our injected** hallucination classes (fabricated
+supported findings). The blind red-team rescore is the unseen precision signal and records 1 FP. Recall
+here is measured against **our injected** hallucination classes (fabricated
 token / tool over-read / inference over-reach), which map onto the seats — so high recall is expected by
 construction and is **not** a substitute for an external key. Layer C-bis removes that circularity; layer D
 is external supporting evidence with its own scope.
@@ -51,20 +51,20 @@ is external supporting evidence with its own scope.
 ## C-bis. Blind red-team — the floor's *real* recall, held-out and non-circular
 
 `eval/blind_redteam.mjs` removes layer C's "expected by construction" circularity: an **independent LLM
-attacker** writes fresh findings (supported *and* hallucinated) the seats were never tuned on, the detector
-is **frozen**, and the deterministic floor is scored on the held-out set.
+attacker** wrote fresh findings (supported *and* hallucinated) the seats were not tuned on. After final
+causation hardening, `eval/blind_rescore.mjs` rescored that persisted corpus with the current detector.
 
 | | value |
 |---|---|
 | held-out findings (independent attacker) | 130 (56 supported · 74 unsupported) |
-| deterministic-floor recall (overall / per seed) | **0.770 overall** · s1 0.684 / s2 0.861 |
-| deterministic-floor precision (overall / per seed) | **0.983 overall** · s1 0.963 / s2 1.000 |
+| deterministic-floor recall (overall / per seed) | **0.811 overall** · current rescore over persisted corpus |
+| deterministic-floor precision (overall / per seed) | **0.984 overall** · 1 FP |
 
-**Honest:** this is the floor's *true* recall — the regex seats catch about three-quarters of unseen hallucinations
+**Honest:** this is the floor's *true* recall — the regex seats catch more than four-fifths of unseen hallucinations
 at high precision and **still miss some** (the report enumerates the specific `true_holes`). That residual gap
 is exactly what the **additive LLM skeptic panel** addresses: it runs only after the floor passes a finding
 and bounces second-order over-reads no regex enumerates. Panel recall/FP is measured separately from the
-floor's deterministic precision. Outputs: `accuracy-report/blind_redteam_report.json` (+ `blind_findings.jsonl`).
+floor's deterministic precision. Outputs: `accuracy-report/blind_redteam_report.json`, `accuracy-report/blind_rescore_report.json` (+ `blind_findings.jsonl`).
 
 ## D. External benchmark (supporting evidence, scoped)
 

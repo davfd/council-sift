@@ -10,18 +10,35 @@ EV="/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01"
 CASE=ROCBA-Q
 NF() { grep -vE 'MEM-TELEMETRY|C1-COST|OPENAI_API_KEY absent|injected env' || true; }
 
-OUT="$("$SIFT" "fls -f ntfs \"$EV\" 154910 | grep -iE 'drive|dropbox|onedrive|stark|icloud|documents' | head -16")"
+CMD="fls -f ntfs \"$EV\" 154910 | grep -iE 'drive|dropbox|onedrive|stark|icloud|documents' | head -16"
+CAPTURE_JSON="$(CMD="$CMD" EV="$EV" CASE="$CASE" python3 - <<'PY' | node bridge/csift.mjs capture
+import json, os
+print(json.dumps({
+  "case": os.environ["CASE"],
+  "artifact": os.environ["EV"],
+  "locator": "ntfs:Users/fredr (inode 154910)",
+  "tool": "fls",
+  "command": os.environ["CMD"],
+  "cited_tokens": ["Google Drive", "iCloudDrive", "ROCBA Dropbox", "OneDrive - Stark Research Labs"],
+}))
+PY
+)"
+EXEC_REF="$(printf '%s' "$CAPTURE_JSON" | python3 -c 'import json,sys; print(json.load(sys.stdin)["execution_ref"])')"
+OUT="$(EXEC_REF="$EXEC_REF" python3 - <<'PY'
+import json, os
+print(json.load(open(os.environ["EXEC_REF"]))["output"], end="")
+PY
+)"
 echo "── REAL TSK fls of Users/fredr (official ROCBA evidence) ──"; echo "$OUT"; echo
 
 docker exec councilsift-neo4j cypher-shell -u neo4j -p councilsiftpw \
   "MATCH (n) WHERE n.project_root='$CASE' DETACH DELETE n;" >/dev/null 2>&1 || true
 
-mkf() { OBS="$1" INTERP="$2" CONF="$3" CITED="$4" OUT="$OUT" CASE="$CASE" python3 - <<'PY'
+mkf() { OBS="$1" INTERP="$2" CONF="$3" CITED="$4" EXEC_REF="$EXEC_REF" CASE="$CASE" python3 - <<'PY'
 import json, os
 print(json.dumps({"case":os.environ["CASE"],"observation":os.environ["OBS"],"interpretation":os.environ["INTERP"],
-"confidence":os.environ["CONF"],"artifact":"/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01",
-"locator":"ntfs:Users/fredr (inode 154910)","tool":"fls","command":"fls -f ntfs rocba-cdrive.e01 154910",
-"output":os.environ["OUT"],"provenance_tier":"STORED_OUTPUT_ONLY","cited_tokens":[t for t in os.environ["CITED"].split("|") if t]}))
+"confidence":os.environ["CONF"],"execution_ref":os.environ["EXEC_REF"],
+"cited_tokens":[t for t in os.environ["CITED"].split("|") if t]}))
 PY
 }
 

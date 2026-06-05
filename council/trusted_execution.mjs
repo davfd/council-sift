@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { basename, isAbsolute, join, resolve } from 'node:path';
 
 const SAFE_CASE = /^[A-Za-z0-9._-]{1,128}$/;
@@ -177,15 +177,11 @@ export function resolveFindingEvidence(finding) {
     };
   }
 
-  if (f.output != null && f.provenance_tier !== STORED_OUTPUT_ONLY) {
-    throw new Error('caller-supplied output refused: use csift capture and pass execution_ref/execution_record, or explicitly mark provenance_tier=STORED_OUTPUT_ONLY for legacy stored-output-only material');
-  }
   if (f.provenance_tier === STORED_OUTPUT_ONLY) {
-    return {
-      ...f,
-      output: String(f.output ?? ''),
-      evidence_excerpt: f.evidence_excerpt || boundedEvidenceExcerpt(String(f.output ?? ''), f.cited_tokens || []),
-    };
+    throw new Error('STORED_OUTPUT_ONLY is for historical receipts only; new record-finding input must use csift capture plus execution_ref/execution_record');
+  }
+  if (f.output != null) {
+    throw new Error('caller-supplied output refused: use csift capture and pass execution_ref/execution_record');
   }
   throw new Error('missing trusted execution record: run csift capture first, then record the finding with execution_ref');
 }
@@ -205,6 +201,13 @@ export function readExecutionManifest(dir) {
   }
 }
 
+function atomicWriteJson(path, value) {
+  const body = JSON.stringify(value, null, 2) + '\n';
+  const tmp = `${path}.${process.pid}.${Date.now()}.tmp`;
+  writeFileSync(tmp, body, { flag: 'wx' });
+  renameSync(tmp, path);
+}
+
 export function writeTrustedExecutionRecord(dir, record) {
   const file = executionFilename(record);
   mkdirSync(dir, { recursive: true });
@@ -219,7 +222,7 @@ export function writeTrustedExecutionRecord(dir, record) {
   }
   const manifest = readExecutionManifest(dir);
   manifest.latest_by_execution[record.execution_id] = { file, record_sha256: record.record_sha256, captured_at: record.captured_at };
-  writeFileSync(join(dir, MANIFEST), JSON.stringify(manifest, null, 2) + '\n');
+  atomicWriteJson(join(dir, MANIFEST), manifest);
   return { file, path, manifest };
 }
 

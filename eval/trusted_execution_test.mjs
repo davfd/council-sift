@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
+import { mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import {
   boundedEvidenceExcerpt,
   buildTrustedExecutionRecord,
@@ -70,6 +74,15 @@ assertThrows(
   'caller-supplied output gate',
 );
 
+assertThrows(
+  () => resolveFindingEvidence({
+    case: 'SRL-MEM', artifact: record.artifact, locator: record.locator, tool: record.tool,
+    command: record.command, output, provenance_tier: 'STORED_OUTPUT_ONLY',
+  }),
+  /STORED_OUTPUT_ONLY.*historical receipts only/i,
+  'stored-output-only self-assertion gate',
+);
+
 const resolved = resolveFindingEvidence({
   case: 'SRL-MEM',
   observation: 'vol3 windows.psscan shows Rar.exe PID 2524',
@@ -91,5 +104,35 @@ assertThrows(
   /does not match trusted execution record/i,
   'mismatched caller metadata gate',
 );
+
+const temp = mkdtempSync(join(tmpdir(), 'csift-capture-integration-'));
+try {
+  const wrapper = join(temp, 'mock-sift.sh');
+  writeFileSync(wrapper, '#!/usr/bin/env bash\nprintf "MOCK_WRAPPER_COMMAND=%s\\nRar.exe 2524\\n" "$1"\n', { mode: 0o755 });
+  const capture = spawnSync('node', ['bridge/csift.mjs', 'capture'], {
+    cwd: new URL('..', import.meta.url),
+    env: { ...process.env, CSIFT_SIFT_WRAPPER: wrapper, CSIFT_EXECUTIONS_DIR: temp },
+    input: JSON.stringify({
+      case: 'T4-CAPTURE',
+      artifact: '/tmp/mock.img',
+      locator: 'mock:line=2',
+      tool: 'mock-sift',
+      command: 'mock forensic command --safe',
+      cited_tokens: ['Rar.exe', '2524'],
+    }),
+    encoding: 'utf8',
+  });
+  assert(capture.status === 0, `csift capture integration failed: ${capture.stderr || capture.stdout}`);
+  const summary = JSON.parse(capture.stdout);
+  assert(summary.provenance_tier === 'TRUSTED_EXECUTION', 'capture summary must be trusted execution');
+  const recordPath = join(temp, summary.execution_ref.replace(/^council\/executions\//, ''));
+  const captured = JSON.parse(readFileSync(recordPath, 'utf8'));
+  assert(verifyExecutionRecord(captured).ok === true, 'CLI capture record must verify');
+  assert(captured.output.includes('MOCK_WRAPPER_COMMAND=mock forensic command --safe'), 'capture must execute wrapper with command as argv');
+  assert(captured.bounded_excerpt.excerpt.includes('Rar.exe 2524'), 'capture record must carry bounded cited excerpt');
+  assert(statSync(join(temp, 'manifest.json')).size > 0, 'capture must write manifest');
+} finally {
+  rmSync(temp, { recursive: true, force: true });
+}
 
 console.log('trusted_execution_test PASS');

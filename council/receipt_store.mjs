@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const SAFE_ID = /^[A-Za-z0-9_.:-]+$/;
@@ -39,7 +39,10 @@ export function writeReceiptManifest(dir, manifest) {
     latest_by_finding: manifest.latest_by_finding || {},
     rerun_status_by_finding: manifest.rerun_status_by_finding || {},
   }, null, 2) + '\n';
-  writeFileSync(join(dir, MANIFEST), body);
+  const path = join(dir, MANIFEST);
+  const tmp = `${path}.${process.pid}.${Date.now()}.tmp`;
+  writeFileSync(tmp, body, { flag: 'wx' });
+  renameSync(tmp, path);
 }
 
 export function writeReceiptFiles(dir, receipt) {

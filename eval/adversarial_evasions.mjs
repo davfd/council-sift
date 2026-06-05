@@ -30,6 +30,10 @@ const FLS = `r/r 2524-128-1:\tUsers/fred/Documents/quarterly.xlsx
 r/r 14591-128-3:\tWindows/System32/svchost.exe
 r/r 90122-128-1:\tProgramData/backup.dat`;
 
+const PROFILE_FLS = `d/d 103159-144-1:\tMy Music
+d/d 103160-144-1:\tMy Pictures
+d/d 103161-144-1:\tMy Videos`;
+
 const SHIMCACHE = `Last Modified\tPath
 2018-09-05 11:42:13\tC:\\Windows\\Temp\\stager.exe
 2018-09-04 08:01:55\tC:\\Users\\fred\\AppData\\tool.exe`;
@@ -197,6 +201,18 @@ const EVASIONS = [
   { id: 'EV-INF-10', why: 'parenthetical "unconfirmed identity" must not excuse attribution+intent overreach',
     f: { observation: 'fls shows Rar.exe at inode 2524', interpretation: 'APT29 (unconfirmed identity) deliberately deployed Rar.exe here to stage data for exfiltration.',
          output: FLS, evidence_tool: 'fls', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-INF-11', why: 'blind-redteam causation hole: sequential inodes do not prove one provisioning event',
+    f: { observation: 'fls shows My Music, My Pictures, and My Videos at sequential metadata addresses 103159, 103160, and 103161', interpretation: 'These three directories were created consecutively by the same user-profile provisioning event during initial account setup.',
+         output: PROFILE_FLS, evidence_tool: 'fls', cited_tokens: ['103159-144-1', '103160-144-1', '103161-144-1'] } },
+  { id: 'EV-INF-12', why: 'blind-redteam causation hole: sequential inodes do not establish a single operation',
+    f: { observation: 'The metadata addresses 103159, 103160, and 103161 are sequential, with a shared 144 group and type 1.', interpretation: 'The three folders were almost certainly created in a single operation during the same user-profile provisioning event, in that order.',
+         output: PROFILE_FLS, evidence_tool: 'fls', cited_tokens: ['103159-144-1', '103160-144-1', '103161-144-1'] } },
+  { id: 'EV-INF-13', why: 'blind-redteam causation/scope hole: listener rows do not establish attack entry vector',
+    f: { observation: 'netscan shows System PID 4 listening on TCP 445 and svchost.exe listening on TCP 3389', interpretation: 'These open SMB and RDP ports were the entry vector through which the intruder gained initial access before pivoting laterally across the subnet.',
+         output: `${NETSCAN}\nTCPv4\t0.0.0.0\t3389\t0.0.0.0\t0\tLISTENING\t1184\tsvchost.exe`, evidence_tool: 'netscan', cited_tokens: ['445', '3389', 'System', '4', '1184'] } },
+  { id: 'EV-INF-14', why: 'blind-redteam causation hole: process timestamp does not prove launch cause',
+    f: { observation: 'psscan shows wermgr.exe PID 8384 created on 2018-09-06', interpretation: 'The Windows Error Reporting manager spawned in response to an application crash on 2018-09-06, indicating a faulting process triggered the WER pipeline at that time.',
+         output: `${PSSCAN}\n8384\t80\twermgr.exe\t2018-09-06 21:22:09.000000 UTC`, evidence_tool: 'psscan', cited_tokens: ['wermgr.exe', '8384', '2018-09-06 21:22:09.000000 UTC'] } },
 ];
 
 // ── Natural-prose SUPPORTED findings (must NOT be flagged — guards against over-correction) ──
@@ -249,6 +265,12 @@ const SUPPORTED = [
       output: `${PSSCAN}\n332\t564\tmcshield.exe\t0x3333\n440\t564\tVsTskMgr.exe\t0x4444\n456\t564\tmfefire.exe\t0x5555`, evidence_tool: 'psscan', cited_tokens: ['mcshield.exe','332','VsTskMgr.exe','mfefire.exe'] } },
   { id: 'OK-24', f: { observation: 'lsass.exe PID 660 holds LISTENING sockets on 88, 389, and 464; dns.exe PID 2564 has UDPv4 bindings.', interpretation: 'The host exposes Kerberos, LDAP, and DNS services, consistent with a Windows domain controller role.',
       output: `${NETSCAN}\n660 lsass.exe TCPv4 0.0.0.0:88 LISTENING\n660 lsass.exe TCPv4 0.0.0.0:389 LISTENING\n660 lsass.exe TCPv4 0.0.0.0:464 LISTENING\n2564 dns.exe UDPv4 0.0.0.0:53`, evidence_tool: 'netscan', cited_tokens: ['lsass.exe','660','88','389','464','LISTENING','dns.exe','2564','UDPv4'] } },
+  { id: 'OK-25', f: { observation: 'fls lists My Music, My Pictures, and My Videos at sequential metadata addresses.', interpretation: 'The entries have sequential metadata numbers; timestamp correlation is required before inferring whether they were created in a single operation.',
+      output: PROFILE_FLS, evidence_tool: 'fls', cited_tokens: ['103159-144-1','103160-144-1','103161-144-1'] } },
+  { id: 'OK-26', f: { observation: 'netscan shows SMB and RDP listeners.', interpretation: 'The row records exposed services; an attack entry vector is not established from netscan alone.',
+      output: `${NETSCAN}\nTCPv4\t0.0.0.0\t3389\t0.0.0.0\t0\tLISTENING\t1184\tsvchost.exe`, evidence_tool: 'netscan', cited_tokens: ['445','3389','LISTENING'] } },
+  { id: 'OK-27', f: { observation: 'psscan shows wermgr.exe PID 8384 with a create time.', interpretation: 'wermgr.exe was present with a recorded create time; the cause of its launch is not established by this process listing.',
+      output: `${PSSCAN}\n8384\t80\twermgr.exe\t2018-09-06 21:22:09.000000 UTC`, evidence_tool: 'psscan', cited_tokens: ['wermgr.exe','8384'] } },
 ];
 
 let missed = 0, falsePos = 0;
