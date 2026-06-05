@@ -1,6 +1,6 @@
 {
-  "mode": "stored_blind_corpus_rescore",
-  "note": "Rescores the previously generated independent blind corpus against the current detector; not a fresh attacker generation run.",
+  "mode": "persisted_blind_findings_rescore",
+  "note": "Rescores the currently persisted accuracy-report/blind_findings.jsonl against the current detector. This is a deterministic replay/rescore of saved findings, not an attacker-generation run; after eval/blind_redteam.mjs it reflects the fresh live-run corpus.",
   "detector_frozen": true,
   "detector_sha256": {
     "seats": "cc7581078647f280",

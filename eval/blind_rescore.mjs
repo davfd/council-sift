@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /**
- * blind_rescore.mjs — rescore the persisted independent blind findings against the current frozen detector.
+ * blind_rescore.mjs — rescore the currently persisted blind findings against the current frozen detector.
  *
- * This is not a fresh attacker generation run; it is a detector-regression gate over the previously
- * generated blind corpus in accuracy-report/blind_findings.jsonl. Use it when the Claude attacker is
- * unavailable, and keep eval/blind_redteam.mjs as the full live generation protocol.
+ * This is not an attacker-generation run; it is a detector-regression / determinism gate over whatever
+ * blind corpus is currently persisted in accuracy-report/blind_findings.jsonl. After a live
+ * eval/blind_redteam.mjs run, that file contains the fresh live-run findings; otherwise it may contain
+ * an older saved blind corpus. Keep eval/blind_redteam.mjs as the full live generation protocol.
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -57,8 +58,8 @@ const fps = rescored.filter((f) => f.ground_truth?.label === 'supported' && f.fl
 const fns = rescored.filter((f) => f.ground_truth?.label === 'unsupported' && !f.floor_caught);
 
 const report = {
-  mode: 'stored_blind_corpus_rescore',
-  note: 'Rescores the previously generated independent blind corpus against the current detector; not a fresh attacker generation run.',
+  mode: 'persisted_blind_findings_rescore',
+  note: 'Rescores the currently persisted accuracy-report/blind_findings.jsonl against the current detector. This is a deterministic replay/rescore of saved findings, not an attacker-generation run; after eval/blind_redteam.mjs it reflects the fresh live-run corpus.',
   detector_frozen: true,
   detector_sha256: { seats: sha(resolve('council/seats.mjs')), skeptic: sha(resolve('council/llm_skeptic.mjs')) },
   source: { findings: FINDINGS, total: rescored.length, supported: rescored.filter((f) => f.ground_truth?.label === 'supported').length,
@@ -68,13 +69,13 @@ const report = {
   false_negatives: fns.map((f) => ({ class: f.ground_truth.class, interpretation: f.interpretation, note: f.ground_truth.note })),
 };
 writeFileSync(resolve('accuracy-report/blind_rescore_report.json'), JSON.stringify(report, null, 2));
-console.log(`stored blind rescore: recall=${floor.recall.toFixed(3)} precision=${floor.precision.toFixed(3)} (TP${floor.tp} FP${floor.fp} FN${floor.fn} TN${floor.tn})`);
+console.log(`persisted blind findings rescore: recall=${floor.recall.toFixed(3)} precision=${floor.precision.toFixed(3)} (TP${floor.tp} FP${floor.fp} FN${floor.fn} TN${floor.tn})`);
 console.log('by class: ' + Object.entries(byClass).map(([k, v]) => `${k} ${v.caught}/${v.n}`).join(' · '));
 console.log(`false positives: ${fps.length}`);
 for (const f of fps) console.log(`  FP by=${f.floor_seat} ${String(f.interpretation).slice(0, 120)}`);
 console.log('persisted: accuracy-report/blind_rescore_report.json');
 if (floor.recall < 0.6712328767123288 || fps.length > 3) {
-  console.error('FAIL — stored blind corpus regressed beyond baseline floor recall/FP guard.');
+  console.error('FAIL — persisted blind findings regressed beyond baseline floor recall/FP guard.');
   process.exit(1);
 }
-console.log('PASS — stored blind corpus meets baseline floor recall and FP guard.');
+console.log('PASS — persisted blind findings meet baseline floor recall and FP guard.');
