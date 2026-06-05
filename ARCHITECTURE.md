@@ -133,7 +133,7 @@ so it can only ever *add* a bounce and never rescue a refuted one. Panel recall/
 from the deterministic floor; it is additive evidence, not a global FP=0 guarantee.
 Without an authenticated `claude` it **abstains** (no effect). Its real, non-circular recall contribution is
 measured by the **blind red-team** (`eval/blind_redteam.mjs`: independent attacker, frozen detector — the
-floor alone is ~65–69% recall @ ~93–96% precision on 130 unseen findings; the panel lifts the residual).
+floor alone is 77.0% recall @ 98.3% precision on the fresh 130-finding run; the sampled panel lifts the scored scope to 97.2% recall @ 98.6% precision with 0 panel-added FP).
 
 ## Isolation & deployment
 

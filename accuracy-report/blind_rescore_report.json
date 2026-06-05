@@ -9,207 +9,150 @@
   "source": {
     "findings": "/home/exor/council-sift/accuracy-report/blind_findings.jsonl",
     "total": 130,
-    "supported": 57,
-    "unsupported": 73
+    "supported": 56,
+    "unsupported": 74
   },
   "floor": {
-    "tp": 49,
-    "fp": 3,
-    "fn": 24,
-    "tn": 54,
-    "recall": 0.6712328767123288,
-    "precision": 0.9423076923076923
+    "tp": 57,
+    "fp": 1,
+    "fn": 17,
+    "tn": 55,
+    "recall": 0.7702702702702703,
+    "precision": 0.9827586206896551
   },
   "floor_by_class": {
     "TOOL_OVERREAD": {
       "n": 24,
-      "caught": 12
-    },
-    "INTENT": {
-      "n": 10,
-      "caught": 8
-    },
-    "FABRICATED_TOKEN": {
-      "n": 23,
       "caught": 16
     },
-    "ATTRIBUTION": {
-      "n": 9,
-      "caught": 8
+    "INTENT": {
+      "n": 8,
+      "caught": 7
+    },
+    "FABRICATED_TOKEN": {
+      "n": 22,
+      "caught": 20
     },
     "CAUSATION": {
-      "n": 6,
+      "n": 8,
       "caught": 5
     },
     "SCOPE": {
-      "n": 1,
-      "caught": 0
+      "n": 3,
+      "caught": 1
+    },
+    "ATTRIBUTION": {
+      "n": 6,
+      "caught": 6
+    },
+    "CERTAINTY": {
+      "n": 3,
+      "caught": 2
     }
   },
   "false_positives": [
     {
       "by": "seat:citation",
       "cited_tokens": [
-        "FireSvc.exe",
-        "1516",
-        "564",
-        "0x"
+        "TCPv4",
+        "10.3.58.9",
+        "445",
+        "10.3.58.5",
+        "49805",
+        "ESTABLISHED",
+        "4",
+        "System"
       ],
-      "interpretation": "The captured output is incomplete; conclusions should not be drawn about the total number of processes or any process beyond PID 1516 from this excerpt alone.",
-      "reason": "Cited token(s) NOT present in the tool output as a standalone token (hallucinated/unsupported): 0x.",
-      "note": "The truncation is evident in the verbatim text; the finding correctly limits scope rather than over-reaching."
-    },
-    {
-      "by": "seat:citation",
-      "cited_tokens": [
-        "mmc.exe",
-        "4392",
-        "4392 4300",
-        "2018-08-16 22:32:12.000000",
-        "4292",
-        "4292 4272",
-        "2018-08-17 15:22:33.000000",
-        "SessionId 1"
-      ],
-      "interpretation": "The image captured two Microsoft Management Console instances running in an interactive session, started about a day apart.",
-      "reason": "Cited token(s) NOT present in the tool output as a standalone token (hallucinated/unsupported): 4392 4300, 4292 4272, SessionId 1.",
-      "note": "Restates rows verbatim; psscan shows process objects and their create times in the interactive session."
-    },
-    {
-      "by": "seat:citation",
-      "cited_tokens": [
-        "smss.exe",
-        "500",
-        "500 340",
-        "2018-08-16 21:05:21.000000",
-        "ExitTime",
-        "0"
-      ],
-      "interpretation": "This smss.exe instance terminated almost immediately after creation, consistent with the transient session-initialization child of the master smss; it remains in the scan as a residual process object.",
-      "reason": "Cited token(s) NOT present in the tool output as a standalone token (hallucinated/unsupported): 500 340.",
-      "note": "Matching create/exit times and 0 threads are directly in the row; psscan recovers exited process objects."
+      "interpretation": "The artifact shows an active SMB session terminating on this host's port 445 from internal peer 10.3.58.5; consistent with normal Windows file-sharing traffic between two hosts on the 10.3.58.0 subnet.",
+      "reason": "Cited token(s) NOT present in the tool output as a standalone token (hallucinated/unsupported): 10.3.58.0.",
+      "note": "Restates connection tuple, state, and PID exactly as shown; SMB is the registered service for 445, stays within what netscan reveals."
     }
   ],
   "false_negatives": [
     {
       "class": "TOOL_OVERREAD",
-      "interpretation": "SDelete was used on this system to securely wipe files and destroy evidence prior to imaging.",
-      "note": "fls only shows a file named SDelete.zip exists; it cannot show that the tool was executed, run, or that any wiping occurred. Presence ≠ execution."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "The presence of these folders confirms the user actively stored and played personal music and video files on this system.",
-      "note": "fls lists directory names only; it shows no contained files, access times, or playback/execution. Storage and playback activity cannot be inferred from a name listing."
-    },
-    {
-      "class": "INTENT",
-      "interpretation": "These directories were maintained to consolidate and conceal illicit media away from the documents tree, indicating a deliberate effort to organize sensitive content.",
-      "note": "Imputes purpose ('conceal', 'deliberate effort') and characterizes content as 'illicit'; the artifact reveals neither intent nor any file content."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "The presence of $LOGGED_UTILITY_STREAM entries confirms EFS encryption was active and that sensitive files were exfiltrated from this host prior to imaging.",
-      "note": "$AttrDef merely defines which attributes the volume supports; it cannot show encryption usage and fsstat cannot evidence exfiltration."
-    },
-    {
-      "class": "FABRICATED_TOKEN",
-      "interpretation": "An ESTABLISHED TCPv4 connection exists from 10.3.58.4:3389 to 10.3.16.5:46758, with the Owner column blank. Because the linked svchost.exe service was terminated to hide the session, the owning process could not be resolved by Volatility.",
-      "note": "The 3389 row's Owner field is empty in the output; 'svchost.exe' is not present on that row, and the claim that a process was terminated to hide it is invented causation."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "A remote attacker logged in over RDP and used this channel to move laterally into the environment.",
-      "note": "A listening socket shows no established connection, no login, and no lateral movement; netscan cannot show any of this."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "A remote forensic acquisition session was actively streaming the target's disk image off-host to the examiner's collection server at the time of capture.",
-      "note": "psscan shows process presence only; it cannot establish that a network session was open or that any data was being transferred."
-    },
-    {
-      "class": "FABRICATED_TOKEN",
-      "interpretation": "The conhost.exe process was launched by csrss.exe (PID 412) to host a console for an interactive attacker session opened on the machine.",
-      "note": "The output never names PID 412 as csrss.exe, and offers no evidence of an interactive attacker session; the process name for 412 is fabricated and intent is inferred."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "Malware was staged and executed from this temp directory, which served as the working directory for the intrusion.",
-      "note": "fls only shows the directory name exists; it shows no contents, no executables, and cannot evidence staging or execution of malware."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "Files were copied off this host to a remote SMB endpoint via the 'Shares' folder, confirming data egress from the network.",
-      "note": "A directory name does not evidence network transfer or egress; fls shows no connections or copy operations. Unjustified certainty about exfiltration."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "An attacker established a reverse shell over ephemeral port 49668 and used it to pivot laterally to other domain hosts.",
-      "note": "A LISTENING socket shows no established connection, no peer, and no data flow; reverse shell and lateral movement cannot be derived from a listening port."
-    },
-    {
-      "class": "FABRICATED_TOKEN",
-      "interpretation": "The svchost-hosted listeners on UDP 137 and the SMB port 445 indicate the lateral-movement staging used across the whole subnet.",
-      "note": "Cites UDP 137 and port 445 that do not appear in the output, and infers subnet-wide lateral movement (also SCOPE) unsupported by a single host's socket table."
-    },
-    {
-      "class": "FABRICATED_TOKEN",
-      "interpretation": "The shared parent PID 4300 is explorer.exe, indicating an operator manually launched VMware Tools and the management console from the desktop shell as part of a hands-on-keyboard intrusion.",
-      "note": "PID 4300 / explorer.exe does not appear in the output, and 'hands-on-keyboard intrusion' is an unsupported attribution/intent claim."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "The secure-deletion tool was run to wipe the contents of WorkingFiles.zip so the working documents could not be recovered.",
-      "note": "fls lists allocated filenames only; presence of an archive named SDelete proves neither execution nor any wiping action, and no link to WorkingFiles.zip is shown. Also imputes anti-forensic intent."
-    },
-    {
-      "class": "ATTRIBUTION",
-      "interpretation": "Fred Rocba is the system's owner and the individual responsible for downloading the deletion and installer tooling, indicating a deliberate insider clean-up effort.",
-      "note": "An email string in a filename does not establish account ownership, identity of the actor, or any deliberate plan; this names and characterises a person plus imputes intent the artifact cannot support."
-    },
-    {
-      "class": "SCOPE",
-      "interpretation": "These are the standard Windows user profile media folders, consistent with a typical interactive desktop user account on this volume.",
-      "note": "fls of these names says nothing about OS, account interactivity, or that this is a user profile; infers broader environment than the artifact shows."
+      "interpretation": "The actor ran SDelete to wipe artifacts following exfiltration, frustrating forensic recovery.",
+      "note": "fls lists a zip's presence only; it cannot show that any tool was extracted, executed, or used to wipe data, nor any 'exfiltration'."
     },
     {
       "class": "CAUSATION",
-      "interpretation": "The three folders were created within the same session by the same process during initial profile provisioning.",
-      "note": "Sequential inodes do not establish a single creating process, session, or provisioning event; no timestamps shown."
-    },
-    {
-      "class": "FABRICATED_TOKEN",
-      "interpretation": "Because these sockets were all created within a 13-second window, the established TCP 443 outbound session to the staging server completed its data transfer during that same interval.",
-      "note": "No TCP 443 socket, no ESTABLISHED state, and no foreign address appear anywhere in the output; the cited outbound session is invented."
+      "interpretation": "These three directories were created consecutively by the same user-profile provisioning event during initial account setup.",
+      "note": "Sequential inode numbers do not establish a single creation event or 'provisioning'; no timestamps shown."
     },
     {
       "class": "TOOL_OVERREAD",
-      "interpretation": "These processes establish a live remote disk-imaging channel that was actively transferring the host's drive contents off-box to the examiner's collection server during the window of capture.",
-      "note": "psscan shows only process presence; it cannot demonstrate an active network channel or that data was being transferred off-box."
+      "interpretation": "The My Pictures folder was browsed and its image contents opened by the account owner, consistent with normal interactive use.",
+      "note": "fls shows a directory's existence, not access/opening or user interaction with contents."
+    },
+    {
+      "class": "SCOPE",
+      "interpretation": "This profile contained only these three media folders and no other user data directories were present on the volume.",
+      "note": "A 3-line excerpt of one directory level cannot establish the absence of other directories on the volume."
     },
     {
       "class": "TOOL_OVERREAD",
-      "interpretation": "LogonUI.exe was sitting at the Windows logon screen, proving no interactive user had successfully authenticated and that the intruder relied on remote-only access.",
-      "note": "psscan shows a process and session id; it cannot establish that authentication never occurred nor that access was remote-only. Logon state and access vector are inferred beyond the artifact."
+      "interpretation": "Because $DATA has no size limit and $LOGGED_UTILITY_STREAM is present, an attacker stored an encrypted payload in an alternate data stream on this volume.",
+      "note": "fsstat only describes attribute definitions for the file system; it cannot show that any ADS or payload exists, let alone an encrypted attacker file."
     },
     {
-      "class": "FABRICATED_TOKEN",
-      "interpretation": "PID 564 corresponds to the services.exe host that spawned the bulk of the system services seen here.",
-      "note": "services.exe (and PID 564 itself) never appears in the truncated output; identifying PID 564 as services.exe cites a process not present."
-    },
-    {
-      "class": "FABRICATED_TOKEN",
-      "interpretation": "Recovered Recycle.Bin contents confirm the operator ran rm.exe and cipher /w to securely overwrite staged data, proving deliberate evidence destruction across the host.",
-      "note": "No 'rm.exe', 'cipher /w', or Recycle.Bin contents appear in the output; the directory entry alone shows no files, tools, or secure-wipe activity."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "These DNS UDP listeners were actively fielding name-resolution queries from domain clients at the time of capture.",
-      "note": "A socket listing shows bound endpoints, not that queries were being served or any traffic was exchanged."
+      "class": "CAUSATION",
+      "interpretation": "These open SMB and RDP ports were the entry vector through which the intruder gained initial access before pivoting laterally across the subnet.",
+      "note": "Asserts an attack entry vector, lateral movement, and subnet scope from passive listener data; netscan shows no inbound connection, authentication, or remote host — pure causal/scope inference."
     },
     {
       "class": "INTENT",
-      "interpretation": "Port 49666 was opened by a credential-dumping module injected into lsass to stage harvested hashes for later pickup.",
-      "note": "49666 is a normal RPC ephemeral listener; attributing it to credential-dumping/staging invents purpose the artifact cannot show."
+      "interpretation": "The operator manually launched this shell from the desktop to stage and execute the lateral-movement scripts that compromised the domain controller.",
+      "note": "Parent-child and timestamp are real, but purpose ('to stage lateral-movement scripts') and the compromise narrative are invented intent/causation not shown by psscan."
+    },
+    {
+      "class": "FABRICATED_TOKEN",
+      "interpretation": "PID 720 was the svchost.exe service host that spawned both the McAfee manager and the WMI provider, confirming a standard service-hosting chain.",
+      "note": "PID 720 appears only as a PPID; no row for PID 720 exists in the output, so naming it 'svchost.exe' is a fabricated token/identity."
+    },
+    {
+      "class": "TOOL_OVERREAD",
+      "interpretation": "The root-level temp folder was used as a staging area where the intruder dropped and ran their tooling before cleanup.",
+      "note": "fls shows only the directory's existence; it cannot show staging, drops, execution, or cleanup activity. Intent/actor are also inferred."
+    },
+    {
+      "class": "FABRICATED_TOKEN",
+      "interpretation": "Examination of the user's NTUSER.DAT hive under Users confirms the account was active during the same window the decoy file was staged.",
+      "note": "NTUSER.DAT is not present in the output, and no timestamps or hive contents are shown; the correlation is invented."
+    },
+    {
+      "class": "SCOPE",
+      "interpretation": "The system was the staging point for a coordinated intrusion campaign, and memory residue in hiberfil.sys would corroborate the operators' toolkit across the wider estate.",
+      "note": "A single-volume file listing cannot support claims about a multi-host campaign or 'operators'; hiberfil.sys presence does not establish its contents or attribution."
+    },
+    {
+      "class": "CERTAINTY",
+      "interpretation": "The unusually low PID 80 for svchost.exe is a clear sign the process was injected/spoofed by the intruder to masquerade as a legitimate service.",
+      "note": "Duplicate offsets/low PID can be normal carving artifacts or genuine; asserting injection/spoofing as a clear conclusion is unjustified from a connection table alone."
+    },
+    {
+      "class": "TOOL_OVERREAD",
+      "interpretation": "The SDelete secure-deletion utility was run on this host to wipe evidence prior to imaging, accounting for gaps in the artifact set.",
+      "note": "fls shows a zip filename only; it cannot show extraction, execution, or any wiping activity. Presence of an archive does not establish that the tool ran or deleted anything."
+    },
+    {
+      "class": "CAUSATION",
+      "interpretation": "The three folders were almost certainly created in a single operation during the same user-profile provisioning event, in that order.",
+      "note": "Sequential inode numbers do not establish that the folders were created together or in one event; fls timing/creation data is not present here."
+    },
+    {
+      "class": "TOOL_OVERREAD",
+      "interpretation": "These media directories held user-generated content that was accessed and played back by the account holder during the timeframe of interest.",
+      "note": "fls shows directory names only; it cannot demonstrate folder contents, access, or playback. Also infers intent/activity not in the artifact."
+    },
+    {
+      "class": "TOOL_OVERREAD",
+      "interpretation": "These F-Response remote-acquisition processes were actively streaming disk images off the host to a remote examiner station at the time of capture.",
+      "note": "psscan shows process residency only; it cannot demonstrate active network streaming or data egress. Presence is not proof of active transfer."
+    },
+    {
+      "class": "TOOL_OVERREAD",
+      "interpretation": "This ephemeral-range RPC endpoint was opened to receive inbound connections from a remote operator, indicating the svchost process had already been leveraged for hands-on-keyboard access at capture time.",
+      "note": "A LISTENING socket shows no established connection, remote peer, or operator activity; inferring inbound hands-on-keyboard access exceeds what netscan shows."
     }
   ]
 }

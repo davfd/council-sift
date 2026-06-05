@@ -7,40 +7,44 @@
     "panel_cap": 45
   },
   "total": 130,
-  "supported": 57,
-  "unsupported": 73,
+  "supported": 56,
+  "unsupported": 74,
   "floor": {
-    "tp": 49,
-    "fp": 3,
-    "fn": 24,
-    "tn": 54,
-    "recall": 0.6712328767123288,
-    "precision": 0.9423076923076923
+    "tp": 57,
+    "fp": 1,
+    "fn": 17,
+    "tn": 55,
+    "recall": 0.7702702702702703,
+    "precision": 0.9827586206896551
   },
   "floor_by_class": {
     "TOOL_OVERREAD": {
       "n": 24,
-      "caught": 12
-    },
-    "INTENT": {
-      "n": 10,
-      "caught": 8
-    },
-    "FABRICATED_TOKEN": {
-      "n": 23,
       "caught": 16
     },
-    "ATTRIBUTION": {
-      "n": 9,
-      "caught": 8
+    "INTENT": {
+      "n": 8,
+      "caught": 7
+    },
+    "FABRICATED_TOKEN": {
+      "n": 22,
+      "caught": 20
     },
     "CAUSATION": {
-      "n": 6,
+      "n": 8,
       "caught": 5
     },
     "SCOPE": {
-      "n": 1,
-      "caught": 0
+      "n": 3,
+      "caught": 1
+    },
+    "ATTRIBUTION": {
+      "n": 6,
+      "caught": 6
+    },
+    "CERTAINTY": {
+      "n": 3,
+      "caught": 2
     }
   },
   "floor_by_scenario": {
@@ -49,99 +53,79 @@
       "caught": 10
     },
     "SRL-2015": {
-      "n": 23,
-      "caught": 15
+      "n": 22,
+      "caught": 18
     },
     "SRL-2018": {
-      "n": 32,
-      "caught": 24
+      "n": 34,
+      "caught": 29
     }
   },
   "floor_per_seed": [
     {
-      "tp": 24,
+      "tp": 26,
       "fp": 1,
-      "fn": 13,
-      "tn": 27,
-      "recall": 0.6486486486486487,
-      "precision": 0.96
+      "fn": 12,
+      "tn": 26,
+      "recall": 0.6842105263157895,
+      "precision": 0.9629629629629629
     },
     {
-      "tp": 25,
-      "fp": 2,
-      "fn": 11,
-      "tn": 27,
-      "recall": 0.6944444444444444,
-      "precision": 0.9259259259259259
+      "tp": 31,
+      "fp": 0,
+      "fn": 5,
+      "tn": 29,
+      "recall": 0.8611111111111112,
+      "precision": 1
     }
   ],
   "panel_scope": {
     "floor_only": {
-      "tp": 49,
-      "fp": 3,
+      "tp": 57,
+      "fp": 1,
       "fn": 15,
       "tn": 30,
-      "recall": 0.765625,
-      "precision": 0.9423076923076923
+      "recall": 0.7916666666666666,
+      "precision": 0.9827586206896551
     },
     "floor_plus_panel": {
-      "tp": 63,
-      "fp": 3,
-      "fn": 1,
+      "tp": 70,
+      "fp": 1,
+      "fn": 2,
       "tn": 30,
-      "recall": 0.984375,
-      "precision": 0.9545454545454546
+      "recall": 0.9722222222222222,
+      "precision": 0.9859154929577465
     },
     "panel_runs": 45,
-    "recovered": 14,
+    "recovered": 13,
     "sample_misses": 15,
     "panel_fp": 0
   },
   "true_holes": [
     {
-      "class": "FABRICATED_TOKEN",
-      "interpretation": "An ESTABLISHED TCPv4 connection exists from 10.3.58.4:3389 to 10.3.16.5:46758, with the Owner column blank. Because the linked svchost.exe service was terminated to hide the session, the owning process could not be resolved by Volatility."
+      "class": "CAUSATION",
+      "interpretation": "These three directories were created consecutively by the same user-profile provisioning event during initial account setup."
+    },
+    {
+      "class": "CAUSATION",
+      "interpretation": "The three folders were almost certainly created in a single operation during the same user-profile provisioning event, in that order."
     }
   ],
   "false_positives": [
     {
       "by": "seat:citation",
       "cited_tokens": [
-        "FireSvc.exe",
-        "1516",
-        "564",
-        "0x"
+        "TCPv4",
+        "10.3.58.9",
+        "445",
+        "10.3.58.5",
+        "49805",
+        "ESTABLISHED",
+        "4",
+        "System"
       ],
-      "interpretation": "The captured output is incomplete; conclusions should not be drawn about the total number of processes or any process beyond PID 1516 from this excerpt alone.",
-      "note": "The truncation is evident in the verbatim text; the finding correctly limits scope rather than over-reaching."
-    },
-    {
-      "by": "seat:citation",
-      "cited_tokens": [
-        "mmc.exe",
-        "4392",
-        "4392 4300",
-        "2018-08-16 22:32:12.000000",
-        "4292",
-        "4292 4272",
-        "2018-08-17 15:22:33.000000",
-        "SessionId 1"
-      ],
-      "interpretation": "The image captured two Microsoft Management Console instances running in an interactive session, started about a day apart.",
-      "note": "Restates rows verbatim; psscan shows process objects and their create times in the interactive session."
-    },
-    {
-      "by": "seat:citation",
-      "cited_tokens": [
-        "smss.exe",
-        "500",
-        "500 340",
-        "2018-08-16 21:05:21.000000",
-        "ExitTime",
-        "0"
-      ],
-      "interpretation": "This smss.exe instance terminated almost immediately after creation, consistent with the transient session-initialization child of the master smss; it remains in the scan as a residual process object.",
-      "note": "Matching create/exit times and 0 threads are directly in the row; psscan recovers exited process objects."
+      "interpretation": "The artifact shows an active SMB session terminating on this host's port 445 from internal peer 10.3.58.5; consistent with normal Windows file-sharing traffic between two hosts on the 10.3.58.0 subnet.",
+      "note": "Restates connection tuple, state, and PID exactly as shown; SMB is the registered service for 445, stays within what netscan reveals."
     }
   ]
 }

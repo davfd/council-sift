@@ -60,7 +60,7 @@ refused at the gateway; capabilities are HMAC-scoped and expiring; the audit cha
 **Say:** "Not a one-shot. Across **36 real tool-output artifacts, 185 findings** on the injected-class
 regression benchmark: Council OFF lets **all 85 injected unsupported claims** reach the human; Council ON
 lets **zero** through, with **zero false positives on that template-scoped supported set**. Honest scope:
-the blind red-team report is the unseen precision signal and records 3 FP. The external vigia-cases run is
+the blind red-team report is the unseen precision signal and records 1 FP in the fresh run. The external vigia-cases run is
 supporting evidence — its held-out answer key scores a live LLM specificity prompt path, not the deterministic
 Council seats; current verdict accuracy is **100%** on a small 3-case all-MALICE `score_against` tier, with
 Council delta about zero and the false-positive gate passing."

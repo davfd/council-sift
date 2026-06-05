@@ -42,8 +42,8 @@ absent in the real output), not author opinion:
 | precision / recall · FP / FN | 1.000 / 1.000 · 0 / 0 |
 
 **Honest scope:** precision/FP=0 is measured on this injected-class regression set (template-scoped
-supported findings). The blind red-team report is the unseen precision signal and records 3 FP in that
-run. Recall here is measured against **our injected** hallucination classes (fabricated
+supported findings). The blind red-team report is the unseen precision signal and records 1 FP in the
+fresh run. Recall here is measured against **our injected** hallucination classes (fabricated
 token / tool over-read / inference over-reach), which map onto the seats — so high recall is expected by
 construction and is **not** a substitute for an external key. Layer C-bis removes that circularity; layer D
 is external supporting evidence with its own scope.
@@ -56,12 +56,12 @@ is **frozen**, and the deterministic floor is scored on the held-out set.
 
 | | value |
 |---|---|
-| held-out findings (independent attacker) | 130 (57 supported · 73 unsupported) |
-| deterministic-floor recall (per seed) | **0.65 – 0.69** |
-| deterministic-floor precision (per seed) | **0.93 – 0.96** |
+| held-out findings (independent attacker) | 130 (56 supported · 74 unsupported) |
+| deterministic-floor recall (overall / per seed) | **0.770 overall** · s1 0.684 / s2 0.861 |
+| deterministic-floor precision (overall / per seed) | **0.983 overall** · s1 0.963 / s2 1.000 |
 
-**Honest:** this is the floor's *true* recall — the regex seats catch ~two-thirds of unseen hallucinations
-at high precision and **miss the rest** (the report enumerates the specific `true_holes`). That residual gap
+**Honest:** this is the floor's *true* recall — the regex seats catch about three-quarters of unseen hallucinations
+at high precision and **still miss some** (the report enumerates the specific `true_holes`). That residual gap
 is exactly what the **additive LLM skeptic panel** addresses: it runs only after the floor passes a finding
 and bounces second-order over-reads no regex enumerates. Panel recall/FP is measured separately from the
 floor's deterministic precision. Outputs: `accuracy-report/blind_redteam_report.json` (+ `blind_findings.jsonl`).

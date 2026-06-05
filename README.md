@@ -25,8 +25,8 @@ the exact tool execution and re-verify it.
 > 2. **The one number to scope correctly:** on the injected-class regression benchmark
 >    ([`eval/bench_real.mjs`](eval/bench_real.mjs)), Council **OFF lets 85/85 injected unsupported claims
 >    reach the human; Council ON lets 0 through, with 0 false positives on that template-scoped supported set.**
-> 3. **We report our misses.** On the blind/non-circular red-team, the deterministic floor catches only ~⅔ of
->    *unseen* hallucinations at ~94% precision (3 false positives in that run; the LLM panel lifts recall) — see [Accuracy & honesty](#accuracy--honesty).
+> 3. **We report our misses.** On the fresh blind/non-circular red-team, the deterministic floor catches **57/74**
+>    unseen hallucinations (**77.0% recall**) at **98.3% precision** (**1 false positive**; the LLM panel lifts recall) — see [Accuracy & honesty](#accuracy--honesty).
 >
 > Council-SIFT is **complementary** to a human HMAC-approval step (such as the reference Valhuntir
 > submission): it feeds that step only findings that already survived verification. It secures the
@@ -36,7 +36,7 @@ the exact tool execution and re-verify it.
 > on **two tiers**: (1) a **deterministic floor** — reproducible by any judge with no API key, whose
 > refutations are mechanically verifiable ("the cited token `185.220.101.45` is not in the tool output")
 > and whose regression-benchmark precision is **FP=0 on the injected-class supported set**; the blind red-team
-> floor is the honest unseen signal (~67% recall, ~94% precision, 3 FP); and (2) an **additive LLM skeptic
+> floor is the honest unseen signal (**77.0% recall, 98.3% precision, 1 FP** in the fresh run); and (2) an **additive LLM skeptic
 > panel** (OpenClaw / Claude-Agent-SDK) that lifts recall on over-reads no regex can enumerate. The panel
 > can **only ever *add* a bounce to a finding the floor already passed — it can never rescue a refuted one**
 > — and a bounce requires a **≥2-of-3 independent-skeptic majority**, so one trigger-happy LLM cannot reject
@@ -51,10 +51,10 @@ the exact tool execution and re-verify it.
 > Honest: this suite was used to harden the seats, so it is not the held-out benchmark.
 >
 > **The held-out, non-circular number** comes from [`eval/blind_redteam.mjs`](eval/blind_redteam.mjs): an
-> *independent* LLM attacker writes 130 fresh findings the seats were never tuned on (57 supported · 73
-> hallucinated), the detector is **frozen**, and the deterministic floor scores **~65–69% recall at
-> ~93–96% precision** — i.e. the floor catches ~two-thirds of *unseen* hallucinations with very few false
-> flags, and the report names the ones it misses. That residual is what the LLM panel
+> *independent* LLM attacker writes 130 fresh findings the seats were never tuned on (56 supported · 74
+> hallucinated), the detector is **frozen**, and the deterministic floor scores **77.0% recall at
+> 98.3% precision** — i.e. the floor catches about three-quarters of *unseen* hallucinations with one false
+> flag, and the report names the ones it misses. The sampled LLM panel lifts the scored scope to **97.2% recall / 98.6% precision** with **0 panel-added FP**. That residual is what the LLM panel
 > ([`eval/skeptic_live_demo.mjs`](eval/skeptic_live_demo.mjs)) is designed to lift; panel claims should be
 > read as additive recall evidence, not as a global FP=0 guarantee.
 
@@ -128,7 +128,7 @@ We measure it directly on **real tool output from all three official scenarios**
 SRL-2018, dozens of hosts): **Council-OFF = the Protocol SIFT baseline** lets every injected
 unsupported claim reach the human; **Council-ON** catches all 85 injected unsupported claims with
 **zero false positives on that injected-class supported set**. The blind red-team report separately shows
-~67% recall / ~94% precision (3 FP), so these numbers are scoped, not a global accuracy claim. See [`accuracy-report/bench_real_report.md`](accuracy-report/bench_real_report.md) — regenerate
+77.0% recall / 98.3% precision (1 FP), so these numbers are scoped, not a global accuracy claim. See [`accuracy-report/bench_real_report.md`](accuracy-report/bench_real_report.md) — regenerate
 with `node eval/bench_real.mjs`.
 
 ---
@@ -196,7 +196,7 @@ evidence → analyst drafts a 4-part finding (observation / interpretation / con
 | `eval/ablation.mjs` | small labelled sanity set (memory/disk/hash) | Council **OFF 6/6 → ON 0/6** |
 | `eval/adversarial_evasions.mjs` | red-team regression suite phrased to dodge the seat vocabulary + substring/zero-token/PID/scope/RFC1918 exploits | hardened floor **52/52 caught, 0/24 FP** (regression test, not held-out) |
 | `eval/gate_redteam.py` | broad live-gate red-team — 52 evidence-destruction attempts across 9 evasion classes (encoding/eval, indirection, interpreters, wrappers, path-prefixed, quoting, archive-extract, tool-native writes, redirects) | **all 52 refused, 0 false-denies** |
-| `eval/blind_redteam.mjs` | **held-out, non-circular** — independent LLM attacker, frozen detector, 130 unseen findings | deterministic floor **~65–69% recall @ ~93–96% precision** (the floor's *true* recall; misses listed) |
+| `eval/blind_redteam.mjs` | **held-out, non-circular** — independent LLM attacker, frozen detector, 130 unseen findings | deterministic floor **77.0% recall @ 98.3% precision** (57/74 unsupported caught, 1 FP; misses listed) |
 | `eval/skeptic_panel_test.mjs` | additive-panel gate logic (mocked votes, no API key) | 2/3→bounce · 1/3→pass · abstains w/o auth · additive-only |
 | `eval/skeptic_live_demo.mjs` | **live** LLM panel on second-order evasions that pass the hardened floor | majority **bounces over-reads the floor missed**; **0 FP** on disciplined findings |
 | `tests/test_bypass.py` | identity kernel | **12/12** (self-approve blocked, evidence prompt-injection refused, forged/expired/scope caps, tamper-evident audit) |
@@ -283,7 +283,7 @@ agent**: tool choices and findings are the model's own.)*
 # bounces only on a ≥2/3 skeptic majority, and abstains (no effect) without an authenticated `claude`:
 COUNCIL_LLM_SKEPTIC=1 node council/council.mjs review <finding_id>
 node eval/skeptic_live_demo.mjs              # live: panel bounces second-order evasions the floor passed, 0 FP
-node eval/blind_redteam.mjs                  # held-out non-circular recall: independent LLM attacker, frozen floor (~65-69% recall @ ~93-96% precision)
+node eval/blind_redteam.mjs                  # held-out non-circular recall: independent LLM attacker, frozen floor (77.0% recall @ 98.3% precision in the fresh run)
 node eval/blind_rescore.mjs                  # offline detector-regression gate over the persisted blind corpus (no live attacker; fails on recall/FP regression)
 node council/run_agentic.mjs <finding_id>    # OpenClaw seat narration view (Claude Agent SDK if authenticated)
 ```
@@ -338,7 +338,7 @@ images (dozens of hosts)** — findings are grounded in real artifacts; ground t
 present-vs-absent in the real output. It ships with explicit **honesty notes**:
 - **Precision / FP-rate on the injected-class regression set:** across the template-scoped supported findings,
   the Council raised **zero** false flags. The blind red-team report is the unseen precision signal and
-  records 3 FP in that run; do not read the regression FP=0 as a global guarantee.
+  records 1 FP in the fresh run; do not read the regression FP=0 as a global guarantee.
 - **Recall on the injected set is by-construction** (its hallucination classes map onto the seats) — so
   that number is **not** a substitute for an external key. We therefore keep the hardened floor regression
   suite ([`eval/adversarial_evasions.mjs`](eval/adversarial_evasions.mjs)): evasions phrased to dodge the seat
