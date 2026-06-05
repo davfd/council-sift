@@ -17,13 +17,13 @@
  * Env: NEO4J_URI/USER/PASSWORD (isolated 7690 graph).
  */
 import { createHash } from 'node:crypto';
-import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Neo4jService } from '../claw-memory-core/dist/storage/neo4j/neo4j.service.js';
 import { handleMarkWrong } from '../claw-memory-core/dist/handlers/mark-wrong.js';
 import { runSeats } from './seats.mjs';
 import { llmSkepticPanel } from './llm_skeptic.mjs';
+import { writeReceiptFiles } from './receipt_store.mjs';
 import { guardIsolatedUri, assertSafeId } from '../safety.mjs';
 
 const sha = (s) => createHash('sha256').update(s, 'utf8').digest('hex');
@@ -58,7 +58,7 @@ async function prevReceiptSha(svc, caseId) {
 
 async function review(svc, id) {
   const f = await loadFinding(svc, id);
-  const { seats, synth } = runSeats(f);                  // Citation + Tool-semantics + Contradiction + Inference → Synthesis
+  const { seats, synth } = runSeats(f);                  // Citation + Tool-semantics + Contradiction + Inference + Scope → Synthesis
   const ts = new Date().toISOString();
 
   console.log(`\n── Council review: ${f.fid} (${f.case}) ──`);
@@ -114,12 +114,11 @@ async function review(svc, id) {
      MERGE (r)-[:CERTIFIES]->(n)`,
     { id: f.nodeId, rs: receipt_sha256, fid: f.fid, t: f.case, ts, prev, body: JSON.stringify(receipt) },
   );
-  mkdirSync(RECEIPTS_DIR, { recursive: true });
   assertSafeId(f.fid, die, 'finding id');  // never let a finding_id escape the receipts dir
-  writeFileSync(resolve(RECEIPTS_DIR, `${f.fid}.json`), JSON.stringify(receipt, null, 2));
+  const written = writeReceiptFiles(RECEIPTS_DIR, receipt);
   console.log(`\n  ✓ COUNCIL_VERIFIED — Receipt ${receipt_sha256.slice(0, 16)}… (chains to ${String(prev).slice(0, 12)}…)`);
-  console.log(`    written: council/receipts/${f.fid}.json\n`);
-  return { disposition: 'COUNCIL_VERIFIED', finding_id: f.fid, receipt_sha256 };
+  console.log(`    written: council/receipts/${written.file}\n`);
+  return { disposition: 'COUNCIL_VERIFIED', finding_id: f.fid, receipt_sha256, receipt_file: written.file };
 }
 
 async function showReceipt(svc, id) {

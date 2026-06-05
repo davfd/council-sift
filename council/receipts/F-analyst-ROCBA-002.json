@@ -13,7 +13,9 @@
     "locator": "ntfs:root",
     "tool": "fls/fsstat",
     "command": "fsstat + fls -f ntfs rocba-cdrive.e01",
-    "output_sha256": "fd594eee31dd42b87abfdca6f7881d3d4a956a9e142915e14e524261acda78c1"
+    "output_sha256": "fd594eee31dd42b87abfdca6f7881d3d4a956a9e142915e14e524261acda78c1",
+    "rerun_status": "STORED_OUTPUT_ONLY",
+    "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
   },
   "seats": [
     {
@@ -68,5 +70,8 @@
   "disposition": "COUNCIL_VERIFIED",
   "created_at": "2026-06-02T20:26:07.551Z",
   "prev_receipt_sha256": "GENESIS",
-  "receipt_sha256": "4d522fe789b30fd89e1b88ac037439f035b03ef59b9ed8277bb30e2eccfcf48d"
+  "receipt_sha256": "4d522fe789b30fd89e1b88ac037439f035b03ef59b9ed8277bb30e2eccfcf48d",
+  "rerun_status": "STORED_OUTPUT_ONLY",
+  "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here.",
+  "receipt_hash_scope_note": "receipt_sha256 is the original Council receipt hash; rerun_status fields are Tier 2 audit metadata labels."
 }

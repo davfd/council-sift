@@ -19,6 +19,7 @@
  */
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { Neo4jService } from '../claw-memory-core/dist/storage/neo4j/neo4j.service.js';
 import { handleRemember } from '../claw-memory-core/dist/handlers/remember.js';
 import { handleMarkWrong } from '../claw-memory-core/dist/handlers/mark-wrong.js';
@@ -27,6 +28,16 @@ import { guardIsolatedUri, assertSafeId } from '../safety.mjs';
 const sha = (s) => createHash('sha256').update(s, 'utf8').digest('hex');
 const die = (m) => { console.error('[csift] ' + m); process.exit(1); };
 const CONF = ['HIGH', 'MEDIUM', 'LOW', 'SPECULATIVE'];
+const RECEIPT_MANIFEST_URL = new URL('../council/receipts/manifest.json', import.meta.url);
+
+function receiptRerunStatus(findingId) {
+  try {
+    const manifest = JSON.parse(readFileSync(RECEIPT_MANIFEST_URL, 'utf8'));
+    return manifest?.rerun_status_by_finding?.[findingId] || null;
+  } catch {
+    return null;
+  }
+}
 
 // DFIR findings/deposits are MemoryClaims — deterministic rule-based result, no LLM/OpenAI key.
 // Full ClassificationResult shape {type, properties, confidence, path} required by handleRemember.
@@ -141,6 +152,7 @@ async function trace(svc, id, opts = {}) {
   );
   if (!rows.length) die('finding not found: ' + id);
   const r = rows[0];
+  const rerun_status = receiptRerunStatus(r.fid);
   // Stored-chain integrity: re-hash the CAPTURED tool output held in the graph (proves the stored
   // output has not been altered since deposit + the cited hash is consistent). This does NOT, by
   // itself, prove SIFT produced it — use --rerun for that.
@@ -153,7 +165,11 @@ async function trace(svc, id, opts = {}) {
   // compare the FRESH output hash to the recorded one. This is what proves SIFT produces it.
   let independent_rerun = opts.rerun ? { requested: true } : undefined;
   if (opts.rerun) {
-    if (!r.cmd) {
+    if (rerun_status?.status === 'STORED_OUTPUT_ONLY') {
+      independent_rerun = { requested: true, status: 'STORED_OUTPUT_ONLY',
+        verdict: 'NOT_RERUNNABLE — this receipt is explicitly labeled stored-output-only; use stored_chain_integrity, or provide the original concrete evidence path before claiming independent rerun.',
+        note: rerun_status.note || null };
+    } else if (!r.cmd) {
       independent_rerun = { requested: true, status: 'NO_COMMAND — finding has no recorded command to re-run' };
     } else {
       const wrapper = process.env.SIFT_WRAPPER || `${process.env.HOME || ''}/sift-workstation/sift`;
@@ -186,6 +202,7 @@ async function trace(svc, id, opts = {}) {
     finding_id: r.fid, nodeId: r.nodeId, status: r.status, lifecycle: r.lifecycle,
     claim: { observation: r.obs, interpretation: r.interp, confidence: r.conf, content_sha256: r.csha },
     evidence_pointer: { artifact: r.art, locator: r.loc, tool: r.tool, command: r.cmd, output_sha256: r.oh },
+    rerun_status,
     stored_chain_integrity: stored_chain,
     independent_rerun,
   }, null, 2));

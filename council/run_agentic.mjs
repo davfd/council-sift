@@ -18,7 +18,7 @@ import { dirname, resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { Neo4jService } from '../claw-memory-core/dist/storage/neo4j/neo4j.service.js';
-import { citationSeat, toolSemanticsSeat, contradictionSeat, inferenceSeat, synthesisSeat } from './seats.mjs';
+import { citationSeat, toolSemanticsSeat, contradictionSeat, inferenceSeat, scopeSeat, synthesisSeat } from './seats.mjs';
 import { guardIsolatedUri } from '../safety.mjs';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
@@ -27,7 +27,7 @@ const id = process.argv[2];
 if (!id) die('usage: node council/run_agentic.mjs <finding_id>');
 guardIsolatedUri(process.env.NEO4J_URI, die);
 
-const SEAT_FILE = { 'seat:citation': 'citation.md', 'seat:tool-semantics': 'tool-semantics.md', 'seat:contradiction': 'contradiction.md', 'seat:synthesis': 'synthesis.md', 'seat:inference': 'inference.md' };
+const SEAT_FILE = { 'seat:citation': 'citation.md', 'seat:tool-semantics': 'tool-semantics.md', 'seat:contradiction': 'contradiction.md', 'seat:synthesis': 'synthesis.md', 'seat:inference': 'inference.md', 'seat:scope': 'inference.md' };
 const persona = (seat) => { try { return readFileSync(resolve(__dir, 'agents', SEAT_FILE[seat] || 'citation.md'), 'utf8'); } catch { return seat; } };
 
 // Resolve the Claude Agent SDK from the vendored core's node_modules (regardless of this file's dir).
@@ -82,7 +82,8 @@ console.log(query ? '(SDK present — seats narrate via the Claude Agent SDK if 
                   : '(SDK not resolvable — deterministic-narration fallback)\n');
 
 const seatFns = [['seat:citation', citationSeat], ['seat:tool-semantics', toolSemanticsSeat],
-                 ['seat:contradiction', contradictionSeat], ['seat:inference', inferenceSeat]];
+                 ['seat:contradiction', contradictionSeat], ['seat:inference', inferenceSeat],
+                 ['seat:scope', scopeSeat]];
 const verdicts = [];
 let usedLLM = false;
 for (const [seat, fn] of seatFns) {

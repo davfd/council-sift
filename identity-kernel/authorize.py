@@ -41,8 +41,12 @@ _DANGER = [
     (re.compile(r"(^|[|;&]\s*|sudo\s+)(bash|sh|zsh|dash|ksh|csh|tcsh)\b"), "sub-shell interpreter"),
     (re.compile(r"\bsed\b[^|;&]*\s-[a-zA-Z]*i"), "sed in-place edit (-i)"),
     (re.compile(r"\bfind\b[^|;&]*\s-(delete|exec|execdir|fprint|fprintf|fls|ok|okdir)\b"), "find delete/exec"),
+    (re.compile(r"\b(?:awk|gawk)\b[^|;&]*\s(?:-f\s*\S+|--file(?:=|\s+)\S+)"), "awk file-based script execution"),
+    (re.compile(r"\btar\b[^|;&]*--(?:to-command(?:=|\b)|checkpoint-action(?:=|\s+)\s*exec\b)"), "tar exec hook"),
+    (re.compile(r"\btar\b[^|;&]*--checkpoint-action\s*=\s*exec"), "tar checkpoint exec hook"),
     (re.compile(r"\b(perl|ruby|node|php)\b\s+-[a-zA-Z]*[eiE]"), "interpreter inline-exec (-e/-i)"),
     (re.compile(r"\b(os\.system|os\.unlink|os\.remove|os\.rmdir|os\.truncate|shutil\.rmtree|shutil\.move|subprocess|Popen|__import__)\b"), "destructive script call"),
+    (re.compile(r"\b(?:open|Path)\s*\([^)]*(?:/mnt/evidence|/evidence|/dev/)[^)]*\)[^|;&]*(?:\.write\b|\.unlink\b|\.write_text\b|\.write_bytes\b|\.rename\b|\.replace\b|\.mkdir\b|\.rmdir\b)", re.I), "script mutates protected evidence/device path"),
     (re.compile(r">>?\s*/dev/"), "redirect to a device"),
     (re.compile(r">>?\s*[^\s|;&]*\.(E01|e01|aff|aff4|s01|l01|001|img|dd|raw|mem|vmem|bin)\b"), "redirect over an image/dump"),
     (re.compile(r">>?\s*[^\s|;&]*/(mnt/)?evidence\b"), "redirect into evidence"),
@@ -60,6 +64,38 @@ _WRITE_FLAG = re.compile(
 # An evidence/device path that is OUTPUT (a dir/device), not an INPUT file being read (archive/image ext).
 _EVID_DEV = re.compile(r"^/?(dev/|mnt/evidence|evidence)")
 _INPUT_EXT = re.compile(r"\.(zip|7z|gz|bz2|xz|tar|tgz|tbz|e01|aff4?|s01|l01|img|dd|raw|mem|vmem|001|bin)$", re.I)
+
+# T2-E: allow the one documented legit generated-finding helper, but do not let an analyst run an
+# arbitrary Python script by filename through the SIFT wrapper. Inline `-c` payloads are still governed
+# by the existing destructive-call patterns; `python3 -m ...` remains a module invocation, not script-file
+# execution. Keep this list tiny and explicit so false-deny decisions are visible in review.
+_PYTHON_SCRIPT_ALLOWLIST = {"/tmp/build_finding.py", "/tmp/build.py"}
+
+
+def _python_script_violation(cmd):
+    try:
+        toks = shlex.split(cmd, posix=True)
+    except ValueError:
+        toks = cmd.split()
+    for i, tok in enumerate(toks):
+        base = os.path.basename(tok) if "/" in tok else tok
+        if base not in {"python", "python3"}:
+            continue
+        # Walk to the first non-option argument. Options with their own values are not script files.
+        j = i + 1
+        while j < len(toks) and toks[j].startswith("-"):
+            if toks[j] in {"-c", "-m"}:
+                j = min(j + 2, len(toks))
+                break
+            j += 1
+        if j >= len(toks):
+            continue
+        script = toks[j]
+        if re.search(r"\.py(?:$|[?#])", script, re.I):
+            normalized = os.path.normpath(script)
+            if normalized not in _PYTHON_SCRIPT_ALLOWLIST:
+                return script
+    return None
 
 
 def _writes_into_evidence(cmd):
@@ -117,6 +153,9 @@ def scan(cmd, gw, iss, caller):
     for rx, why in _DANGER:
         if rx.search(cmd):
             return False, {"refused": why}
+    py_script = _python_script_violation(cmd)
+    if py_script:
+        return False, {"refused": f"python script-file execution outside allowlist ({py_script})"}
     # tool-native write/extract into evidence or a device (distinguishes an output dir from an input file)
     w = _writes_into_evidence(cmd)
     if w:

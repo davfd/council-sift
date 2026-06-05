@@ -120,6 +120,15 @@ const EVASIONS = [
   { id: 'EV-CI-6', why: 'interpretation-only fabricated IP plus incidental "no evidence left behind" must still be checked',
     f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe sent data to 185.220.101.45 for collection and no evidence was left behind.',
          output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-CI-7', why: 'PID/process-name mismatch: cited PID and process name appear in output, but not on the same row',
+    f: { observation: 'psscan shows svchost.exe PID 2524', interpretation: 'svchost.exe PID 2524 is a resident Windows service process.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'svchost.exe'] } },
+  { id: 'EV-SCOPE-1', why: 'single fls artifact must not support environment-wide/all-host scope claim',
+    f: { observation: 'fls shows quarterly.xlsx at inode 2524', interpretation: 'This shows systematic, environment-wide collection affecting all hosts across the organization.',
+         output: FLS, evidence_tool: 'fls', cited_tokens: ['2524', 'quarterly.xlsx'] } },
+  { id: 'EV-RFC-1', why: 'RFC1918/private IP must not be called external/public/internet when cited from evidence',
+    f: { observation: 'netscan shows rubyw.exe PID 3180 connected to 10.10.254.1:4444', interpretation: 'rubyw.exe has an active session to an external remote server at 10.10.254.1.',
+         output: NETSCAN, evidence_tool: 'netscan', cited_tokens: ['3180', '10.10.254.1'] } },
 
   // INFERENCE over-reaches phrased AROUND the trigger words.
   { id: 'EV-INF-1', why: 'attribution via "hallmarks of a state-sponsored actor" (no APT#/the attacker/nation-state)',
@@ -190,6 +199,14 @@ const SUPPORTED = [
       output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
   { id: 'OK-17', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'It was impossible to determine whether exfiltration occurred from this process listing alone.',
       output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'OK-18', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe PID 2524 is resident in this single memory image; no environment-wide scope is established.',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'OK-19', f: { observation: 'netscan shows rubyw.exe PID 3180 with an ESTABLISHED session to 10.10.254.1:4444', interpretation: 'rubyw.exe has an active session to an internal RFC1918 host at 10.10.254.1.',
+      output: NETSCAN, evidence_tool: 'netscan', cited_tokens: ['3180', '10.10.254.1'] } },
+  { id: 'OK-20', f: { observation: 'psscan shows Rar.exe PID 2524 and svchost.exe PID 14592', interpretation: 'Rar.exe PID 2524 and svchost.exe PID 14592 are both present in the process listing.',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['Rar.exe','2524','svchost.exe','14592'] } },
+  { id: 'OK-21', f: { observation: 'fls enumerates files under a target directory', interpretation: 'The command enumerated all files in the target directory listing; no environment-wide scope is established.',
+      output: FLS, evidence_tool: 'fls', cited_tokens: ['backup.dat','90122'] } },
 ];
 
 let missed = 0, falsePos = 0;

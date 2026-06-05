@@ -10,7 +10,7 @@ Same analyst output; the only variable is the Council.
 | **Council OFF** | 6 / 6 |
 | **Council ON**  | 0 / 6 |
 
-## Council panel (Citation + Tool-semantics + Contradiction + Inference) vs ground truth
+## Council panel (Citation + Tool-semantics + Contradiction + Inference + Scope) vs ground truth
 
 | metric | value |
 |---|---|

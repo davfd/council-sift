@@ -13,7 +13,9 @@
     "locator": "inode 103887; 4697 records at Sep 06 2018 (e.g. 08:30:02 UTC); host base-dc.shieldbase.lan",
     "tool": "evtxexport (libevtx) on icat-extracted Security.evtx",
     "command": "icat <img> 103887 > /tmp/sec.evtx ; evtxexport -f text /tmp/sec.evtx ; awk 'BEGIN{RS=\"\\n\\n\"}/0x00001259/{print}'",
-    "output_sha256": "149adb056be25ef5b259bf2521a48dcfa7a05daa76745109867e48784f5940ac"
+    "output_sha256": "149adb056be25ef5b259bf2521a48dcfa7a05daa76745109867e48784f5940ac",
+    "rerun_status": "STORED_OUTPUT_ONLY",
+    "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
   },
   "seats": [
     {
@@ -97,5 +99,8 @@
   "disposition": "COUNCIL_VERIFIED",
   "created_at": "2026-06-04T03:08:01.795Z",
   "prev_receipt_sha256": "4529a74a3cee8fd1b5050dc882c0008bef5a7c3126c87e681dd19b4a145a5fa5",
-  "receipt_sha256": "e98bfb60e0fb75a2c7d7d42dcde07bbc98e2dcbc703db6f9d516ca7da865ac26"
+  "receipt_sha256": "e98bfb60e0fb75a2c7d7d42dcde07bbc98e2dcbc703db6f9d516ca7da865ac26",
+  "rerun_status": "STORED_OUTPUT_ONLY",
+  "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here.",
+  "receipt_hash_scope_note": "receipt_sha256 is the original Council receipt hash; rerun_status fields are Tier 2 audit metadata labels."
 }

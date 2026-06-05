@@ -13,7 +13,9 @@
     "locator": "MFT 124824; Parent MFT Entry 5 (root); $DATA actual size 862864067; Created 2018-09-05 14:32:36 UTC",
     "tool": "istat + icat (The Sleuth Kit)",
     "command": "istat -o 0 IMG 124824 | grep -E 'Not Allocated File|Actual Size|Created:|File Modified:|Name:|Parent MFT Entry:' ; echo -n recovered_bytes= ; icat -o 0 IMG 124824 | wc -c",
-    "output_sha256": "ab7ce7e02dd22ce56c3dfd549ae0a4a3f38e0774030f86ec80242476ee181e91"
+    "output_sha256": "ab7ce7e02dd22ce56c3dfd549ae0a4a3f38e0774030f86ec80242476ee181e91",
+    "rerun_status": "STORED_OUTPUT_ONLY",
+    "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
   },
   "seats": [
     {
@@ -97,5 +99,8 @@
   "disposition": "COUNCIL_VERIFIED",
   "created_at": "2026-06-04T03:10:34.491Z",
   "prev_receipt_sha256": "44947807e9f003331fc99cac20f88f0c1ba8c42de189654870946a7e31e56b2a",
-  "receipt_sha256": "ae68bf235cbe60b9095d48f15d4a2c52347d521443840688a47d3e6466c925d2"
+  "receipt_sha256": "ae68bf235cbe60b9095d48f15d4a2c52347d521443840688a47d3e6466c925d2",
+  "rerun_status": "STORED_OUTPUT_ONLY",
+  "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here.",
+  "receipt_hash_scope_note": "receipt_sha256 is the original Council receipt hash; rerun_status fields are Tier 2 audit metadata labels."
 }

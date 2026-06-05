@@ -70,7 +70,7 @@ Same analyst output; the only variable is the Council.
 | **Council OFF** | ${passthroughOFF} / ${totalUnsupported} |
 | **Council ON**  | ${passthroughON} / ${totalUnsupported} |
 
-## Council panel (Citation + Tool-semantics + Contradiction + Inference) vs ground truth
+## Council panel (Citation + Tool-semantics + Contradiction + Inference + Scope) vs ground truth
 
 | metric | value |
 |---|---|

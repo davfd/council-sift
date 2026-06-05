@@ -13,7 +13,9 @@
     "locator": "inode 103887; 4724+4738 records at 2018-09-06 01:37:23 UTC; target tyler.oslund (SID ...-1180)",
     "tool": "grep/awk over evtxexport text of Security.evtx",
     "command": "evtxexport -f text /tmp/sec.evtx ; grep -c per account-mgmt EID + awk RS extract of 0x1274 and 0x1282",
-    "output_sha256": "75d7743e4fb9863597b7a14fb3c544cee77bb615823fa6ba65ddfeb9417c06b8"
+    "output_sha256": "75d7743e4fb9863597b7a14fb3c544cee77bb615823fa6ba65ddfeb9417c06b8",
+    "rerun_status": "STORED_OUTPUT_ONLY",
+    "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
   },
   "seats": [
     {
@@ -105,5 +107,8 @@
   "disposition": "COUNCIL_VERIFIED",
   "created_at": "2026-06-04T03:10:12.346Z",
   "prev_receipt_sha256": "e98bfb60e0fb75a2c7d7d42dcde07bbc98e2dcbc703db6f9d516ca7da865ac26",
-  "receipt_sha256": "db7e7ba3de4876511a644134c52e5b32022f049e8dbb44f18f521b5c96b368ee"
+  "receipt_sha256": "db7e7ba3de4876511a644134c52e5b32022f049e8dbb44f18f521b5c96b368ee",
+  "rerun_status": "STORED_OUTPUT_ONLY",
+  "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here.",
+  "receipt_hash_scope_note": "receipt_sha256 is the original Council receipt hash; rerun_status fields are Tier 2 audit metadata labels."
 }

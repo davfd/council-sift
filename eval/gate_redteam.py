@@ -43,10 +43,14 @@ MUST_REFUSE = {
     "interpreters": [
         "python3 -c 'import subprocess; subprocess.run([\"rm\",\"x\"])'",
         "python3 -c 'import os; os.system(\"rm x\")'",
+        "python3 -c 'open(\"/mnt/evidence/x\",\"w\").write(\"x\")'",
+        "python3 -c 'from pathlib import Path; Path(\"/mnt/evidence/x\").unlink()'",
+        "python3 /tmp/pwn.py",
         "perl -e 'system(\"rm x\")'",
         "ruby -e 'system(\"rm x\")'",
         "node -e 'require(\"fs\").unlinkSync(\"x\")'",
         "awk 'BEGIN{system(\"rm /mnt/evidence/x\")}'",
+        "awk -f /tmp/pwn.awk /tmp/input",
     ],
     "wrappers": [
         "sudo sudo rm /tmp/x", "env rm /tmp/x", "nice rm /tmp/x", "timeout 5 rm /tmp/x",
@@ -60,6 +64,9 @@ MUST_REFUSE = {
     "archive/extract over evidence": [
         "unzip x.zip -d /evidence", "unzip x.zip -d /mnt/evidence",
         "tar --directory=/evidence -xf x.tar", "tar -C /mnt/evidence -xf x.tar",
+        "tar --to-command=/bin/sh -xf /mnt/evidence/a.tar", "tar --checkpoint-action=exec=sh -xf /mnt/evidence/a.tar",
+        "tar --checkpoint-action exec=sh -xf /mnt/evidence/a.tar",
+        "awk -f /tmp/pwn.awk /tmp/input", "awk -f/tmp/pwn.awk /tmp/input",
         "7z x -o/evidence x.7z",
     ],
     "tool-native write": [

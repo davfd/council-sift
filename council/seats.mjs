@@ -1,11 +1,12 @@
 /**
  * seats.mjs — Council-SIFT forensic verifier seats (shared by the live loop and the ablation).
  *
- * Five deterministic verification seats (OpenClaw/LLM agent narration layers on top via run_agentic.mjs):
+ * Five deterministic refutation seats plus Synthesis (OpenClaw/LLM agent narration layers on top via run_agentic.mjs):
  *   Citation       — every evidence token a claim CITES must appear in the tool output.
  *   Tool-semantics — the tool output is not over-read (psscan!=C2, shimcache!=execution, netscan!=exfil).
  *   Contradiction  — a disproving artifact (e.g. $SI vs $FN timestomp) is surfaced.
  *   Inference      — the interpretation does not over-reach (attribution/intent/causation/certainty).
+ *   Scope          — one artifact is not stretched into environment-wide/all-host impact.
  *   Synthesis      — aggregate seat verdicts → disposition.
  *
  * Soundness notes (hardened with the regression probe, eval/adversarial_evasions.mjs):
@@ -49,6 +50,63 @@ function evidenceTokens(text) {
   for (const m of evidenceText.matchAll(/PID[=\s:]*(\d+)/gi)) tokens.add(m[1]);                       // PIDs
   for (const m of evidenceText.matchAll(/[A-Za-z]:\\[^\s",;]+/g)) tokens.add(m[0].toLowerCase());     // Windows paths
   return tokens;
+}
+
+function claimPids(text) {
+  const pids = new Set();
+  for (const m of String(text || '').matchAll(/\bPID[=\s:]*(\d+)\b/gi)) pids.add(m[1]);
+  return [...pids];
+}
+
+function claimProcessNames(text) {
+  const names = new Set();
+  for (const m of String(text || '').matchAll(/\b[A-Za-z0-9_.-]+\.exe\b/gi)) names.add(m[0].toLowerCase());
+  return [...names];
+}
+
+function claimPidProcessPairs(text) {
+  const pairs = [];
+  const s = String(text || '');
+  const crossClaimGap = (gap) => /\b(?:and|or|plus|while|whereas)\b/i.test(gap);
+  const nameThenPid = /\b([A-Za-z0-9_.-]+\.exe)\b([^.\n;]{0,60}?)\bPID[=\s:]*(\d+)\b/gi;
+  const pidThenName = /\bPID[=\s:]*(\d+)\b([^.\n;]{0,60}?)\b([A-Za-z0-9_.-]+\.exe)\b/gi;
+  for (const m of s.matchAll(nameThenPid)) {
+    if (!crossClaimGap(m[2])) pairs.push({ name: m[1].toLowerCase(), pid: m[3] });
+  }
+  for (const m of s.matchAll(pidThenName)) {
+    if (!crossClaimGap(m[2])) pairs.push({ name: m[3].toLowerCase(), pid: m[1] });
+  }
+  const seen = new Set();
+  return pairs.filter((p) => {
+    const k = `${p.pid}\u0000${p.name}`;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
+
+function linesWithToken(output, token) {
+  const norm = String(token || '').toLowerCase();
+  return String(output || '').split(/\r?\n/).filter((line) => tokenPresent(line.toLowerCase(), norm));
+}
+
+function pidProcessMismatch(finding, cited) {
+  const tool = `${finding.evidence_tool || finding.tool || ''}`;
+  if (!/psscan|pslist|cmdline/i.test(tool)) return null;
+  const claimText = `${finding.observation || ''}; ${finding.interpretation || ''}`;
+  const pairs = claimPidProcessPairs(claimText);
+  if (!pairs.length) return null;
+  for (const { pid, name } of pairs) {
+    const rows = linesWithToken(finding.output || '', pid);
+    if (!rows.length) continue; // citation seat handles absent PIDs
+    const sameRow = rows.some((row) => tokenPresent(row.toLowerCase(), name));
+    const nameAppearsSomewhere = tokenPresent(String(finding.output || '').toLowerCase(), name);
+    if (nameAppearsSomewhere && !sameRow) {
+      const rowNames = [...new Set(rows.flatMap((row) => claimProcessNames(row)))].join(', ') || '(no process name parsed)';
+      return { pid, claimed: name, actual: rowNames };
+    }
+  }
+  return null;
 }
 
 function interpretationClaimTokens(interpretation = '') {
@@ -101,10 +159,13 @@ export function citationSeat(finding) {
     return { token: tok, present: tokenPresent(out, norm) };
   });
   const missing = checked.filter((c) => !c.present).map((c) => c.token);
-  const verdict = missing.length === 0 ? 'SUPPORTED' : 'UNSUPPORTED';
-  const reasoning = missing.length === 0
-    ? `All ${checked.length} cited evidence token(s) resolve in the tool output.`
-    : `Cited token(s) NOT present in the tool output as a standalone token (hallucinated/unsupported): ${missing.join(', ')}.`;
+  const mismatch = missing.length === 0 ? pidProcessMismatch(finding, cited) : null;
+  const verdict = missing.length === 0 && !mismatch ? 'SUPPORTED' : 'UNSUPPORTED';
+  const reasoning = missing.length > 0
+    ? `Cited token(s) NOT present in the tool output as a standalone token (hallucinated/unsupported): ${missing.join(', ')}.`
+    : mismatch
+      ? `PID/process-name mismatch: PID ${mismatch.pid} is on output row for ${mismatch.actual}, but the claim names ${mismatch.claimed}.`
+      : `All ${checked.length} cited evidence token(s) resolve in the tool output.`;
   return { seat: 'seat:citation', lens: 'does every cited token resolve in the evidence?', verdict, reasoning, evidence_checked: checked };
 }
 
@@ -156,6 +217,32 @@ export function toolSemanticsSeat(finding) {
 }
 
 // Contradiction seat — is there a disproving artifact? (MVP: timestomp — $SI vs $FN disagreement)
+function privateIpv4(ip) {
+  const parts = String(ip || '').split('.').map((n) => Number(n));
+  if (parts.length !== 4 || parts.some((n) => !Number.isInteger(n) || n < 0 || n > 255)) return false;
+  return parts[0] === 10 || parts[0] === 127 || (parts[0] === 192 && parts[1] === 168) || (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31);
+}
+
+function ipv4s(text) {
+  return [...new Set([...String(text || '').matchAll(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g)].map((m) => m[0]))];
+}
+
+function externalIpContradiction(finding) {
+  const cited = Array.isArray(finding.cited_tokens) ? finding.cited_tokens.join(' ') : '';
+  const ips = ipv4s(`${finding.output || ''} ${finding.observation || ''} ${finding.interpretation || ''} ${cited}`).filter(privateIpv4);
+  if (!ips.length) return null;
+  for (const clause of splitClauses(finding.interpretation || '')) {
+    for (const ip of ips) {
+      if (!clause.includes(ip)) continue;
+      if (!/\b(?:external|public|internet|outside|remote\s+internet)\b/i.test(clause)) continue;
+      if (/\b(?:internal|private|rfc1918|loopback)\b/i.test(clause)) continue;
+      if (/\b(?:not|cannot|can't|could not|couldn't|isn't|is not|are not|aren't)\b.{0,50}\b(?:external|public|internet|outside)\b/i.test(clause)) continue;
+      return { ip, clause };
+    }
+  }
+  return null;
+}
+
 export function contradictionSeat(finding) {
   const out = finding.output || '';
   const si = out.match(/\$SI[^\n]*?(\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(?::\d{2})?)/i);
@@ -164,6 +251,11 @@ export function contradictionSeat(finding) {
   if (si && fn && si[1] !== fn[1] && claimsCreation) {
     return { seat: 'seat:contradiction', lens: 'is there an artifact that disproves this?', verdict: 'CONTRADICTED',
       reasoning: `Timestomp: $SI time (${si[1]}) contradicts $FN time (${fn[1]}); the claim treats the forgeable $SI creation time as authoritative.` };
+  }
+  const ipContradiction = externalIpContradiction(finding);
+  if (ipContradiction) {
+    return { seat: 'seat:contradiction', lens: 'is there an artifact that disproves this?', verdict: 'CONTRADICTED',
+      reasoning: `RFC1918/private IP contradiction: ${ipContradiction.ip} is not an external/public internet address, but the claim says "${ipContradiction.clause.slice(0, 140)}".` };
   }
   return { seat: 'seat:contradiction', lens: 'is there an artifact that disproves this?', verdict: 'SUPPORTED', reasoning: 'No contradicting artifact found in the evidence.' };
 }
@@ -203,9 +295,24 @@ export function inferenceSeat(finding) {
   return { seat: 'seat:inference', lens: 'does the observation support the interpretation?', verdict: 'SUPPORTED', reasoning: 'Interpretation stays within what the cited artifact supports.' };
 }
 
+const SCOPE_OVERREACH = /\b(?:all|every)\s+(?:hosts?|systems?|machines?|workstations?|servers?|endpoints?|assets?)\b|\benvironment[- ]wide\b|\borganization[- ]wide\b|\benterprise[- ]wide\b|\bacross\s+(?:the\s+)?(?:organization|enterprise|environment|domain|network)\b|\bentire\s+(?:network|environment|domain|organization|enterprise)\b/i;
+const SCOPE_NEGATION = /\b(?:no|not|without|cannot|can't|could not|couldn't)\b.{0,80}\b(?:scope|all\s+hosts?|environment[- ]wide|organization[- ]wide|enterprise[- ]wide|entire\s+(?:network|environment|domain|organization|enterprise))\b.{0,80}\b(?:established|shown|supported|claimed|available|present|proven|confirmed)?\b/i;
+
+export function scopeSeat(finding) {
+  const interp = (finding.interpretation || '').trim();
+  if (!interp) return { seat: 'seat:scope', lens: 'does the artifact support the claimed scope?', verdict: 'SUPPORTED', reasoning: 'No interpretation to evaluate for scope.' };
+  const clauses = splitClauses(interp);
+  const offending = clauses.find((c) => SCOPE_OVERREACH.test(c) && !NEGATION_HEDGE.test(c) && !SCOPE_NEGATION.test(c));
+  if (offending) {
+    return { seat: 'seat:scope', lens: 'does the artifact support the claimed scope?', verdict: 'UNSUPPORTED',
+      reasoning: `Scope overreach: one cited artifact/tool output cannot establish environment-wide/all-host/organization-wide impact. Offending clause: "${offending.slice(0, 140)}".` };
+  }
+  return { seat: 'seat:scope', lens: 'does the artifact support the claimed scope?', verdict: 'SUPPORTED', reasoning: 'No environment-wide/all-host scope overreach detected.' };
+}
+
 // Run the full seat panel + synthesis. `caught` = any seat refuted (bounce for self-correction).
 export function runSeats(finding) {
-  const seats = [citationSeat(finding), toolSemanticsSeat(finding), contradictionSeat(finding), inferenceSeat(finding)];
+  const seats = [citationSeat(finding), toolSemanticsSeat(finding), contradictionSeat(finding), inferenceSeat(finding), scopeSeat(finding)];
   const synth = synthesisSeat(seats);
   return { seats, synth, caught: synth.verdict === 'BOUNCE_FOR_CORRECTION' };
 }

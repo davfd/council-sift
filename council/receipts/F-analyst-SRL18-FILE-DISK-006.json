@@ -13,7 +13,9 @@
     "locator": "MFT 120557 (live, allocated) and MFT 124702 (deleted); both Actual Size 724919",
     "tool": "fls + istat (The Sleuth Kit)",
     "command": "fls -r -p -o 0 IMG | grep StarFury.zip ; istat -o 0 IMG 120557 ; istat -o 0 IMG 124702",
-    "output_sha256": "7ae2c713331f93a3f945995031c5c88687ce21bf2bdad4db44532681d8011bcf"
+    "output_sha256": "7ae2c713331f93a3f945995031c5c88687ce21bf2bdad4db44532681d8011bcf",
+    "rerun_status": "STORED_OUTPUT_ONLY",
+    "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
   },
   "seats": [
     {
@@ -97,5 +99,8 @@
   "disposition": "COUNCIL_VERIFIED",
   "created_at": "2026-06-04T03:13:33.193Z",
   "prev_receipt_sha256": "ae68bf235cbe60b9095d48f15d4a2c52347d521443840688a47d3e6466c925d2",
-  "receipt_sha256": "9c48d16b65aefd2580fe346e8b684a4c91fb17479ef79f9099a4dd63125edb78"
+  "receipt_sha256": "9c48d16b65aefd2580fe346e8b684a4c91fb17479ef79f9099a4dd63125edb78",
+  "rerun_status": "STORED_OUTPUT_ONLY",
+  "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here.",
+  "receipt_hash_scope_note": "receipt_sha256 is the original Council receipt hash; rerun_status fields are Tier 2 audit metadata labels."
 }
