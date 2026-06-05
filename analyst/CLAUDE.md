@@ -7,9 +7,11 @@ findings reach the human examiner.
 
 ## Your tools (on PATH; call via Bash)
 
-- `sift '<command>'` — run a forensic tool **inside the SIFT VM** and get its real stdout.
+- `sift '<command>'` — quick interactive forensic look inside the SIFT VM.
   e.g. `sift 'fls -r -p /tmp/case.img'`, `sift 'vol -f /cases/mem.img windows.psscan'`.
-- `csift record-finding` — submit a finding. Pipe a JSON object on stdin (schema below). Prints the
+- `csift capture` — pipe a JSON execution spec on stdin; it runs the command through `bin/sift`, writes
+  a local hash-verified trusted-execution record, and prints `execution_ref`.
+- `csift record-finding` — submit a finding that references an `execution_ref`. Pipe a JSON object on stdin (schema below). Prints the
   `finding_id`.
 - `council review <finding_id>` — run the Council seats. Output is either `COUNCIL_VERIFIED` (a
   Receipt is emitted) or `BOUNCE_FOR_CORRECTION` (with the seat's objection).
@@ -26,9 +28,7 @@ findings reach the human examiner.
   "confidence": "HIGH | MEDIUM | LOW | SPECULATIVE",
   "artifact": "<path to the evidence>",
   "locator": "<record id / inode / PID / offset / timestamp>",
-  "tool": "<tool name>",
-  "command": "<exact command you ran via sift>",
-  "output": "<the real tool stdout>",
+  "execution_ref": "council/executions/TE-<case>-<hash>-<hash>.json",
   "cited_tokens": ["<each exact evidence string your claim depends on>"]
 }
 ```
@@ -36,8 +36,9 @@ findings reach the human examiner.
 ## Discipline (non-negotiable)
 
 1. **Observation ≠ interpretation.** `observation` is only what the tool printed. Inferences go in
-   `interpretation`. The Council's Citation seat checks every `cited_tokens` entry actually appears in
-   `output` — so **never cite a value that isn't in the tool output** (that is a hallucination and
+   `interpretation`. Run the tool through `csift capture` first; `record-finding` imports the captured
+   stdout from `execution_ref` and refuses ordinary caller-supplied `output`. The Council's Citation seat checks every `cited_tokens` entry actually appears in
+   that captured output — so **never cite a value that isn't in the tool output** (that is a hallucination and
    will be refuted).
 2. **Cite the evidence you actually have.** If a tool can't establish something (e.g. a process list
    can't prove a C2 IP), do not claim it. List in `cited_tokens` exactly the strings your claim rests
@@ -50,8 +51,12 @@ findings reach the human examiner.
 ## Workflow (loop)
 
 For each investigative lead:
-1. Run the relevant tool with `sift '<command>'`; capture the real output.
-2. Draft a finding (above) and submit it: `echo '<json>' | csift record-finding`.
+1. Capture the relevant tool output with `csift capture`:
+   ```bash
+   printf '%s\n' '{"case":"CASE","artifact":"/path/evidence","locator":"tool:record","tool":"vol3","command":"vol -q -f /path/mem.img windows.psscan"}' | csift capture
+   ```
+   Keep the printed `execution_ref`.
+2. Draft a finding (above) that cites that `execution_ref`, then submit it: `echo '<json>' | csift record-finding`.
 3. `council review <finding_id>`.
    - **COUNCIL_VERIFIED** → move to the next lead.
    - **BOUNCE_FOR_CORRECTION** → read the seat's objection, **remove or downgrade the unsupported

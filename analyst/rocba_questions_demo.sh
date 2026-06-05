@@ -21,7 +21,7 @@ import json, os
 print(json.dumps({"case":os.environ["CASE"],"observation":os.environ["OBS"],"interpretation":os.environ["INTERP"],
 "confidence":os.environ["CONF"],"artifact":"/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01",
 "locator":"ntfs:Users/fredr (inode 154910)","tool":"fls","command":"fls -f ntfs rocba-cdrive.e01 154910",
-"output":os.environ["OUT"],"cited_tokens":[t for t in os.environ["CITED"].split("|") if t]}))
+"output":os.environ["OUT"],"provenance_tier":"STORED_OUTPUT_ONLY","cited_tokens":[t for t in os.environ["CITED"].split("|") if t]}))
 PY
 }
 

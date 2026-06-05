@@ -13,22 +13,38 @@ NF() { grep -vE 'MEM-TELEMETRY|C1-COST|OPENAI_API_KEY absent|injected env' || tr
 "$SIFT" '[ -f /tmp/srlmem/base-file-memory.img ] || 7z x -y -o/tmp/srlmem "/mnt/evidence/Compromised APT Attack Scenarios/SRL 2018/base-file-memory.7z" >/dev/null 2>&1
 echo forensics | sudo -S chmod -R a+rwx /opt/volatility3/lib/python3.12/site-packages/volatility3/symbols /opt/volatility3/lib/python3.12/site-packages/volatility3/framework/symbols 2>/dev/null
 [ -s /tmp/srlmem/psscan.txt ] || vol -q -f /tmp/srlmem/base-file-memory.img windows.psscan > /tmp/srlmem/psscan.txt 2>/dev/null'
-# Replay-canonical command: the EXACT pipe whose stdout we store as the finding's tool output, so
+# Replay-canonical command: the EXACT pipe whose stdout we store as the finding's trusted execution record, so
 # `csift trace --rerun` re-executes it and the fresh hash matches (independent re-execution proof).
 CMD='vol -q -f /tmp/srlmem/base-file-memory.img windows.psscan | grep -E "Rar.exe|rdpclip.exe|subject_srv|reg.exe" | head -6'
-OUT="$("$SIFT" "$CMD"; echo X)"; OUT="${OUT%X}"  # preserve exact trailing newlines (rerun captures raw)
+CAPTURE_JSON="$(CMD="$CMD" CASE="$CASE" python3 - <<'PY' | node bridge/csift.mjs capture
+import json, os
+print(json.dumps({
+  "case": os.environ["CASE"],
+  "artifact": "/tmp/srlmem/base-file-memory.img",
+  "locator": "windows.psscan:PID=2524",
+  "tool": "vol3",
+  "command": os.environ["CMD"],
+  "cited_tokens": ["Rar.exe", "2524", "6352"],
+}))
+PY
+)"
+EXEC_REF="$(printf '%s' "$CAPTURE_JSON" | python3 -c 'import json,sys; print(json.load(sys.stdin)["execution_ref"])')"
+OUT="$(EXEC_REF="$EXEC_REF" python3 - <<'PY'
+import json, os
+print(json.load(open(os.environ["EXEC_REF"]))["output"], end="")
+PY
+)"
 echo "── REAL vol3 windows.psscan output (official SRL-2018 base-file memory image) ──"; echo "$OUT"; echo
 
 docker exec councilsift-neo4j cypher-shell -u neo4j -p councilsiftpw \
   "MATCH (n) WHERE n.project_root='$CASE' DETACH DELETE n;" >/dev/null 2>&1 || true
 
-mkf() { OBS="$1" INTERP="$2" CONF="$3" CITED="$4" OUT="$OUT" CMD="$CMD" CASE="$CASE" python3 - <<'PY'
+mkf() { OBS="$1" INTERP="$2" CONF="$3" CITED="$4" EXEC_REF="$EXEC_REF" CASE="$CASE" python3 - <<'PY'
 import json, os
 print(json.dumps({
   "case": os.environ["CASE"], "observation": os.environ["OBS"], "interpretation": os.environ["INTERP"],
-  "confidence": os.environ["CONF"], "artifact": "/tmp/srlmem/base-file-memory.img",
-  "locator": "windows.psscan:PID=2524", "tool": "vol3", "command": os.environ["CMD"],
-  "output": os.environ["OUT"], "cited_tokens": [t for t in os.environ["CITED"].split("|") if t]}))
+  "confidence": os.environ["CONF"], "execution_ref": os.environ["EXEC_REF"],
+  "cited_tokens": [t for t in os.environ["CITED"].split("|") if t]}))
 PY
 }
 

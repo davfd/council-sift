@@ -5,7 +5,8 @@
  * The DFIR analyst calls these to write/trace findings through the REAL claw-memory
  * engine (genuine provenance edges + content_sha256), not raw Cypher.
  *
- *   record-finding   < finding.json   deposit a 4-part DFIR finding + tool-execution provenance
+ *   capture          < execution.json deposit hash-verified local tool execution record
+ *   record-finding   < finding.json   deposit a 4-part DFIR finding + trusted execution provenance
  *   refute <id> "<reason>"            seat objection: mark finding disputed + write ConflictRecord
  *   trace [--rerun] <id>              resolve finding → tool execution; re-hash stored output; --rerun
  *                                     independently re-executes the recorded command and compares the hash
@@ -15,20 +16,33 @@
  *
  * finding.json shape:
  *   { case, observation, interpretation, confidence(HIGH|MEDIUM|LOW|SPECULATIVE),
- *     artifact, locator, tool, command, output }
+ *     execution_ref, cited_tokens }
+ *
+ * Legacy/stored-output-only findings must explicitly set provenance_tier=STORED_OUTPUT_ONLY. Ordinary
+ * caller-supplied output is refused; use `capture` to bind stdout to an execution hash first.
  */
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Neo4jService } from '../claw-memory-core/dist/storage/neo4j/neo4j.service.js';
 import { handleRemember } from '../claw-memory-core/dist/handlers/remember.js';
 import { handleMarkWrong } from '../claw-memory-core/dist/handlers/mark-wrong.js';
 import { guardIsolatedUri, assertSafeId } from '../safety.mjs';
+import {
+  buildTrustedExecutionRecord,
+  loadTrustedExecutionRecord,
+  resolveFindingEvidence,
+  writeTrustedExecutionRecord,
+} from '../council/trusted_execution.mjs';
 
 const sha = (s) => createHash('sha256').update(s, 'utf8').digest('hex');
 const die = (m) => { console.error('[csift] ' + m); process.exit(1); };
 const CONF = ['HIGH', 'MEDIUM', 'LOW', 'SPECULATIVE'];
+const __dir = dirname(fileURLToPath(import.meta.url));
 const RECEIPT_MANIFEST_URL = new URL('../council/receipts/manifest.json', import.meta.url);
+const EXECUTIONS_DIR = resolve(process.env.CSIFT_EXECUTIONS_DIR || resolve(__dir, '../council/executions'));
 
 function receiptRerunStatus(findingId) {
   try {
@@ -51,10 +65,45 @@ async function readStdin() {
 
 function guardIsolated() { guardIsolatedUri(process.env.NEO4J_URI, die); }
 
+async function captureExecution() {
+  const raw = await readStdin();
+  let spec;
+  try { spec = JSON.parse(raw); } catch { die('capture expects a JSON spec on stdin'); }
+  for (const k of ['case', 'artifact', 'locator', 'tool', 'command']) {
+    if (!spec[k]) die(`missing required field: ${k}`);
+  }
+  assertSafeId(spec.case, die, 'case id');
+  const wrapper = spec.wrapper || process.env.CSIFT_SIFT_WRAPPER || resolve(__dir, '../bin/sift');
+  let output = '';
+  let exit_code = 0;
+  try {
+    output = execFileSync(wrapper, [String(spec.command)], { encoding: 'utf8', maxBuffer: 1e8, timeout: Number(spec.timeout_ms || 180000) });
+  } catch (e) {
+    exit_code = Number(e?.status ?? 1);
+    output = String(e?.stdout || '') + String(e?.stderr || '');
+  }
+  const record = buildTrustedExecutionRecord({ ...spec, output, exit_code, wrapper, captured_at: new Date().toISOString() });
+  const written = writeTrustedExecutionRecord(EXECUTIONS_DIR, record);
+  console.log(JSON.stringify({
+    execution_id: record.execution_id,
+    provenance_tier: record.provenance_tier,
+    execution_ref: `council/executions/${written.file}`,
+    record_sha256: record.record_sha256,
+    output_sha256: record.output_sha256,
+    exit_code,
+  }, null, 2));
+}
+
 async function recordFinding(svc) {
   const raw = await readStdin();
   let f;
   try { f = JSON.parse(raw); } catch { die('record-finding expects a JSON finding on stdin'); }
+  if (f.execution_ref && !f.execution_record) {
+    try { f.execution_record = loadTrustedExecutionRecord(f.execution_ref, resolve(__dir, '..')); }
+    catch (e) { die(String(e?.message || e)); }
+  }
+  try { f = resolveFindingEvidence(f); }
+  catch (e) { die(String(e?.message || e)); }
   for (const k of ['case', 'observation', 'interpretation', 'confidence', 'artifact', 'locator', 'tool', 'command']) {
     if (!f[k]) die(`missing required field: ${k}`);
   }
@@ -103,23 +152,31 @@ async function recordFinding(svc) {
   // (DERIVED_FROM) carrying the exact tool/command/output + hash — this is what `trace` re-verifies.
   await svc.run(
     `MATCH (n:MemoryClaim {nodeId:$id})
-     SET n.finding_id=$fid, n.kind='finding', n.status='DRAFT', n.provenance_tier='SHELL',
+     SET n.finding_id=$fid, n.kind='finding', n.status='DRAFT', n.provenance_tier=$tier,
          n.observation=$obs, n.interpretation=$interp, n.confidence=$conf, n.cited_tokens=$cited,
          n.evidence_artifact=$art, n.evidence_locator=$loc, n.evidence_tool=$tool,
-         n.evidence_command=$cmd, n.evidence_output_sha256=$oh
+         n.evidence_command=$cmd, n.evidence_output_sha256=$oh,
+         n.evidence_execution_id=$execId, n.evidence_execution_record_sha256=$execSha,
+         n.evidence_excerpt=$excerpt, n.evidence_excerpt_sha256=$excerptSha
      MERGE (te:ToolExecution {output_sha256:$oh, project_root:$t})
        ON CREATE SET te.tool=$tool, te.command=$cmd, te.output=$out,
-                     te.artifact=$art, te.locator=$loc, te.ranAt=$ts
+                     te.artifact=$art, te.locator=$loc, te.ranAt=$ts,
+                     te.provenance_tier=$tier, te.execution_id=$execId,
+                     te.execution_record_sha256=$execSha
      MERGE (n)-[:DERIVED_FROM]->(te)`,
     { id: nodeId, fid: findingId, obs: f.observation, interp: f.interpretation, conf,
       cited: Array.isArray(f.cited_tokens) ? f.cited_tokens.map(String) : [],
       art: f.artifact, loc: f.locator, tool: f.tool, cmd: f.command, oh: outHash, out: output,
+      tier: f.provenance_tier, execId: f.execution_id || null, execSha: f.execution_record_sha256 || null,
+      excerpt: f.evidence_excerpt ? JSON.stringify(f.evidence_excerpt) : null,
+      excerptSha: f.evidence_excerpt?.excerpt_sha256 || null,
       t: f.case, ts: new Date().toISOString() },
   );
 
   console.log(JSON.stringify({
     finding_id: findingId, nodeId, status: 'DRAFT', confidence: conf, content_sha256: contentHash,
     evidence_pointer: { artifact: f.artifact, locator: f.locator, tool: f.tool, command: f.command, output_sha256: outHash },
+    trusted_execution: { provenance_tier: f.provenance_tier, execution_id: f.execution_id || null, execution_record_sha256: f.execution_record_sha256 || null },
   }, null, 2));
 }
 
@@ -139,6 +196,11 @@ async function refute(svc, id, reason) {
   console.log(JSON.stringify({ nodeId: rows[0].id, lifecycle: mw.structured.lifecycleState, status: 'DISPUTED', conflict_record: cr[0]?.cr ?? null, reason }, null, 2));
 }
 
+function parseJsonOrNull(text) {
+  if (!text) return null;
+  try { return JSON.parse(text); } catch { return null; }
+}
+
 async function trace(svc, id, opts = {}) {
   if (!id) die('usage: trace [--rerun] <finding_id|nodeId>');
   const rows = await svc.run(
@@ -147,7 +209,10 @@ async function trace(svc, id, opts = {}) {
      RETURN n.finding_id AS fid, n.nodeId AS nodeId, n.status AS status, n.lifecycleState AS lifecycle,
             n.observation AS obs, n.interpretation AS interp, n.confidence AS conf, n.content_sha256 AS csha,
             n.evidence_artifact AS art, n.evidence_locator AS loc, n.evidence_tool AS tool,
-            n.evidence_command AS cmd, n.evidence_output_sha256 AS oh, te.output AS out LIMIT 1`,
+            n.evidence_command AS cmd, n.evidence_output_sha256 AS oh,
+            n.provenance_tier AS tier, n.evidence_execution_id AS execId,
+            n.evidence_execution_record_sha256 AS execSha, n.evidence_excerpt AS excerpt,
+            n.evidence_excerpt_sha256 AS excerptSha, te.output AS out LIMIT 1`,
     { id },
   );
   if (!rows.length) die('finding not found: ' + id);
@@ -202,6 +267,8 @@ async function trace(svc, id, opts = {}) {
     finding_id: r.fid, nodeId: r.nodeId, status: r.status, lifecycle: r.lifecycle,
     claim: { observation: r.obs, interpretation: r.interp, confidence: r.conf, content_sha256: r.csha },
     evidence_pointer: { artifact: r.art, locator: r.loc, tool: r.tool, command: r.cmd, output_sha256: r.oh },
+    trusted_execution: { provenance_tier: r.tier || null, execution_id: r.execId || null, execution_record_sha256: r.execSha || null, evidence_excerpt_sha256: r.excerptSha || null },
+    evidence_excerpt: parseJsonOrNull(r.excerpt),
     rerun_status,
     stored_chain_integrity: stored_chain,
     independent_rerun,
@@ -220,15 +287,16 @@ async function list(svc, caseId) {
 }
 
 async function main() {
-  guardIsolated();
   const [cmd, ...args] = process.argv.slice(2);
+  if (cmd === 'capture') { await captureExecution(); process.exit(0); }
+  guardIsolated();
   const svc = new Neo4jService();
   try {
     if (cmd === 'record-finding') await recordFinding(svc);
     else if (cmd === 'refute') await refute(svc, args.find((a) => !a.startsWith('--')), args.filter((a) => !a.startsWith('--')).slice(1).join(' '));
     else if (cmd === 'trace') await trace(svc, args.find((a) => !a.startsWith('--')), { rerun: args.includes('--rerun') });
     else if (cmd === 'list') await list(svc, args[0]);
-    else die('unknown command: ' + (cmd ?? '<none>') + ' (record-finding|refute|trace|list)');
+    else die('unknown command: ' + (cmd ?? '<none>') + ' (capture|record-finding|refute|trace|list)');
   } finally {
     try { await svc.close?.(); } catch {}
   }

@@ -18,6 +18,11 @@ eval/corpus/
 # NOTE: council/receipts/*.json ARE committed (canonical proof deliverables) — not ignored, so a
 # clean orphan snapshot (PUBLISH.md Option B, git add -A) includes them without a force-add.
 
+# Trusted execution captures can contain full official evidence stdout. They are local audit artifacts,
+# not redistributable public corpus. Commit code/tests/docs, not captured stdout records.
+council/executions/*.json
+!council/executions/README.md
+
 *.bak
 *.tmp
 .DS_Store

@@ -41,11 +41,18 @@ async function loadFinding(svc, id) {
             n.observation AS observation, n.interpretation AS interpretation, n.confidence AS confidence,
             n.cited_tokens AS cited_tokens, n.content_sha256 AS csha, n.evidence_artifact AS artifact,
             n.evidence_locator AS evidence_locator, n.evidence_tool AS tool, n.evidence_command AS command,
-            n.evidence_output_sha256 AS output_sha256, te.output AS output LIMIT 1`,
+            n.evidence_output_sha256 AS output_sha256, n.provenance_tier AS provenance_tier,
+            n.evidence_execution_id AS execution_id, n.evidence_execution_record_sha256 AS execution_record_sha256,
+            n.evidence_excerpt AS evidence_excerpt, n.evidence_excerpt_sha256 AS evidence_excerpt_sha256,
+            te.output AS output LIMIT 1`,
     { id },
   );
   if (!rows.length) die('finding not found: ' + id);
-  return rows[0];
+  const f = rows[0];
+  if (typeof f.evidence_excerpt === 'string') {
+    try { f.evidence_excerpt = JSON.parse(f.evidence_excerpt); } catch { f.evidence_excerpt = null; }
+  }
+  return f;
 }
 
 async function prevReceiptSha(svc, caseId) {
@@ -83,6 +90,7 @@ async function review(svc, id) {
     skeptic = await llmSkepticPanel({
       finding_id: f.fid, observation: f.observation, interpretation: f.interpretation,
       evidence_tool: f.tool, evidence_locator: f.evidence_locator, cited_tokens: f.cited_tokens,
+      evidence_excerpt: f.evidence_excerpt,
     });
     console.log(`  ${'seat:llm-panel'.padEnd(16)} ${(skeptic.refute ? 'REFUTE' : 'SUPPORTED').padEnd(12)} [${skeptic.mode}] ${skeptic.summary}`);
     if (skeptic.refute) {
@@ -99,6 +107,8 @@ async function review(svc, id) {
     finding_id: f.fid, nodeId: f.nodeId, case: f.case,
     claim: { observation: f.observation, interpretation: f.interpretation, confidence: f.confidence, content_sha256: f.csha },
     evidence_pointer: { artifact: f.artifact, locator: f.evidence_locator, tool: f.tool, command: f.command, output_sha256: f.output_sha256 },
+    trusted_execution: { provenance_tier: f.provenance_tier || null, execution_id: f.execution_id || null, execution_record_sha256: f.execution_record_sha256 || null, evidence_excerpt_sha256: f.evidence_excerpt_sha256 || null },
+    evidence_excerpt: f.evidence_excerpt || null,
     seats: [...seats, synth].map((s) => ({ seat: s.seat, lens: s.lens, verdict: s.verdict, reasoning: s.reasoning, evidence_checked: s.evidence_checked ?? null })),
     llm_skeptic_panel: { ran: skeptic.ran, mode: skeptic.mode, threshold: skeptic.threshold, refuteCount: skeptic.refuteCount, refute: skeptic.refute, votes: skeptic.votes, summary: skeptic.summary },
     disposition: 'COUNCIL_VERIFIED', created_at: ts, prev_receipt_sha256: prev,

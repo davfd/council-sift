@@ -24,6 +24,7 @@ print(json.dumps({
   "interpretation": os.environ["INTERP"], "confidence": os.environ["CONF"],
   "artifact": "/tmp/case.img", "locator": "fls:inode=12", "tool": "fls",
   "command": "fls -r -p /tmp/case.img", "output": os.environ["OUT"],
+  "provenance_tier": "STORED_OUTPUT_ONLY",
   "cited_tokens": [t for t in os.environ["CITED"].split(",") if t],
 }))
 PY

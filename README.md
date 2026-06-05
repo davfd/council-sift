@@ -141,7 +141,7 @@ with `node eval/bench_real.mjs`.
 | **IR Accuracy** | Findings split into observation / interpretation / confidence; hallucinations are **caught and recorded** (not silently dropped); 4 distinct error classes detected (below). Benchmarked **at scale on real evidence across all 3 official scenarios** — 0 FP on the injected-class supported set, with blind red-team precision reported separately (see the Accuracy Report). |
 | **Breadth & Depth** | Depth over breadth: deep on **memory (Volatility 3)** and **disk (Sleuth Kit)** against the official ROCBA + SRL-2018 datasets, with an evidence-type-agnostic Council. |
 | **Constraint Implementation** | An **architectural, default-deny** identity kernel enforced **live at `bin/sift`**: a command runs only if every binary is on the read-only allowlist — everything else (`shred`, `truncate`, `parted`, `cp`/`mv` over an image, `find -delete`, `sed -i`, an obfuscated `rm`, an unknown binary) is refused *before* execution, with dual-use + obfuscation guards. Plus HMAC-scoped capabilities, no self-approval, prompt-injection refusal, tamper-evident audit. Evidence is **also** mounted read-only (OS-enforced backstop). **12/12 bypass suite** — incl. the exact bypasses a reviewer used. |
-| **Audit Trail Quality** | Every finding → `DERIVED_FROM` tool-execution node (+ `output_sha256`); `csift trace` re-hashes the stored output, and `csift trace --rerun` is the stronger optional check for concrete recorded commands/evidence paths (canonical demo: `F-analyst-SRL-MEM-002`); timestamped execution logs; hash-chained Receipts. |
+| **Audit Trail Quality** | Every finding → `DERIVED_FROM` tool-execution node (+ `output_sha256`); Tier 3 adds `csift capture` trusted execution records so new findings import tool stdout from a hash-verified local capture instead of trusting caller-supplied `output`; `csift trace` re-hashes stored output, and `trace --rerun` is the stronger optional check for concrete recorded commands/evidence paths (canonical demo: `F-analyst-SRL-MEM-002`); timestamped execution logs; hash-chained Receipts. |
 | **Usability & Documentation** | One-command demos; reproducible core needs no API key; clean, seed-free MIT repo; this README. |
 
 **Mandatory Project Requirements:** self-correction without a human ✓ · accuracy traceable to
@@ -174,8 +174,9 @@ Full diagram + data flow: [`ARCHITECTURE.md`](ARCHITECTURE.md) · vector image: 
 ## The loop (bloodstream)
 
 ```
-evidence → analyst drafts a 4-part finding (observation / interpretation / confidence / evidence-pointer)
-         → stored in claw-memory-core with DERIVED_FROM provenance + output_sha256
+evidence → `csift capture` runs the forensic command through `bin/sift` and writes a hash-verified local execution record
+         → analyst drafts a 4-part finding (observation / interpretation / confidence / execution_ref)
+         → `record-finding` imports the captured stdout, refuses ordinary caller-supplied output, and stores DERIVED_FROM provenance + output_sha256
          → Council seats try to REFUTE it
          → if refuted: ConflictRecord + bounce → analyst SELF-CORRECTS (no human)
          → if it survives: hash-chained Council Receipt
@@ -236,6 +237,8 @@ set -a; source claw-memory-core/.env; set +a
 node eval/smoke_lifecycle.mjs        # substrate: deposit → refute → ConflictRecord → corrected claim
 node eval/ablation.mjs               # quick sanity ablation (small labelled set)
 node eval/adversarial_evasions.mjs   # red-team regression: 52/52 caught, 0/24 FP (token-boundary + narrowed hedging + Tier 2 scope/PID/RFC1918 checks)
+node eval/trusted_execution_test.mjs  # Tier 3: trusted execution records + caller-supplied-output refusal
+node eval/bounded_skeptic_prompt_test.mjs # Tier 3: LLM panel sees bounded evidence excerpts, not unbounded raw output
 node eval/skeptic_panel_test.mjs     # additive-panel gate logic with mocked votes (2/3→bounce, 1/3→pass)
 python3 tests/test_bypass.py         # identity-kernel bypass suite (12/12)
 # Pure no-SIFT checks stop here. `trace --rerun` needs a demo receipt plus SIFT wrapper/evidence path.
@@ -297,14 +300,15 @@ node council/run_agentic.mjs <finding_id>    # OpenClaw seat narration view (Cla
 | `claw-memory-core/` | Seed-free Neo4j audit substrate (MemoryClaim / ToolExecution / ConflictRecord / VerificationRecord / CouncilReceipt; append-only; `content_sha256`; provenance edges). Vendored foundation. |
 | `identity-kernel/` | Architectural guardrail — HMAC-scoped/expiring capabilities, forbidden-tool + prompt-injection refusal, bilateral approval, tamper-evident hash-chained audit. `kernel.py` (layered gateway), `dfir_gateway.py` (the DFIR policy: read/high-authority/forbidden tool sets + relations), `authorize.py` (the **live** `--scan-command` gate `bin/sift` calls). |
 | `council/seats.mjs` | The deterministic verifier seats (**precision floor**) — token-boundary citation, tool semantics, contradiction, inference, and scope. |
-| `council/llm_skeptic.mjs` | The **additive** LLM skeptic panel — 3 independent lenses, ≥2/3 majority, abstains with no auth. |
+| `council/trusted_execution.mjs` | Tier 3 trusted-execution utilities: hash-verified `csift capture` records, caller-supplied-output refusal, and bounded evidence excerpts. |
+| `council/llm_skeptic.mjs` | The **additive** LLM skeptic panel — 3 independent lenses, ≥2/3 majority, abstains with no auth; sees bounded evidence excerpts plus full-output hash, not unbounded raw stdout. |
 | `council/council.mjs` | Review loop: deterministic floor → (if passed) additive LLM panel → bounce or hash-chained Receipt. |
 | `council/run_agentic.mjs` | Agentic (OpenClaw / Claude-Agent-SDK) seats, grounded in the same checks. |
 | `council/agents/` | OpenClaw seat definitions (persona + mandate + grounding tool). |
 | `analyst/CLAUDE.md` | The analyst's **operating contract** — the 4-part finding discipline (observation vs interpretation vs confidence + `cited_tokens`) and the self-correct-on-bounce loop that make findings refutable. |
 | `analyst/autorun.sh`, `analyst/process_run.sh` | **The genuine live agent** — headless launcher that ran the 9 indexed investigations + the post-processor (redact → narrative → execution log). |
 | `analyst/run.sh`, `analyst/*_demo.sh` | Interactive agent launcher + the deterministic (hardcoded-finding) reproducibility demos. |
-| `bridge/csift.mjs` | `record-finding` / `trace [--rerun]` / `refute` / `list` over the engine (`--rerun` independently re-executes the recorded tool command). |
+| `bridge/csift.mjs` | `capture` / `record-finding` / `trace [--rerun]` / `refute` / `list` over the engine. `capture` creates local trusted execution records; `record-finding` imports those records and refuses ordinary caller-supplied stdout. |
 | `bin/` | `sift` (live identity-kernel gate) / `csift` / `council` PATH wrappers for the agent. |
 | `eval/` | `smoke_lifecycle` · `ablation` (incl. the timestomp **Contradiction** case) · `bench_real` (at-scale injected bench) · **`blind_redteam.mjs`** (held-out non-circular floor recall) · `blind_rescore.mjs` (current detector over persisted blind corpus) · `adversarial_evasions.mjs` (floor regression, 52/52) · `gate_redteam.py` (52/52 live-gate refusals) · `skeptic_panel_test`/`skeptic_live_demo` (panel) · `vigia_score.mjs` (external benchmark) · `narrative_report.mjs` · `redact_agentic.mjs` · `export_execution_log.mjs`. |
 | `tests/test_bypass.py` | Identity-kernel bypass suite (12/12). |

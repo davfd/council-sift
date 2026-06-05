@@ -4,7 +4,7 @@
   "detector_frozen": true,
   "detector_sha256": {
     "seats": "cc7581078647f280",
-    "skeptic": "53d981fbbef6aca8"
+    "skeptic": "e1f88937ac77c734"
   },
   "source": {
     "findings": "/home/exor/council-sift/accuracy-report/blind_findings.jsonl",

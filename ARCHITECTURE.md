@@ -75,9 +75,12 @@ is the OpenClaw seat-narration view of the floor verdicts.
    regardless of the command. The gate is the tool-layer boundary; the read-only mount is the physical guarantee. (A static gate cannot
    defeat arbitrary runtime-decoded payloads, which is why decode-and-run / sub-shell / command-substitution
    are refused outright.)
-3. **Store with provenance.** `csift record-finding` writes the finding through the real
-   `claw-memory` engine (content hash, classification, lifecycle) and attaches a `ToolExecution`
-   provenance node (`DERIVED_FROM`) holding the exact command + output + `output_sha256`.
+3. **Capture + store with provenance.** `csift capture` runs the command through the live `bin/sift`
+   gate and writes a local, hash-addressed `TRUSTED_EXECUTION` record binding command, artifact,
+   locator, stdout hash, record hash, and a bounded evidence excerpt. `csift record-finding` then writes
+   the finding through the real `claw-memory` engine (content hash, classification, lifecycle), imports
+   stdout from that verified capture, refuses ordinary caller-supplied `output`, and attaches a
+   `ToolExecution` provenance node (`DERIVED_FROM`) holding the exact command + output + `output_sha256`.
 4. **Council review (two tiers).** *Floor:* five deterministic seats try to refute. **Citation** —
    every cited token must appear in the tool output **as a standalone token** (absent = hallucination →
    REFUTE). **Tool-semantics** — the tool isn't over-read (psscan≠C2, netscan≠exfil, shimcache≠execution),
@@ -117,7 +120,8 @@ API key**. Same loop, two drivers: `autorun.sh` is the agent; `*_demo.sh` is the
 human**. Evidence text is treated as data, never as instructions.
 
 **`csift trace --rerun`.** Plain `trace` re-hashes the *stored* tool output (proves the chain hasn't been
-altered). `--rerun` is the stronger check: for receipts whose recorded command is concrete and whose
+altered) and reports the trusted execution id/record hash when the finding came from `csift capture`.
+`--rerun` is the stronger check: for receipts whose recorded command is concrete and whose
 evidence path is available, it re-executes that command through `$SIFT_WRAPPER` and compares the *fresh*
 output hash to the recorded one — proving SIFT actually produced it, not merely that a stored string hashes
 correctly. The compare is exact, or modulo trailing whitespace

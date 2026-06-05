@@ -21,16 +21,17 @@ LOG="$HERE/execution-logs/AGENTIC-${CASE}.jsonl"
 read -r -d '' PROMPT <<EOF
 You are the Council-SIFT DFIR analyst. Your operating contract is analyst/CLAUDE.md (in this directory) —
 follow it exactly. Tools are on PATH; call them with Bash:
-  sift '<command>'         run a forensic tool inside the SIFT VM, get real stdout
-  csift record-finding     submit ONE finding (pipe the JSON schema on stdin); prints the finding_id
+  sift '<command>'         quick interactive forensic look inside the SIFT VM
+  csift capture            run command through bin/sift and print execution_ref for trusted stdout
+  csift record-finding     submit ONE finding with execution_ref (pipe the JSON schema on stdin); prints the finding_id
   council review <id>      run the Council seats → COUNCIL_VERIFIED or BOUNCE_FOR_CORRECTION+objection
   csift trace <id>         show provenance + re-hash the tool output
 
 CASE: ${CASE}
 LEAD: ${LEAD}
 
-Investigate autonomously. For every finding: capture the REAL tool output, draft a 4-part finding
-(observation = literal tool output; interpretation = your inference; confidence; evidence_pointer +
+Investigate autonomously. For every finding: first run `csift capture` for the REAL tool output, then draft a 4-part finding
+(observation = literal captured output; interpretation = your inference; confidence; execution_ref +
 the exact cited_tokens your claim rests on), submit it to the Council, and run council review.
 If the Council BOUNCES a finding, read the objection and SELF-CORRECT — re-file only what the evidence
 supports — without asking me. Do not invent evidence; cite only tokens that appear in real tool output.

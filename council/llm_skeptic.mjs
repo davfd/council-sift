@@ -51,6 +51,15 @@ Discipline (this protects against wrongly rejecting real findings):
 Respond with ONLY a single-line JSON object, nothing else:
 {"refute": true|false, "class": "TOOL_OVERREAD|ATTRIBUTION|INTENT|CAUSATION|CERTAINTY|SCOPE|NONE", "reason": "<= 30 words, quote the offending phrase"}`;
 
+function formatBoundedEvidenceExcerpt(excerpt) {
+  if (!excerpt) return 'BOUNDED_EVIDENCE_EXCERPT: (not provided; judge only the observation/interpretation/cited-token relationship)';
+  return `BOUNDED_EVIDENCE_EXCERPT
+full_output_sha256: ${excerpt.output_sha256 || '(missing)'}
+excerpt_sha256: ${excerpt.excerpt_sha256 || '(missing)'}
+excerpt_chars: ${excerpt.excerpt_chars ?? String(excerpt.excerpt || '').length} / full output ${excerpt.total_chars ?? '?'} chars (bounded; not the full output)
+excerpt:\n${excerpt.excerpt || ''}`;
+}
+
 function buildPrompt(finding, lens) {
   return `LENS: ${lens.name} — ${lens.focus}
 
@@ -59,6 +68,7 @@ observation: ${finding.observation}
 interpretation: ${finding.interpretation || '(none)'}
 tool: ${finding.evidence_tool || finding.tool || '(?)'} | locator: ${finding.evidence_locator || finding.locator || '(?)'}
 cited_tokens: ${JSON.stringify(finding.cited_tokens || [])}
+${formatBoundedEvidenceExcerpt(finding.evidence_excerpt)}
 
 Apply ONLY your lens. Output the JSON verdict only.`;
 }
