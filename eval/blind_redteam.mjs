@@ -84,6 +84,10 @@ for (let s = 1; s <= SEEDS; s++) {
   console.log(`  seed ${s}: generated ${seedCount} findings`);
 }
 findings = findings.filter((f) => f && f.observation && f.ground_truth && f.ground_truth.label);
+if (!findings.length) {
+  console.error('\nBLIND_REDTEAM_ABORT — attacker generated 0 findings; refusing to overwrite prior blind reports. Check Claude login/auth and SDK query errors.');
+  process.exit(3);
+}
 const nSup = findings.filter((f) => f.ground_truth.label === 'supported').length;
 console.log(`\nTotal blind findings: ${findings.length} (supported ${nSup}, unsupported ${findings.length - nSup})\n`);
 

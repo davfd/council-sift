@@ -67,15 +67,14 @@ function claimProcessNames(text) {
 function claimPidProcessPairs(text) {
   const pairs = [];
   const s = String(text || '');
-  const crossClaimGap = (gap) => /\b(?:and|or|plus|while|whereas)\b/i.test(gap);
-  const nameThenPid = /\b([A-Za-z0-9_.-]+\.exe)\b([^.\n;]{0,60}?)\bPID[=\s:]*(\d+)\b/gi;
-  const pidThenName = /\bPID[=\s:]*(\d+)\b([^.\n;]{0,60}?)\b([A-Za-z0-9_.-]+\.exe)\b/gi;
-  for (const m of s.matchAll(nameThenPid)) {
-    if (!crossClaimGap(m[2])) pairs.push({ name: m[1].toLowerCase(), pid: m[3] });
-  }
-  for (const m of s.matchAll(pidThenName)) {
-    if (!crossClaimGap(m[2])) pairs.push({ name: m[3].toLowerCase(), pid: m[1] });
-  }
+  // Intentionally pair ownership phrases, not arbitrary relationship prose.
+  // Catch direct claims like "Rar.exe PID 2524", "Rar.exe has PID 2524", "PID 2524 maps to Rar.exe".
+  // Do NOT cross a broader sentence like "cmd.exe PID 137496 ... PPID 139776 maps to explorer.exe";
+  // that expresses parentage/relationship, not that explorer.exe owns PID 137496.
+  const nameThenPid = /\b([A-Za-z0-9_.-]+\.exe)\b(?:'s)?(?:\s+process)?\s*(?:[,()]\s*)?(?:(?:has|owns|is|maps\s+to|corresponds\s+to|with|assigned\s+to)\s+(?:the\s+)?)?\b(?:PID|process\s+ID)(?:\s+is)?[=\s:]*(\d+)\b/gi;
+  const pidThenName = /\b(?:PID|process\s+ID)(?:\s+is)?[=\s:]*(\d+)\b\s*(?:[,()]\s*|(?:belongs\s+to|maps\s+to|corresponds\s+to|is\s+assigned\s+to|assigned\s+to|is|owned\s+by|for|of|associated\s+with)\s+(?:the\s+)?)\b([A-Za-z0-9_.-]+\.exe)\b/gi;
+  for (const m of s.matchAll(nameThenPid)) pairs.push({ name: m[1].toLowerCase(), pid: m[2] });
+  for (const m of s.matchAll(pidThenName)) pairs.push({ name: m[2].toLowerCase(), pid: m[1] });
   const seen = new Set();
   return pairs.filter((p) => {
     const k = `${p.pid}\u0000${p.name}`;
@@ -192,10 +191,10 @@ const TOOL_SEMANTIC_RULES = [
     bad: /\bexecut|\bran\b|\bwas run\b|\bwere run\b|\bis run\b|\blaunch|\bstarted\b|\binvoked\b/i,
     why: 'Shimcache/AppCompatCache records presence + path, not execution (Win8+ entries are unordered and do not prove the program ran); corroborate with Prefetch/EVTX.' },
   { tool: /psscan|pslist/i,
-    bad: /\bc2\b|c&c|command.?and.?control|network connection|\bbeacon|exfiltrat|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|controller|reach(?:ed|es|ing)?\s*out|connect(?:ed|s|ion)?\s*to|communicat(?:e|ed|ing)\s+with|contact(?:ed|ing)?|reporting\s+to|staged.+(?:drop|server|location|point)|siphon|smuggl|\btransmit/i,
+    bad: /\bc2\b|c&c|command.?and.?control|network connection|\bbeacon|exfiltrat|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|reach(?:ed|es|ing)?\s*out|connect(?:ed|s|ion)?\s*to|communicat(?:e|ed|ing)\s+with|contact(?:ed|ing)?|reporting\s+to|staged.+(?:drop|server|location|point)|siphon|smuggl|\btransmit/i,
     why: 'A process listing (psscan/pslist) cannot establish network activity; netscan/netstat is required to claim C2, beaconing, callback, communication with a remote peer, or exfiltration.' },
   { tool: /netscan|netstat/i,
-    bad: /\bc2\b|c&c|command.?and.?control|\bexfiltrat|\bbeacon|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|controller|siphon|smuggl|\bstole\b|\bstolen\b|data\s*(?:theft|exfil)|sent\s*(?:out|off)|leaked?\s*(?:data|out)|\btransmit|(?:files?|data|archive|payload|documents?)\s+(?:were\s+|was\s+)?(?:transferred|sent|forwarded|moved|uploaded|dispatched)\b|\b(?:transferred|sent|forwarded|moved|uploaded|dispatched)\s+(?:files?|data|archive|payload|documents?)\b/i,
+    bad: /\bc2\b|c&c|command.?and.?control|\bexfiltrat|\bbeacon|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|siphon|smuggl|\bstole\b|\bstolen\b|data\s*(?:theft|exfil)|sent\s*(?:out|off)|leaked?\s*(?:data|out)|\btransmit|(?:files?|data|archive|payload|documents?)\s+(?:were\s+|was\s+)?(?:transferred|sent|forwarded|moved|uploaded|dispatched)\b|\b(?:transferred|sent|forwarded|moved|uploaded|dispatched)\s+(?:files?|data|archive|payload|documents?)\b/i,
     why: 'netscan shows that a socket/connection exists, not that files or data were transferred/exfiltrated/stolen or that the peer is C2; internal/loopback (RFC1918/127.x) addresses cannot be an external C2.' },
   { tool: /amcache/i, bad: /\bexecut|\bran\b|\bwas run\b/i,
     why: 'Amcache indicates presence/first-seen, not confirmed execution; corroborate with Prefetch/EVTX.' },
