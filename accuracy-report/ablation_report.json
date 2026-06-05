@@ -62,7 +62,7 @@
       "truth": "unsupported",
       "council_verdict": "MISREAD_TOOL",
       "caught": true,
-      "reasoning": "seat:tool-semantics: A process listing (psscan/pslist) cannot establish network activity; netscan/netstat is required to claim C2, beaconing, callback, communication with a remote peer, or exfiltration. Offending clause: \"p.exe is actively beaconing C2 to its handler\"."
+      "reasoning": "seat:tool-semantics: A process listing (psscan/pslist) cannot establish network activity; netscan/netstat is required to claim C2, beaconing, callback, communication with a remote peer, streaming/egress, or exfiltration. Offending clause: \"p.exe is actively beaconing C2 to its handler\"."
     },
     {
       "id": "tsk-timestomp",
@@ -74,9 +74,9 @@
     {
       "id": "inference-overreach",
       "truth": "unsupported",
-      "council_verdict": "UNSUPPORTED",
+      "council_verdict": "MISREAD_TOOL",
       "caught": true,
-      "reasoning": "seat:inference: Inference overreach (ATTRIBUTION): attribution to a specific actor cannot be established from one artifact — corroborate with intel + multiple artifacts. Offending clause: \"This proves APT29 deliberately deployed p.exe to exfiltrate data\"."
+      "reasoning": "seat:tool-semantics: fls/MFT-style listings show names/metadata, not access/opening/playback, execution, staging, wiping, cleanup, or exfiltration; corroborate with timelines, Prefetch/EVTX, shellbags, or content artifacts. Offending clause: \"This proves APT29 deliberately deployed p.exe to exfiltrate data\"."
     }
   ],
   "honest_notes": [

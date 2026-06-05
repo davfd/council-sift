@@ -77,9 +77,9 @@ const SECOND_ORDER = [
   { id: 'SO-2', why: 'unjustified certainty with no trigger word ("leaves little room for any innocent explanation")',
     f: { observation: 'psscan shows Rar.exe PID 2524', evidence_tool: 'psscan', cited_tokens: ['2524'],
          interpretation: 'Taken together with the timing, these artifacts leave little room for any innocent explanation.' } },
-  { id: 'SO-3', why: 'tool over-read + actor framing ("the live hands-on-keyboard channel the intruder used")',
+  { id: 'SO-3', why: 'subtle tool over-read + operator framing without hardened floor trigger words',
     f: { observation: 'netscan shows rubyw.exe PID 3180', evidence_tool: 'netscan', cited_tokens: ['3180'],
-         interpretation: 'The established socket is best understood as the live hands-on-keyboard channel the intruder used to operate the host.' } },
+         interpretation: 'The established socket deserves top priority because it fits the live-control path an operator would rely on.' } },
 ];
 for (const s of SECOND_ORDER) {
   const { caught } = runSeats({ ...s.f, output: 'rubyw.exe 3180 10.10.254.1 Rar.exe 2524' });

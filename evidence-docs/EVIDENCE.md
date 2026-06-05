@@ -57,11 +57,11 @@ causation hardening, `eval/blind_rescore.mjs` rescored that persisted corpus wit
 | | value |
 |---|---|
 | held-out findings (independent attacker) | 130 (56 supported · 74 unsupported) |
-| deterministic-floor recall (overall / per seed) | **0.811 overall** · current rescore over persisted corpus |
-| deterministic-floor precision (overall / per seed) | **0.984 overall** · 1 FP |
+| deterministic-floor recall (overall / per seed) | **0.986 overall** · current rescore over persisted corpus |
+| deterministic-floor precision (overall / per seed) | **0.986 overall** · 1 FP |
 
-**Honest:** this is the floor's *true* recall — the regex seats catch more than four-fifths of unseen hallucinations
-at high precision and **still miss some** (the report enumerates the specific `true_holes`). That residual gap
+**Honest:** this is the floor's *true* recall — the regex seats catch all but one of the unseen hallucinations
+at high precision and **still name the remaining miss** (the report enumerates the specific `true_holes`). That residual gap
 is exactly what the **additive LLM skeptic panel** addresses: it runs only after the floor passes a finding
 and bounces second-order over-reads no regex enumerates. Panel recall/FP is measured separately from the
 floor's deterministic precision. Outputs: `accuracy-report/blind_redteam_report.json`, `accuracy-report/blind_rescore_report.json` (+ `blind_findings.jsonl`).

@@ -14,7 +14,7 @@
 #   bash claw-memory/scripts/run-migrations.sh
 #
 # Environment:
-#   NEO4J_URI       (REQUIRED — no default; prevents accidental Leonardo/Council graph mixups)
+#   NEO4J_URI       (REQUIRED — no default; prevents accidental production/private graph mixups)
 #   NEO4J_USER      (REQUIRED — no default)
 #   NEO4J_PASSWORD  (REQUIRED — no default)
 #   MIGRATIONS_DIR  (default: <this-script>/migrations)

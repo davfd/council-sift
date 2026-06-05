@@ -137,12 +137,11 @@ so it can only ever *add* a bounce and never rescue a refuted one. Panel recall/
 from the deterministic floor; it is additive evidence, not a global FP=0 guarantee.
 Without an authenticated `claude` it **abstains** (no effect). Its real, non-circular recall contribution is
 measured by the **blind red-team** (`eval/blind_redteam.mjs`: independent attacker corpus; current
-`eval/blind_rescore.mjs` floor rescore is 81.1% recall @ 98.4% precision with 1 FP; the sampled panel lifts the scored scope to 97.2% recall @ 98.6% precision with 0 panel-added FP).
+`eval/blind_rescore.mjs` floor rescore is 98.6% recall @ 98.6% precision with 1 FP and 1 FN; the sampled panel is demonstrated separately on second-order floor-passing evasions).
 
 ## Isolation & deployment
 
-- The graph is a **dedicated, isolated Neo4j on 7690** — never the Leonardo (7687) or live-council
-  (7688) graphs. No sealed framework internals ship (see [NOVELTY.md](NOVELTY.md)).
+- The graph is a **dedicated, isolated Neo4j on 7690** — not a production/private graph. No sealed framework internals ship (see [NOVELTY.md](NOVELTY.md)).
 - Build-time: engine + Council on the host; the analyst in the SIFT VM reaches the host over QEMU NAT
   (`10.0.2.2:7690`). Submission-time: the stack containerizes to run inside/with SIFT.
 

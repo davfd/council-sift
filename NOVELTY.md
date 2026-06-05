@@ -8,8 +8,8 @@ during the hackathon window.
 
 - **`claw-memory-core/`** — a generic Neo4j semantic-memory engine (MemoryClaim / ConflictRecord /
   VerificationRecord, append-only governance strata, `content_sha256`, provenance edges). Extracted
-  **seed-free** for this submission: no Leonardo seed/framework, no Discord daemon, no council-seat
-  personas. The identity configs were replaced with DFIR identities, and the vendored historical
+  **seed-free** for this submission: no private seed/framework internals, no messaging daemon, no private
+  council personas. The identity configs were replaced with DFIR identities, and the vendored historical
   migrations were genericized (no prior-project persona names; they no-op on a fresh DFIR graph).
 - **Identity kernel** (`identity-kernel/kernel.py`) — ported from our prior "TP-4" capability-gateway
   spike (HMAC scoped capabilities, bilateral recognition, hash-chained audit).
@@ -47,7 +47,7 @@ submission) — findings that pass the Council remain compatible with that sign-
 
 No private seed-governance or framework internals appear anywhere in this repository. The public artifacts
 contain only the generic engine, the DFIR layer, and council-safe mechanism. The isolated graph (Neo4j @
-7690) is never the Leonardo or live-council graph.
+7690) is never a production/private graph.
 
 ## License
 

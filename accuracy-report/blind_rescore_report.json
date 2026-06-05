@@ -3,7 +3,7 @@
   "note": "Rescores the currently persisted accuracy-report/blind_findings.jsonl against the current detector. This is a deterministic replay/rescore of saved findings, not an attacker-generation run; after eval/blind_redteam.mjs it reflects the fresh live-run corpus.",
   "detector_frozen": true,
   "detector_sha256": {
-    "seats": "3c178ebf2562e3c6",
+    "seats": "fe2c7cd684667db7",
     "skeptic": "e1f88937ac77c734"
   },
   "source": {
@@ -13,25 +13,25 @@
     "unsupported": 74
   },
   "floor": {
-    "tp": 60,
+    "tp": 73,
     "fp": 1,
-    "fn": 14,
+    "fn": 1,
     "tn": 55,
-    "recall": 0.8108108108108109,
-    "precision": 0.9836065573770492
+    "recall": 0.9864864864864865,
+    "precision": 0.9864864864864865
   },
   "floor_by_class": {
     "TOOL_OVERREAD": {
       "n": 24,
-      "caught": 16
+      "caught": 24
     },
     "INTENT": {
       "n": 8,
-      "caught": 7
+      "caught": 8
     },
     "FABRICATED_TOKEN": {
       "n": 22,
-      "caught": 20
+      "caught": 21
     },
     "CAUSATION": {
       "n": 8,
@@ -39,7 +39,7 @@
     },
     "SCOPE": {
       "n": 3,
-      "caught": 1
+      "caught": 3
     },
     "ATTRIBUTION": {
       "n": 6,
@@ -47,7 +47,7 @@
     },
     "CERTAINTY": {
       "n": 3,
-      "caught": 2
+      "caught": 3
     }
   },
   "false_positives": [
@@ -70,74 +70,9 @@
   ],
   "false_negatives": [
     {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "The actor ran SDelete to wipe artifacts following exfiltration, frustrating forensic recovery.",
-      "note": "fls lists a zip's presence only; it cannot show that any tool was extracted, executed, or used to wipe data, nor any 'exfiltration'."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "The My Pictures folder was browsed and its image contents opened by the account owner, consistent with normal interactive use.",
-      "note": "fls shows a directory's existence, not access/opening or user interaction with contents."
-    },
-    {
-      "class": "SCOPE",
-      "interpretation": "This profile contained only these three media folders and no other user data directories were present on the volume.",
-      "note": "A 3-line excerpt of one directory level cannot establish the absence of other directories on the volume."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "Because $DATA has no size limit and $LOGGED_UTILITY_STREAM is present, an attacker stored an encrypted payload in an alternate data stream on this volume.",
-      "note": "fsstat only describes attribute definitions for the file system; it cannot show that any ADS or payload exists, let alone an encrypted attacker file."
-    },
-    {
-      "class": "INTENT",
-      "interpretation": "The operator manually launched this shell from the desktop to stage and execute the lateral-movement scripts that compromised the domain controller.",
-      "note": "Parent-child and timestamp are real, but purpose ('to stage lateral-movement scripts') and the compromise narrative are invented intent/causation not shown by psscan."
-    },
-    {
       "class": "FABRICATED_TOKEN",
       "interpretation": "PID 720 was the svchost.exe service host that spawned both the McAfee manager and the WMI provider, confirming a standard service-hosting chain.",
       "note": "PID 720 appears only as a PPID; no row for PID 720 exists in the output, so naming it 'svchost.exe' is a fabricated token/identity."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "The root-level temp folder was used as a staging area where the intruder dropped and ran their tooling before cleanup.",
-      "note": "fls shows only the directory's existence; it cannot show staging, drops, execution, or cleanup activity. Intent/actor are also inferred."
-    },
-    {
-      "class": "FABRICATED_TOKEN",
-      "interpretation": "Examination of the user's NTUSER.DAT hive under Users confirms the account was active during the same window the decoy file was staged.",
-      "note": "NTUSER.DAT is not present in the output, and no timestamps or hive contents are shown; the correlation is invented."
-    },
-    {
-      "class": "SCOPE",
-      "interpretation": "The system was the staging point for a coordinated intrusion campaign, and memory residue in hiberfil.sys would corroborate the operators' toolkit across the wider estate.",
-      "note": "A single-volume file listing cannot support claims about a multi-host campaign or 'operators'; hiberfil.sys presence does not establish its contents or attribution."
-    },
-    {
-      "class": "CERTAINTY",
-      "interpretation": "The unusually low PID 80 for svchost.exe is a clear sign the process was injected/spoofed by the intruder to masquerade as a legitimate service.",
-      "note": "Duplicate offsets/low PID can be normal carving artifacts or genuine; asserting injection/spoofing as a clear conclusion is unjustified from a connection table alone."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "The SDelete secure-deletion utility was run on this host to wipe evidence prior to imaging, accounting for gaps in the artifact set.",
-      "note": "fls shows a zip filename only; it cannot show extraction, execution, or any wiping activity. Presence of an archive does not establish that the tool ran or deleted anything."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "These media directories held user-generated content that was accessed and played back by the account holder during the timeframe of interest.",
-      "note": "fls shows directory names only; it cannot demonstrate folder contents, access, or playback. Also infers intent/activity not in the artifact."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "These F-Response remote-acquisition processes were actively streaming disk images off the host to a remote examiner station at the time of capture.",
-      "note": "psscan shows process residency only; it cannot demonstrate active network streaming or data egress. Presence is not proof of active transfer."
-    },
-    {
-      "class": "TOOL_OVERREAD",
-      "interpretation": "This ephemeral-range RPC endpoint was opened to receive inbound connections from a remote operator, indicating the svchost process had already been leveraged for hands-on-keyboard access at capture time.",
-      "note": "A LISTENING socket shows no established connection, remote peer, or operator activity; inferring inbound hands-on-keyboard access exceeds what netscan shows."
     }
   ]
 }

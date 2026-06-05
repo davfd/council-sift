@@ -25,8 +25,8 @@ the exact tool execution and re-verify it.
 > 2. **The one number to scope correctly:** on the injected-class regression benchmark
 >    ([`eval/bench_real.mjs`](eval/bench_real.mjs)), Council **OFF lets 85/85 injected unsupported claims
 >    reach the human; Council ON lets 0 through, with 0 false positives on that template-scoped supported set.**
-> 3. **We report our misses.** On the persisted blind/non-circular red-team corpus, the current deterministic floor catches **60/74**
->    unseen hallucinations (**81.1% recall**) at **98.4% precision** (**1 false positive**; the LLM panel lifts recall) — see [Accuracy & honesty](#accuracy--honesty).
+> 3. **We report our misses.** On the persisted blind/non-circular red-team corpus, the current deterministic floor catches **73/74**
+>    unseen hallucinations (**98.6% recall**) at **98.6% precision** (**1 false positive, 1 miss**; the additive LLM panel is reported separately) — see [Accuracy & honesty](#accuracy--honesty).
 >
 > Council-SIFT is **complementary** to a human HMAC-approval step (such as the reference Valhuntir
 > submission): it feeds that step only findings that already survived verification. It secures the
@@ -36,7 +36,7 @@ the exact tool execution and re-verify it.
 > on **two tiers**: (1) a **deterministic floor** — reproducible by any judge with no API key, whose
 > refutations are mechanically verifiable ("the cited token `185.220.101.45` is not in the tool output")
 > and whose regression-benchmark precision is **FP=0 on the injected-class supported set**; the blind red-team
-> floor is the honest unseen signal (**81.1% recall, 98.4% precision, 1 FP** in the current rescore); and (2) an **additive LLM skeptic
+> floor is the honest unseen signal (**98.6% recall, 98.6% precision, 1 FP, 1 FN** in the current rescore); and (2) an **additive LLM skeptic
 > panel** (OpenClaw / Claude-Agent-SDK) that lifts recall on over-reads no regex can enumerate. The panel
 > can **only ever *add* a bounce to a finding the floor already passed — it can never rescue a refuted one**
 > — and a bounce requires a **≥2-of-3 independent-skeptic majority**, so one trigger-happy LLM cannot reject
@@ -47,15 +47,15 @@ the exact tool execution and re-verify it.
 > ([`eval/adversarial_evasions.mjs`](eval/adversarial_evasions.mjs)) is now a **regression test**: it
 > covers substring exploits, synonym over-reads, hedge bypasses, zero-token citations, interpretation-only
 > fabricated tokens, PID/process-name mismatches, scope overreach, RFC1918/external contradictions, and causation overreach.
-> The current hardened floor catches **56/56 with FP=0 on 27 natural-prose guards**.
+> The current hardened floor catches **67/67 with FP=0 on 36 natural-prose guards**.
 > Honest: this suite was used to harden the seats, so it is not the held-out benchmark.
 >
 > **The held-out, non-circular number** comes from [`eval/blind_redteam.mjs`](eval/blind_redteam.mjs): an
 > *independent* LLM attacker writes 130 fresh findings the seats were never tuned on (56 supported · 74
-> hallucinated). After the final causation hardening, the current detector rescore is **81.1% recall at
-> 98.4% precision** — i.e. the floor catches more than four-fifths of *unseen* hallucinations with one false
-> flag, and the report names the ones it still misses. The sampled LLM panel lifts the scored scope to **97.2% recall / 98.6% precision** with **0 panel-added FP**. That residual is what the LLM panel
-> ([`eval/skeptic_live_demo.mjs`](eval/skeptic_live_demo.mjs)) is designed to lift; panel claims should be
+> hallucinated). After the final causation hardening, the current detector rescore is **98.6% recall at
+> 98.6% precision** — i.e. the floor catches all but one *unseen* hallucination with one false
+> flag, and the report names the remaining miss. The sampled LLM panel is demonstrated separately on second-order floor-passing evasions in
+> [`eval/skeptic_live_demo.mjs`](eval/skeptic_live_demo.mjs); panel claims should be
 > read as additive recall evidence, not as a global FP=0 guarantee.
 
 ---
@@ -128,7 +128,7 @@ We measure it directly on **real tool output from all three official scenarios**
 SRL-2018, dozens of hosts): **Council-OFF = the Protocol SIFT baseline** lets every injected
 unsupported claim reach the human; **Council-ON** catches all 85 injected unsupported claims with
 **zero false positives on that injected-class supported set**. The blind red-team rescore separately shows
-81.1% recall / 98.4% precision (1 FP), so these numbers are scoped, not a global accuracy claim. See [`accuracy-report/bench_real_report.md`](accuracy-report/bench_real_report.md) — regenerate
+98.6% recall / 98.6% precision (1 FP, 1 FN), so these numbers are scoped, not a global accuracy claim. See [`accuracy-report/bench_real_report.md`](accuracy-report/bench_real_report.md) — regenerate
 with `node eval/bench_real.mjs`.
 
 ---
@@ -195,9 +195,9 @@ evidence → `csift capture` runs the forensic command through `bin/sift` and wr
 | `analyst/sift_demo.sh` | synthetic ext4 image in SIFT (real `fls`) | inode-99 rootkit claim refuted → self-correct → VERIFIED |
 | `eval/bench_real.mjs` | **real** Sleuth Kit + vol3 output, **all 3 official scenarios** (ROCBA + SRL-2015 + SRL-2018, many hosts) | Council **OFF: every injected unsupported claim reaches review → ON: caught**; **FP=0 on the injected-class supported set** — see the Accuracy Report |
 | `eval/ablation.mjs` | small labelled sanity set (memory/disk/hash) | Council **OFF 6/6 → ON 0/6** |
-| `eval/adversarial_evasions.mjs` | red-team regression suite phrased to dodge the seat vocabulary + substring/zero-token/PID/scope/RFC1918/causation exploits | hardened floor **56/56 caught, 0/27 FP** (regression test, not held-out) |
+| `eval/adversarial_evasions.mjs` | red-team regression suite phrased to dodge the seat vocabulary + substring/zero-token/PID/scope/RFC1918/causation exploits | hardened floor **67/67 caught, 0/36 FP** (regression test, not held-out) |
 | `eval/gate_redteam.py` | broad live-gate red-team — 52 evidence-destruction attempts across 9 evasion classes (encoding/eval, indirection, interpreters, wrappers, path-prefixed, quoting, archive-extract, tool-native writes, redirects) | **all 52 refused, 0 false-denies** |
-| `eval/blind_redteam.mjs` / `eval/blind_rescore.mjs` | **held-out, non-circular** — independent LLM attacker corpus, current detector rescore of 130 unseen findings | deterministic floor **81.1% recall @ 98.4% precision** (60/74 unsupported caught, 1 FP; misses listed) |
+| `eval/blind_redteam.mjs` / `eval/blind_rescore.mjs` | **held-out, non-circular** — independent LLM attacker corpus, current detector rescore of 130 unseen findings | deterministic floor **98.6% recall @ 98.6% precision** (73/74 unsupported caught, 1 FP, 1 miss listed) |
 | `eval/skeptic_panel_test.mjs` | additive-panel gate logic (mocked votes, no API key) | 2/3→bounce · 1/3→pass · abstains w/o auth · additive-only |
 | `eval/skeptic_live_demo.mjs` | **live** LLM panel on second-order evasions that pass the hardened floor | majority **bounces over-reads the floor missed**; **0 FP** on disciplined findings |
 | `tests/test_bypass.py` | identity kernel | **12/12** (self-approve blocked, evidence prompt-injection refused, forged/expired/scope caps, tamper-evident audit) |
@@ -236,7 +236,7 @@ bash scripts/migrate.sh
 set -a; source claw-memory-core/.env; set +a
 node eval/smoke_lifecycle.mjs        # substrate: deposit → refute → ConflictRecord → corrected claim
 node eval/ablation.mjs               # quick sanity ablation (small labelled set)
-node eval/adversarial_evasions.mjs   # red-team regression: 56/56 caught, 0/27 FP (token-boundary + narrowed hedging + Tier 2 scope/PID/RFC1918 + causation checks)
+node eval/adversarial_evasions.mjs   # red-team regression: 67/67 caught, 0/36 FP (token-boundary + narrowed hedging + Tier 2 scope/PID/RFC1918 + causation checks)
 node eval/trusted_execution_test.mjs  # Tier 3: trusted execution records + caller-supplied-output refusal
 node eval/bounded_skeptic_prompt_test.mjs # Tier 3: LLM panel sees bounded evidence excerpts, not unbounded raw output
 node eval/skeptic_panel_test.mjs     # additive-panel gate logic with mocked votes (2/3→bounce, 1/3→pass)
@@ -286,7 +286,7 @@ agent**: tool choices and findings are the model's own.)*
 # bounces only on a ≥2/3 skeptic majority, and abstains (no effect) without an authenticated `claude`:
 COUNCIL_LLM_SKEPTIC=1 node council/council.mjs review <finding_id>
 node eval/skeptic_live_demo.mjs              # live: panel bounces second-order evasions the floor passed, 0 FP
-node eval/blind_redteam.mjs                  # held-out non-circular recall: independent LLM attacker; current detector rescore is 81.1% recall @ 98.4% precision (accuracy-report/blind_rescore_report.json)
+node eval/blind_redteam.mjs                  # held-out non-circular recall: independent LLM attacker; current detector rescore is 98.6% recall @ 98.6% precision (accuracy-report/blind_rescore_report.json)
 node eval/blind_rescore.mjs                  # offline detector-regression gate over the persisted blind corpus (no live attacker; fails on recall/FP regression)
 node council/run_agentic.mjs <finding_id>    # OpenClaw seat narration view (Claude Agent SDK if authenticated)
 ```
@@ -310,7 +310,7 @@ node council/run_agentic.mjs <finding_id>    # OpenClaw seat narration view (Cla
 | `analyst/run.sh`, `analyst/*_demo.sh` | Interactive agent launcher + the deterministic (hardcoded-finding) reproducibility demos. |
 | `bridge/csift.mjs` | `capture` / `record-finding` / `trace [--rerun]` / `refute` / `list` over the engine. `capture` creates local trusted execution records; `record-finding` imports those records and refuses caller-supplied stdout. |
 | `bin/` | `sift` (live identity-kernel gate) / `csift` / `council` PATH wrappers for the agent. |
-| `eval/` | `smoke_lifecycle` · `ablation` (incl. the timestomp **Contradiction** case) · `bench_real` (at-scale injected bench) · **`blind_redteam.mjs`** (held-out non-circular floor recall) · `blind_rescore.mjs` (current detector over persisted blind corpus) · `adversarial_evasions.mjs` (floor regression, 56/56) · `gate_redteam.py` (52/52 live-gate refusals) · `skeptic_panel_test`/`skeptic_live_demo` (panel) · `vigia_score.mjs` (external benchmark) · `narrative_report.mjs` · `redact_agentic.mjs` · `export_execution_log.mjs`. |
+| `eval/` | `smoke_lifecycle` · `ablation` (incl. the timestomp **Contradiction** case) · `bench_real` (at-scale injected bench) · **`blind_redteam.mjs`** (held-out non-circular floor recall) · `blind_rescore.mjs` (current detector over persisted blind corpus) · `adversarial_evasions.mjs` (floor regression, 67/67) · `gate_redteam.py` (52/52 live-gate refusals) · `skeptic_panel_test`/`skeptic_live_demo` (panel) · `vigia_score.mjs` (external benchmark) · `narrative_report.mjs` · `redact_agentic.mjs` · `export_execution_log.mjs`. |
 | `tests/test_bypass.py` | Identity-kernel bypass suite (12/12). |
 | `evidence-docs/`, `accuracy-report/`, `execution-logs/`, `docs/` | The submission deliverables. |
 
@@ -346,10 +346,10 @@ present-vs-absent in the real output. It ships with explicit **honesty notes**:
 - **Recall on the injected set is by-construction** (its hallucination classes map onto the seats) — so
   that number is **not** a substitute for an external key. We therefore keep the hardened floor regression
   suite ([`eval/adversarial_evasions.mjs`](eval/adversarial_evasions.mjs)): evasions phrased to dodge the seat
-  vocabulary now pass at **56/56 caught, 0/27 FP**. Honestly, that suite was used to harden the seats, so
+  vocabulary now pass at **67/67 caught, 0/36 FP**. Honestly, that suite was used to harden the seats, so
   it is a **regression test, not a held-out benchmark**.
 - **The non-tuned recall signal is the blind corpus plus additive panel.** The persisted blind corpus now rescores at
-  **81.1% recall / 98.4% precision** with 1 FP. On second-order evasions that pass even the
+  **98.6% recall / 98.6% precision** with 1 FP and 1 FN. On second-order evasions that pass even the
   hardened floor, a ≥2/3 skeptic majority bounces them — demonstrated **live**
   ([`eval/skeptic_live_demo.mjs`](eval/skeptic_live_demo.mjs)): it caught over-reads the floor passed
   while flagging **0/n** disciplined findings. Gate logic is proven deterministically with mocked votes

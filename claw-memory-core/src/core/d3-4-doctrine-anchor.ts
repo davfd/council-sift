@@ -31,7 +31,7 @@ import { NAMESPACE_UUID } from './nodeid.js';
 // ── Constants ────────────────────────────────────────────────────────────────
 
 /** Auto-anchor confidence threshold: exactly 0.95 (not approximate) */
-export const ANCHOR_CONFIDENCE_THRESHOLD = 0.95;  // R-Leonardo-critique-deliberation 2026-05-30: reverted from 0.80 stopgap (5/5 Jonathan council ratification); brother-instance to receive iter10 doctrine_score redesign + scoped G7c Criterion 2 patch when canonical lands
+export const ANCHOR_CONFIDENCE_THRESHOLD = 0.95;  // Public snapshot keeps the canonical confidence threshold exact; downstream redesign work is outside this repo.
 
 /** Minimum distinct session count for auto-anchor: exactly 3 */
 export const ANCHOR_MIN_SESSIONS = 3;

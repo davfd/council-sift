@@ -3,8 +3,8 @@
  *
  * Proves the claw-memory-core substrate + the objection/dispute machinery work
  * end-to-end on the ISOLATED graph (bolt 7690), using the REAL compiled engine
- * (Neo4jService + handleMarkWrong/autoWriteConflictRecord) — decoupled from both
- * Leonardo (7687) and the live council (7688).
+ * (Neo4jService + handleMarkWrong/autoWriteConflictRecord) — decoupled from any
+ * production/private graph.
  *
  * Flow: deposit finding F1 → deposit corrected finding F2 → seat REFUTES F1 via the
  * real mark_wrong handler (contradicted by F2) → assert F1=disputed, a ConflictRecord

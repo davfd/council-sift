@@ -72,7 +72,7 @@ function claimPidProcessPairs(text) {
   // Do NOT cross a broader sentence like "cmd.exe PID 137496 ... PPID 139776 maps to explorer.exe";
   // that expresses parentage/relationship, not that explorer.exe owns PID 137496.
   const nameThenPid = /\b([A-Za-z0-9_.-]+\.exe)\b(?:'s)?(?:\s+process)?\s*(?:[,()]\s*)?(?:(?:has|owns|is|maps\s+to|corresponds\s+to|with|assigned\s+to)\s+(?:the\s+)?)?\b(?:PID|process\s+ID)(?:\s+is)?[=\s:]*(\d+)\b/gi;
-  const pidThenName = /\b(?:PID|process\s+ID)(?:\s+is)?[=\s:]*(\d+)\b\s*(?:[,()]\s*|(?:belongs\s+to|maps\s+to|corresponds\s+to|is\s+assigned\s+to|assigned\s+to|is|owned\s+by|for|of|associated\s+with)\s+(?:the\s+)?)\b([A-Za-z0-9_.-]+\.exe)\b/gi;
+  const pidThenName = /\b(?:PID|process\s+ID)(?:\s+is)?[=\s:]*(\d+)\b\s*(?:[,()]\s*|(?:(?:belongs\s+to|maps\s+to|corresponds\s+to|is\s+assigned\s+to|assigned\s+to|is|was|owned\s+by|for|of|associated\s+with)\s+(?:the\s+)?)\b)([A-Za-z0-9_.-]+\.exe)\b/gi;
   for (const m of s.matchAll(nameThenPid)) pairs.push({ name: m[1].toLowerCase(), pid: m[2] });
   for (const m of s.matchAll(pidThenName)) pairs.push({ name: m[2].toLowerCase(), pid: m[1] });
   const seen = new Set();
@@ -89,19 +89,47 @@ function linesWithToken(output, token) {
   return String(output || '').split(/\r?\n/).filter((line) => tokenPresent(line.toLowerCase(), norm));
 }
 
+function processTableRows(output) {
+  const lines = String(output || '').split(/\r?\n/).filter((line) => line.trim());
+  if (!lines.length) return [];
+  const split = (line) => line.trim().split(/\t+|\s{2,}/).filter(Boolean);
+  const header = split(lines[0]).map((h) => h.toLowerCase());
+  const pidIdx = header.findIndex((h) => h === 'pid' || h === 'processid' || h === 'process_id');
+  const nameIdx = header.findIndex((h) => /^(imagefilename|image|name|process|owner|command)$/i.test(h));
+  if (pidIdx >= 0 && nameIdx >= 0) {
+    return lines.slice(1).map((line) => {
+      const cols = split(line);
+      return { line, pid: cols[pidIdx], name: String(cols[nameIdx] || '').toLowerCase() };
+    }).filter((r) => /^\d+$/.test(r.pid || '') && r.name);
+  }
+  // Fallback for simple rows like "2524 Rar.exe ...": treat the first standalone integer as PID.
+  return lines.map((line) => {
+    const cols = split(line);
+    const pid = (cols.find((c) => /^\d+$/.test(c)) || '');
+    const name = (cols.find((c) => /\.exe$/i.test(c)) || '').toLowerCase();
+    return { line, pid, name };
+  }).filter((r) => r.pid && r.name);
+}
+
 function pidProcessMismatch(finding, cited) {
   const tool = `${finding.evidence_tool || finding.tool || ''}`;
   if (!/psscan|pslist|cmdline/i.test(tool)) return null;
   const claimText = `${finding.observation || ''}; ${finding.interpretation || ''}`;
   const pairs = claimPidProcessPairs(claimText);
   if (!pairs.length) return null;
+  const rows = processTableRows(finding.output || '');
   for (const { pid, name } of pairs) {
-    const rows = linesWithToken(finding.output || '', pid);
-    if (!rows.length) continue; // citation seat handles absent PIDs
-    const sameRow = rows.some((row) => tokenPresent(row.toLowerCase(), name));
-    const nameAppearsSomewhere = tokenPresent(String(finding.output || '').toLowerCase(), name);
+    const pidRows = rows.filter((row) => row.pid === pid);
+    const nameAppearsSomewhere = rows.some((row) => row.name === name || tokenPresent(row.line.toLowerCase(), name));
+    if (!pidRows.length) {
+      if (nameAppearsSomewhere && linesWithToken(finding.output || '', pid).length) {
+        return { pid, claimed: name, actual: '(PID appears only outside the PID column)' };
+      }
+      continue; // citation seat handles absent PIDs; non-tabular fallback cannot prove mismatch.
+    }
+    const sameRow = pidRows.some((row) => row.name === name || tokenPresent(row.line.toLowerCase(), name));
     if (nameAppearsSomewhere && !sameRow) {
-      const rowNames = [...new Set(rows.flatMap((row) => claimProcessNames(row)))].join(', ') || '(no process name parsed)';
+      const rowNames = [...new Set(pidRows.map((row) => row.name).filter(Boolean))].join(', ') || '(no process name parsed)';
       return { pid, claimed: name, actual: rowNames };
     }
   }
@@ -111,17 +139,20 @@ function pidProcessMismatch(finding, cited) {
 function interpretationClaimTokens(interpretation = '') {
   const tokens = new Set();
   const text = String(interpretation || '');
-  const addIfAffirmative = (m) => {
+  const addIfAffirmative = (m, kind = 'generic') => {
     const token = m[0];
     // Do not split on periods here: IPv4 addresses contain periods. Use a local window so
     // "No connection to 185... is established" is exempt, while "sent data to 185..." is checked.
     const start = Math.max(0, m.index - 90);
     const end = Math.min(text.length, m.index + token.length + 90);
     const local = text.slice(start, end);
-    if (!NEGATION_HEDGE.test(local)) tokens.add(token.toLowerCase());
+    if (NEGATION_HEDGE.test(local)) return;
+    if (kind === 'filename' && /\b(?:correlat\w*|check|review|look\s+for|examin\w*|triage|collect|acquire)\b.{0,80}\b(?:before|to\s+determine|whether|corroborat\w*)\b|\bbefore\s+concluding\b/i.test(local)) return;
+    tokens.add(token.toLowerCase());
   };
   for (const m of text.matchAll(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g)) addIfAffirmative(m);              // claimed IPs
   for (const m of text.matchAll(/\b[a-fA-F0-9]{32,64}\b/g)) addIfAffirmative(m);                    // claimed hashes
+  for (const m of text.matchAll(/\b[A-Za-z0-9_$][A-Za-z0-9_$.-]*\.(?:exe|dll|sys|dat|zip|rar|7z|ps1|bat|cmd|reg|evtx|lnk|docx?|xlsx?|pptx?|txt|log)\b/gi)) addIfAffirmative(m, 'filename'); // claimed evidence filenames
   return tokens;
 }
 
@@ -191,11 +222,17 @@ const TOOL_SEMANTIC_RULES = [
     bad: /\bexecut|\bran\b|\bwas run\b|\bwere run\b|\bis run\b|\blaunch|\bstarted\b|\binvoked\b/i,
     why: 'Shimcache/AppCompatCache records presence + path, not execution (Win8+ entries are unordered and do not prove the program ran); corroborate with Prefetch/EVTX.' },
   { tool: /psscan|pslist/i,
-    bad: /\bc2\b|c&c|command.?and.?control|network connection|\bbeacon|exfiltrat|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|reach(?:ed|es|ing)?\s*out|connect(?:ed|s|ion)?\s*to|communicat(?:e|ed|ing)\s+with|contact(?:ed|ing)?|reporting\s+to|staged.+(?:drop|server|location|point)|siphon|smuggl|\btransmit/i,
-    why: 'A process listing (psscan/pslist) cannot establish network activity; netscan/netstat is required to claim C2, beaconing, callback, communication with a remote peer, or exfiltration.' },
+    bad: /\bc2\b|c&c|command.?and.?control|network connection|\bbeacon|exfiltrat|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|reach(?:ed|es|ing)?\s*out|connect(?:ed|s|ion)?\s*to|communicat(?:e|ed|ing)\s+with|contact(?:ed|ing)?|reporting\s+to|staged.+(?:drop|server|location|point)|siphon|smuggl|\btransmit|\b(?:active(?:ly)?\s+)?stream(?:ing|ed)?\b.{0,80}\boff\b|\bremote examiner station\b|\bdata\s+egress\b/i,
+    why: 'A process listing (psscan/pslist) cannot establish network activity; netscan/netstat is required to claim C2, beaconing, callback, communication with a remote peer, streaming/egress, or exfiltration.' },
   { tool: /netscan|netstat/i,
-    bad: /\bc2\b|c&c|command.?and.?control|\bexfiltrat|\bbeacon|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|siphon|smuggl|\bstole\b|\bstolen\b|data\s*(?:theft|exfil)|sent\s*(?:out|off)|leaked?\s*(?:data|out)|\btransmit|(?:files?|data|archive|payload|documents?)\s+(?:were\s+|was\s+)?(?:transferred|sent|forwarded|moved|uploaded|dispatched)\b|\b(?:transferred|sent|forwarded|moved|uploaded|dispatched)\s+(?:files?|data|archive|payload|documents?)\b/i,
-    why: 'netscan shows that a socket/connection exists, not that files or data were transferred/exfiltrated/stolen or that the peer is C2; internal/loopback (RFC1918/127.x) addresses cannot be an external C2.' },
+    bad: /\bc2\b|c&c|command.?and.?control|\bexfiltrat|\bbeacon|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|siphon|smuggl|\bstole\b|\bstolen\b|data\s*(?:theft|exfil)|sent\s*(?:out|off)|leaked?\s*(?:data|out)|\btransmit|(?:files?|data|archive|payload|documents?)\s+(?:were\s+|was\s+)?(?:transferred|sent|forwarded|moved|uploaded|dispatched)\b|\b(?:transferred|sent|forwarded|moved|uploaded|dispatched)\s+(?:files?|data|archive|payload|documents?)\b|\bremote operator\b|hands.?on.?keyboard|\bleveraged\b.{0,80}\baccess\b/i,
+    why: 'netscan shows that a socket/connection exists, not that files/data moved, that the peer is C2, or that a listener was used by a remote operator; internal/loopback (RFC1918/127.x) addresses cannot be an external C2.' },
+  { tool: /fls|mft|tsk/i,
+    bad: /\b(?:accessed|opened|browsed|viewed|played\s+back|ran|executed|launched|deployed|dropped|extracted|wip(?:e|ed|ing)|overwrit(?:e|ten|ing)|secure-deletion|staging\s+area|staged|cleanup|exfiltrat|data\s+theft|user-generated\s+content|account\s+owner)\b/i,
+    why: 'fls/MFT-style listings show names/metadata, not access/opening/playback, execution, staging, wiping, cleanup, or exfiltration; corroborate with timelines, Prefetch/EVTX, shellbags, or content artifacts.' },
+  { tool: /fsstat/i,
+    bad: /\battacker\b|\bpayload\b|\bencrypted\b|alternate\s+data\s+stream|\bADS\b|\bstored\b.{0,80}\b(?:stream|payload)\b/i,
+    why: 'fsstat reports filesystem metadata/attribute definitions; it cannot prove a concrete ADS/payload exists or attribute attacker activity.' },
   { tool: /amcache/i, bad: /\bexecut|\bran\b|\bwas run\b/i,
     why: 'Amcache indicates presence/first-seen, not confirmed execution; corroborate with Prefetch/EVTX.' },
 ];
@@ -263,23 +300,23 @@ export function contradictionSeat(finding) {
 // Catches attribution / intent / causation / unjustified-certainty leaps (right evidence, wrong leap).
 const INFERENCE_OVERREACH = [
   { kind: 'ATTRIBUTION',
-    re: /\bAPT[-\s]?\d+\b|\bFIN[-\s]?\d+\b|\bUNC[-\s]?\d+\b|\bthe attacker\b|\bthreat actor\b|\badversary\b|\bnation.?state\b|\bstate.?sponsored\b|\bhallmarks?\b|\btradecraft\b|\bsignature of\b|\battribut\w*\b|\bsophisticated (?:actor|group|adversary|threat)\b|\b(?:lazarus|sandworm|fancy bear|cozy bear|wizard spider|carbanak|equation group)\b/i,
+    re: /\bAPT[-\s]?\d+\b|\bFIN[-\s]?\d+\b|\bUNC[-\s]?\d+\b|\bthe attacker\b|\bthreat actor\b|\badversary\b|\bnation.?state\b|\bstate.?sponsored\b|\bhallmarks?\b|\btradecraft\b|\bsignature of\b|\battribut(?:ion|ing|ed\s+(?:to|by)|able\s+to|es?\s+(?:to|by))\b|\bsophisticated (?:actor|group|adversary|threat)\b|\b(?:lazarus|sandworm|fancy bear|cozy bear|wizard spider|carbanak|equation group)\b/i,
     why: 'attribution to a specific actor cannot be established from one artifact — corroborate with intel + multiple artifacts.' },
   { kind: 'INTENT',
-    re: /\bdeliberately\b|\bintentionally\b|\bin order to\b|\bto evade\b|\bto exfiltrate\b|\bwith the intent\b|\bfor the purpose of\b|\bso as to\b|\baim(?:ed|s)? to\b|\bmeant to\b|\bdesigned to\b|\bintended to\b|\bwith the goal\b|\bin an attempt to\b|\bto (?:steal|hide|conceal|cover|persist|escalate|maintain access)\b/i,
+    re: /\bdeliberately\b|\bintentionally\b|\bmanually\s+launched\b|\bin order to\b|\bto evade\b|\bto exfiltrate\b|\bwith the intent\b|\bfor the purpose of\b|\bso as to\b|\baim(?:ed|s)? to\b|\bmeant to\b|\bdesigned to\b|\bintended to\b|\bwith the goal\b|\bin an attempt to\b|\bto (?:steal|hide|conceal|cover|persist|escalate|maintain access|stage|execute|compromise)\b|lateral[- ]movement/i,
     why: 'intent is not provable from a forensic artifact alone (what happened ≠ why).' },
   { kind: 'CAUSATION',
-    re: /\bcaused\b|\bresulted in\b|\bled to\b|\bbecause of this\b|\btriggered\b|\bgave (?:the )?attacker\b|\benabled the\b|\bas a result\b|\bbrought about\b|\bin response to\b|\bdue to\b|\bcaused by\b|\bentry vector\b|\binitial access\b|\bpivot(?:ing|ed)? laterally\b|\bcreated\b.{0,80}\b(?:same\s+user-profile\s+provisioning\s+event|single operation|initial account setup)\b|\bsingle operation\b.{0,80}\bprovisioning event\b/i,
+    re: /\bcaused\b|\bresulted in\b|\bled to\b|\bbecause of this\b|\btriggered\b|\bgave (?:the )?attacker\b|\benabled the\b|\bas a result\b|\bbrought about\b|\bin response to\b|\bdue to\b|\bcaused by\b|\bentry vector\b|\binitial access\b|\bpivot(?:ing|ed)? laterally\b|\bcreated\b.{0,80}\b(?:same\s+user-profile\s+provisioning\s+event|single operation|initial account setup)\b|\bsingle operation\b.{0,80}\bprovisioning event\b|\bused\s+as\s+a\s+staging\s+point\b|\baccounting\s+for\b.{0,80}\b(?:gap|missing|absence|absent|erased|wiped|deleted)\b/i,
     why: 'causation asserted from correlation — the artifact shows state, not cause.' },
   { kind: 'CERTAINTY',
-    re: /\bproves?\b|\bdefinitively\b|\bconfirms? that\b|\bestablishes? that\b|\bbeyond (?:any )?doubt\b|\bwithout doubt\b|\bunambiguously\b|\bconclusively\b|\birrefutabl\w*\b|\bclearly (?:shows?|indicates?|demonstrates?|proves?)\b|\bguarantee/i,
+    re: /\bproves?\b|\bdefinitively\b|\bconfirms? that\b|\bestablishes? that\b|\bbeyond (?:any )?doubt\b|\bwithout doubt\b|\bunambiguously\b|\bconclusively\b|\birrefutabl\w*\b|\bclear\s+sign\b|\bclearly (?:shows?|indicates?|demonstrates?|proves?)\b|\bguarantee/i,
     why: 'unjustified certainty — a single artifact rarely proves a conclusion outright.' },
 ];
 // Inference uses a STRICTER, negation-only hedge than tool-semantics: an explicit disclaimer
 // ("attribution is NOT established", "does not prove", "cannot conclude") exempts the clause, but a
 // soft epistemic softener ("consistent with APT29", "may be a nation-state") does NOT — naming an
 // actor/intent even tentatively from one artifact is still an over-reach.
-const NEGATION_HEDGE = /\b(?:is|are|was|were|be|been|being)\s+not\s+(?:established|proven|confirmed|supported|shown|observed|seen|present|available|enough)\b|\b(?:does|do|did)\s+not\s+(?:prove|establish|confirm|support|show|demonstrate)\b|\b(?:cannot|can't|could not|couldn't)\s+(?:conclude|establish|prove|confirm|support|show|call|determine|say|infer|be)\b|\bunable to\s+(?:conclude|establish|prove|confirm|support|show|determine|infer|say)\b|\bnot\s+(?:established|proven|confirmed|supported|shown|observed|seen|present|available|enough)\b|\bno\s+(?:connection|exfiltration|c2|network activity|network traffic|data transfer)\s+(?:was|is|has been|can be|could be|to\b|with)\b|\b(?:is|are|was|were|remains?)\s+(?:unconfirmed|unproven|insufficient)\b|\b(?:cannot|can't|could not|couldn't|not yet|have not|has not)\s+(?:determine|determining|determined)\s+whether\b|\b(?:needed?|required?|necessary|not\s+possible|impossible|unclear|uncertain|difficult|hard|unable)\s+to\s+determine\s+whether\b|\b(?:needed?|required?|necessary)\b.{0,80}\bbefore\s+inferr?ing\s+whether\b|\bwarrants?\b.{0,80}\b(?:correlation|analysis|investigation|review|triage)\b.{0,80}\bto\s+determine\s+whether\b/i;
+const NEGATION_HEDGE = /\b(?:is|are|was|were|be|been|being)\s+not\s+(?:established|proven|confirmed|supported|shown|observed|seen|present|available|enough)\b|\b(?:does|do|did)\s+not\s+(?:prove|establish|confirm|support|show|demonstrate)\b|\b(?:cannot|can't|could not|couldn't)\s+(?:conclude|establish|prove|confirm|support|show|call|determine|say|infer|be)\b|\bunable to\s+(?:conclude|establish|prove|confirm|support|show|determine|infer|say)\b|\bnot\s+(?:established|proven|confirmed|supported|shown|observed|seen|present|available|enough)\b|\bno\s+(?:connection|exfiltration|c2|network activity|network traffic|data transfer|lateral movement|attribution|intent|causation|initial access|entry vector)\s+(?:was|is|has been|can be|could be|to\b|with)\b|\b(?:is|are|was|were|remains?)\s+(?:unconfirmed|unproven|insufficient)\b|\b(?:cannot|can't|could not|couldn't|not yet|have not|has not)\s+(?:determine|determining|determined)\s+whether\b|\b(?:needed?|required?|necessary|not\s+possible|impossible|unclear|uncertain|difficult|hard|unable)\s+to\s+determine\s+whether\b|\b(?:needed?|required?|necessary)\b.{0,80}\bbefore\s+inferr?ing\s+whether\b|\bbefore\s+attribut\w*\b|\bwarrants?\b.{0,80}\b(?:correlation|analysis|investigation|review|triage)\b.{0,80}\bto\s+determine\s+whether\b/i;
 export function inferenceSeat(finding) {
   const interp = (finding.interpretation || '').trim();
   if (!interp) return { seat: 'seat:inference', lens: 'does the observation support the interpretation?', verdict: 'SUPPORTED', reasoning: 'No interpretation to evaluate.' };
@@ -294,8 +331,8 @@ export function inferenceSeat(finding) {
   return { seat: 'seat:inference', lens: 'does the observation support the interpretation?', verdict: 'SUPPORTED', reasoning: 'Interpretation stays within what the cited artifact supports.' };
 }
 
-const SCOPE_OVERREACH = /\b(?:all|every)\s+(?:hosts?|systems?|machines?|workstations?|servers?|endpoints?|assets?)\b|\benvironment[- ]wide\b|\borganization[- ]wide\b|\benterprise[- ]wide\b|\bacross\s+(?:the\s+)?(?:organization|enterprise|environment|domain|network)\b|\bentire\s+(?:network|environment|domain|organization|enterprise)\b/i;
-const SCOPE_NEGATION = /\b(?:no|not|without|cannot|can't|could not|couldn't)\b.{0,80}\b(?:scope|all\s+hosts?|environment[- ]wide|organization[- ]wide|enterprise[- ]wide|entire\s+(?:network|environment|domain|organization|enterprise))\b.{0,80}\b(?:established|shown|supported|claimed|available|present|proven|confirmed)?\b/i;
+const SCOPE_OVERREACH = /\b(?:all|every)\s+(?:hosts?|systems?|machines?|workstations?|servers?|endpoints?|assets?)\b|\benvironment[- ]wide\b|\borganization[- ]wide\b|\benterprise[- ]wide\b|\bacross\s+(?:the\s+)?(?:organization|enterprise|environment|domain|network)\b|\bentire\s+(?:network|environment|domain|organization|enterprise)\b|\b(?:wider|broader)\s+(?:estate|campaign|environment)\b|\bcoordinated\s+intrusion\s+campaign\b|\bno\s+other\b.{0,80}\b(?:directories|folders|files|entries|user\s+data)\b.{0,80}\b(?:present|on\s+the\s+volume|in\s+the\s+volume)\b/i;
+const SCOPE_NEGATION = /\b(?:no|not|without|cannot|can't|could not|couldn't)\b.{0,80}\b(?:scope|all\s+hosts?|environment[- ]wide|organization[- ]wide|enterprise[- ]wide|entire\s+(?:network|environment|domain|organization|enterprise)|wider\s+(?:estate|campaign)|coordinated\s+intrusion\s+campaign)\b.{0,80}\b(?:established|shown|supported|claimed|available|present|proven|confirmed)?\b|\bbefore\s+attribut\w*\b.{0,80}\b(?:wider|broader)\s+(?:estate|campaign|environment)\b/i;
 
 export function scopeSeat(finding) {
   const interp = (finding.interpretation || '').trim();

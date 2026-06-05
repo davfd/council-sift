@@ -32,7 +32,7 @@ Same analyst output; the only variable is the Council.
 | hash-hallucinated | unsupported | UNSUPPORTED | yes |
 | mem-toolmisread | unsupported | MISREAD_TOOL | yes |
 | tsk-timestomp | unsupported | CONTRADICTED | yes |
-| inference-overreach | unsupported | UNSUPPORTED | yes |
+| inference-overreach | unsupported | MISREAD_TOOL | yes |
 
 ## Honest limitations (honesty valued over perfection)
 
