@@ -8,13 +8,13 @@
  *   Inference      — the interpretation does not over-reach (attribution/intent/causation/certainty).
  *   Synthesis      — aggregate seat verdicts → disposition.
  *
- * Soundness notes (hardened after the held-out adversarial-evasion probe, eval/adversarial_evasions.mjs):
+ * Soundness notes (hardened with the regression probe, eval/adversarial_evasions.mjs):
  *   - Citation uses TOKEN-BOUNDARY matching, not raw substring: a fabricated token that only appears
  *     embedded inside a larger real token (PID "459" inside "14592"; "host.exe" inside "svchost.exe")
  *     is correctly reported ABSENT.
  *   - Tool-semantics / Inference vocabularies are broadened beyond the obvious trigger words, and the
- *     hedge exemption is CLAUSE-LOCAL: a disclaimer must sit in the same clause as the over-read it
- *     excuses — a stray "not" elsewhere in the sentence no longer disables the seat.
+ *     tool-semantics exemption is clause-local and negation/disclaimer-only: a soft epistemic hedge like
+ *     "appears to have exfiltrated" does not excuse an affirmative over-read.
  */
 
 // Characters that form one contiguous identifier / path-segment / IP / hash / PID token.
@@ -37,23 +37,65 @@ function tokenPresent(haystack, norm) {
   }
 }
 
-// Regex auto-extraction of checkable evidence tokens when the analyst doesn't declare them.
-export function citedTokens(observation, locator) {
+// Regex auto-extraction of checkable evidence tokens.
+// - Observation extraction is a fallback only when the analyst omits cited_tokens.
+// - Locator strings identify where evidence came from; they are not automatically required to appear in
+//   tool output, because case paths and host/IP labels often live outside the forensic output itself.
+function evidenceTokens(text) {
   const tokens = new Set();
-  const text = `${observation} ${locator}`;
-  for (const m of text.matchAll(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g)) tokens.add(m[0]);          // IPv4
-  for (const m of text.matchAll(/\b[a-fA-F0-9]{32,64}\b/g)) tokens.add(m[0].toLowerCase());  // md5/sha
-  for (const m of text.matchAll(/PID[=\s:]*(\d+)/gi)) tokens.add(m[1]);                       // PIDs
-  for (const m of text.matchAll(/[A-Za-z]:\\[^\s",;]+/g)) tokens.add(m[0].toLowerCase());     // Windows paths
+  const evidenceText = String(text || '');
+  for (const m of evidenceText.matchAll(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g)) tokens.add(m[0]);          // IPv4
+  for (const m of evidenceText.matchAll(/\b[a-fA-F0-9]{32,64}\b/g)) tokens.add(m[0].toLowerCase());  // md5/sha
+  for (const m of evidenceText.matchAll(/PID[=\s:]*(\d+)/gi)) tokens.add(m[1]);                       // PIDs
+  for (const m of evidenceText.matchAll(/[A-Za-z]:\\[^\s",;]+/g)) tokens.add(m[0].toLowerCase());     // Windows paths
+  return tokens;
+}
+
+function interpretationClaimTokens(interpretation = '') {
+  const tokens = new Set();
+  const text = String(interpretation || '');
+  const addIfAffirmative = (m) => {
+    const token = m[0];
+    // Do not split on periods here: IPv4 addresses contain periods. Use a local window so
+    // "No connection to 185... is established" is exempt, while "sent data to 185..." is checked.
+    const start = Math.max(0, m.index - 90);
+    const end = Math.min(text.length, m.index + token.length + 90);
+    const local = text.slice(start, end);
+    if (!NEGATION_HEDGE.test(local)) tokens.add(token.toLowerCase());
+  };
+  for (const m of text.matchAll(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g)) addIfAffirmative(m);              // claimed IPs
+  for (const m of text.matchAll(/\b[a-fA-F0-9]{32,64}\b/g)) addIfAffirmative(m);                    // claimed hashes
+  return tokens;
+}
+
+export function citedTokens(observation, locator, interpretation = '', includeEvidenceFallback = true) {
+  const tokens = new Set();
+  void locator; // locators are provenance pointers, not evidence text to be proven inside tool output
+  if (includeEvidenceFallback) {
+    for (const tok of evidenceTokens(observation || '')) tokens.add(tok);
+  }
+  for (const tok of interpretationClaimTokens(interpretation)) tokens.add(tok);
   return [...tokens];
 }
 
 // Citation seat — deterministic: does every cited token appear in the tool output AS A TOKEN?
 export function citationSeat(finding) {
   const out = (finding.output || '').toLowerCase().replace(/\\\\/g, '\\');
-  const cited = (Array.isArray(finding.cited_tokens) && finding.cited_tokens.length)
-    ? finding.cited_tokens
-    : citedTokens(finding.observation, finding.evidence_locator || '');
+  const rawExplicit = Array.isArray(finding.cited_tokens) ? finding.cited_tokens : [];
+  const explicit = rawExplicit
+    .filter((tok) => tok !== null && tok !== undefined && String(tok).trim())
+    .map((tok) => String(tok));
+  const auto = citedTokens(
+    finding.observation,
+    finding.evidence_locator || '',
+    finding.interpretation || '',
+    explicit.length === 0,
+  );
+  const cited = [...new Set([...explicit, ...auto])];
+  if (cited.length === 0) {
+    return { seat: 'seat:citation', lens: 'does every cited token resolve in the evidence?', verdict: 'UNSUPPORTED',
+      reasoning: 'No verifiable evidence tokens supplied or auto-extracted; analyst must cite at least one concrete evidence token before the Council can verify the claim.', evidence_checked: [] };
+  }
   const checked = cited.map((tok) => {
     const norm = String(tok).toLowerCase().replace(/\\\\/g, '\\');
     return { token: tok, present: tokenPresent(out, norm) };
@@ -79,25 +121,21 @@ export function synthesisSeat(seatVerdicts) {
 // Split an interpretation into clauses so a hedge is judged LOCAL to the over-read it excuses.
 function splitClauses(text) {
   return String(text)
-    .split(/[.;]|\bhowever\b|\b(?:al)?though\b|\bbut\b|\byet\b|—|--|,\s*(?:though|while|whereas)\b/i)
+    .split(/;|\.(?:\s+|$)|\bhowever\b|\b(?:al)?though\b|\bbut\b|\byet\b|—|--|,\s*(?:though|while|whereas)\b/i)
     .map((s) => s.trim())
     .filter(Boolean);
 }
-// A clause is hedged if it locally disclaims / down-grades the strong reading. Includes epistemic
-// hedges (may/might/could/appears/suggests) because a hedged hypothesis is NOT an affirmative over-read.
-const LOCAL_HEDGE = /\bnot\b|n['’]t\b|\bno\b|\bcannot\b|\bwithout\b|\binsufficient\b|\bunconfirmed\b|\bunproven\b|\bnot established\b|\brequires?\b|\bwarrants?\b|\bcorrobor|\bmay\b|\bmight\b|\bcould\b|\bpossibl|\bappears?\b|\bseems?\b|\bsuggest|\bconsistent with\b|\bindicator\b|\bpending\b|\bwhether\b/i;
-
 // Tool-semantics seat — catches over-reading a tool: right tokens, wrong conclusion *for that tool*.
 const TOOL_SEMANTIC_RULES = [
   { tool: /shimcache|appcompat/i,
     bad: /\bexecut|\bran\b|\bwas run\b|\bwere run\b|\bis run\b|\blaunch|\bstarted\b|\binvoked\b/i,
     why: 'Shimcache/AppCompatCache records presence + path, not execution (Win8+ entries are unordered and do not prove the program ran); corroborate with Prefetch/EVTX.' },
   { tool: /psscan|pslist/i,
-    bad: /\bc2\b|c&c|command.?and.?control|network connection|\bbeacon|exfiltrat|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|controller|reach(?:ed|es|ing)?\s*out|connect(?:ed|s|ion)?\s*to|siphon|smuggl|\btransmit/i,
-    why: 'A process listing (psscan/pslist) cannot establish network activity; netscan/netstat is required to claim C2, beaconing, callback, or exfiltration.' },
+    bad: /\bc2\b|c&c|command.?and.?control|network connection|\bbeacon|exfiltrat|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|controller|reach(?:ed|es|ing)?\s*out|connect(?:ed|s|ion)?\s*to|communicat(?:e|ed|ing)\s+with|contact(?:ed|ing)?|reporting\s+to|staged.+(?:drop|server|location|point)|siphon|smuggl|\btransmit/i,
+    why: 'A process listing (psscan/pslist) cannot establish network activity; netscan/netstat is required to claim C2, beaconing, callback, communication with a remote peer, or exfiltration.' },
   { tool: /netscan|netstat/i,
-    bad: /\bc2\b|c&c|command.?and.?control|\bexfiltrat|\bbeacon|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|controller|siphon|smuggl|\bstole\b|\bstolen\b|data\s*(?:theft|exfil)|sent\s*(?:out|off)|leaked?\s*(?:data|out)|\btransmit/i,
-    why: 'netscan shows that a socket/connection exists, not that data was exfiltrated/stolen or that the peer is C2; internal/loopback (RFC1918/127.x) addresses cannot be an external C2.' },
+    bad: /\bc2\b|c&c|command.?and.?control|\bexfiltrat|\bbeacon|phoned?\s*home|call(?:ed|s)?\s*(?:home|back)|callback|controller|siphon|smuggl|\bstole\b|\bstolen\b|data\s*(?:theft|exfil)|sent\s*(?:out|off)|leaked?\s*(?:data|out)|\btransmit|(?:files?|data|archive|payload|documents?)\s+(?:were\s+|was\s+)?(?:transferred|sent|forwarded|moved|uploaded|dispatched)\b|\b(?:transferred|sent|forwarded|moved|uploaded|dispatched)\s+(?:files?|data|archive|payload|documents?)\b/i,
+    why: 'netscan shows that a socket/connection exists, not that files or data were transferred/exfiltrated/stolen or that the peer is C2; internal/loopback (RFC1918/127.x) addresses cannot be an external C2.' },
   { tool: /amcache/i, bad: /\bexecut|\bran\b|\bwas run\b/i,
     why: 'Amcache indicates presence/first-seen, not confirmed execution; corroborate with Prefetch/EVTX.' },
 ];
@@ -107,8 +145,8 @@ export function toolSemanticsSeat(finding) {
   const clauses = splitClauses(interp);
   for (const r of TOOL_SEMANTIC_RULES) {
     if (!r.tool.test(hay)) continue;
-    // Flag only an AFFIRMATIVE over-read: a clause that asserts the bad reading WITHOUT a local hedge.
-    const offending = clauses.find((c) => r.bad.test(c) && !LOCAL_HEDGE.test(c));
+    // Flag only an AFFIRMATIVE over-read: a clause that asserts the bad reading WITHOUT a local negation/disclaimer.
+    const offending = clauses.find((c) => r.bad.test(c) && !NEGATION_HEDGE.test(c));
     if (offending) {
       return { seat: 'seat:tool-semantics', lens: 'is the tool output read correctly?', verdict: 'MISREAD_TOOL',
         reasoning: `${r.why} Offending clause: "${offending.slice(0, 140)}".` };
@@ -143,14 +181,14 @@ const INFERENCE_OVERREACH = [
     re: /\bcaused\b|\bresulted in\b|\bled to\b|\bbecause of this\b|\btriggered\b|\bgave (?:the )?attacker\b|\benabled the\b|\bas a result\b|\bbrought about\b/i,
     why: 'causation asserted from correlation — the artifact shows state, not cause.' },
   { kind: 'CERTAINTY',
-    re: /\bproves?\b|\bdefinitively\b|\bconfirms? that\b|\bestablishes? that\b|\bbeyond (?:any )?doubt\b|\bwithout doubt\b|\bunambiguously\b|\bconclusively\b|\birrefutabl\w*\b|\bclearly (?:shows?|indicates?|demonstrates?|proves?)\b|\bdemonstrates? that\b|\bguarantee/i,
+    re: /\bproves?\b|\bdefinitively\b|\bconfirms? that\b|\bestablishes? that\b|\bbeyond (?:any )?doubt\b|\bwithout doubt\b|\bunambiguously\b|\bconclusively\b|\birrefutabl\w*\b|\bclearly (?:shows?|indicates?|demonstrates?|proves?)\b|\bguarantee/i,
     why: 'unjustified certainty — a single artifact rarely proves a conclusion outright.' },
 ];
 // Inference uses a STRICTER, negation-only hedge than tool-semantics: an explicit disclaimer
 // ("attribution is NOT established", "does not prove", "cannot conclude") exempts the clause, but a
 // soft epistemic softener ("consistent with APT29", "may be a nation-state") does NOT — naming an
 // actor/intent even tentatively from one artifact is still an over-reach.
-const NEGATION_HEDGE = /\bnot\b|n['’]t\b|\bno\b|\bnone\b|\bcannot\b|\bwithout\b|\bunconfirmed\b|\bunproven\b|\bnot established\b|\bnot proven\b|\bdoes not\b|\bdo not\b|\bcannot be\b|\bunable to\b|\bpending\b|\binsufficient\b/i;
+const NEGATION_HEDGE = /\b(?:is|are|was|were|be|been|being)\s+not\s+(?:established|proven|confirmed|supported|shown|observed|seen|present|available|enough)\b|\b(?:does|do|did)\s+not\s+(?:prove|establish|confirm|support|show|demonstrate)\b|\b(?:cannot|can't|could not|couldn't)\s+(?:conclude|establish|prove|confirm|support|show|call|determine|say|infer|be)\b|\bunable to\s+(?:conclude|establish|prove|confirm|support|show|determine|infer|say)\b|\bnot\s+(?:established|proven|confirmed|supported|shown|observed|seen|present|available|enough)\b|\bno\s+(?:connection|exfiltration|c2|network activity|network traffic|data transfer)\s+(?:was|is|has been|can be|could be|to\b|with)\b|\b(?:is|are|was|were|remains?)\s+(?:unconfirmed|unproven|insufficient)\b|\b(?:cannot|can't|could not|couldn't|not yet|have not|has not)\s+(?:determine|determining|determined)\s+whether\b|\b(?:needed?|required?|necessary|not\s+possible|impossible|unclear|uncertain|difficult|hard|unable)\s+to\s+determine\s+whether\b|\bwarrants?\b.{0,80}\b(?:correlation|analysis|investigation|review|triage)\b.{0,80}\bto\s+determine\s+whether\b/i;
 export function inferenceSeat(finding) {
   const interp = (finding.interpretation || '').trim();
   if (!interp) return { seat: 'seat:inference', lens: 'does the observation support the interpretation?', verdict: 'SUPPORTED', reasoning: 'No interpretation to evaluate.' };

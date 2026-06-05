@@ -86,7 +86,8 @@ is the OpenClaw seat-narration view of the floor verdicts.
    over-reach (negation-only hedge). **Synthesis** aggregates → verify or bounce. *Additive tier:* if the
    floor passed, the **LLM skeptic panel** (`llm_skeptic.mjs`) runs — a ≥2/3 majority of independent
    skeptics can **add** a bounce for an over-read the regex floor cannot enumerate; it never rescues a
-   refuted finding and never lowers the floor's FP=0 precision.
+   refuted finding. Its recall and false-positive behavior are measured separately from the deterministic
+   floor, rather than claimed as a global FP=0 guarantee.
 5. **Self-correction (no human).** On refute, the finding → `DISPUTED` + a `ConflictRecord` (the
    objection); the analyst re-files a corrected finding and the loop repeats.
 6. **Receipt + trace.** A surviving finding → `COUNCIL_VERIFIED` + a hash-chained `CouncilReceipt`
@@ -116,18 +117,20 @@ API key**. Same loop, two drivers: `autorun.sh` is the agent; `*_demo.sh` is the
 human**. Evidence text is treated as data, never as instructions.
 
 **`csift trace --rerun`.** Plain `trace` re-hashes the *stored* tool output (proves the chain hasn't been
-altered). `--rerun` re-executes the **recorded command** through `$SIFT_WRAPPER` and compares the *fresh*
-output hash to the recorded one — this is what proves SIFT actually produced it, not a fabricated string.
-It works because the relevant tools (`vol3 windows.psscan/netscan`, `fls`, `icat`) are **byte-deterministic
-over a static evidence image** (verified empirically). The compare is exact, or modulo trailing whitespace
+altered). `--rerun` is the stronger check: for receipts whose recorded command is concrete and whose
+evidence path is available, it re-executes that command through `$SIFT_WRAPPER` and compares the *fresh*
+output hash to the recorded one — proving SIFT actually produced it, not merely that a stored string hashes
+correctly. The compare is exact, or modulo trailing whitespace
 (bash `$()` strips trailing newlines, `execFileSync` keeps them — the verdict reports which). A real
-divergence means non-deterministic output, changed evidence, or fabrication.
+divergence means non-deterministic output, changed evidence, a placeholder/non-rerunnable command, or
+fabrication.
 
 **The LLM skeptic panel (`council/llm_skeptic.mjs`).** Three independent skeptics, each with a distinct
 lens — **tool-semantics** (is the tool over-read?), **inference** (is the leap unjustified?), **support**
 (does the cited evidence actually carry the claim?). Each votes bounce/keep; a **⌊n/2⌋+1 = 2-of-3 majority**
 is required to add a bounce. It runs **only after the deterministic floor has already passed** a finding —
-so it can only ever *add* a bounce, never rescue a refuted one, and never lowers the floor's FP=0 precision.
+so it can only ever *add* a bounce and never rescue a refuted one. Panel recall/FP is measured separately
+from the deterministic floor; it is additive evidence, not a global FP=0 guarantee.
 Without an authenticated `claude` it **abstains** (no effect). Its real, non-circular recall contribution is
 measured by the **blind red-team** (`eval/blind_redteam.mjs`: independent attacker, frozen detector — the
 floor alone is ~65–69% recall @ ~93–96% precision on 130 unseen findings; the panel lifts the residual).

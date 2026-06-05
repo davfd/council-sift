@@ -57,5 +57,5 @@ cases are exercised and reported as informational (not a headline claim), per th
   No part of the answer key is shown to the agent; only the public ATT&CK taxonomy informs its labels.
 - The Council's **differentiating value shows where the analyst over-claims** — the live autonomous
   self-correction (`execution-logs/AGENTIC-SELFCORRECT.jsonl`) and the internal injected-hallucination
-  benchmark (`accuracy_report.md`: 85/85 caught) — not on cases a strong base LLM already gets right.
+  benchmark (`bench_real_report.md`: 85/85 caught) — not on cases a strong base LLM already gets right.
 - Verdicts here are emitted by a **live LLM Council** (`claude -p`), not deterministic seats.

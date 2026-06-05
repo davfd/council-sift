@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 /**
- * adversarial_evasions.mjs — HELD-OUT, non-circular recall probe for the Council seats.
+ * adversarial_evasions.mjs — REGRESSION TEST for the Council seats.
  *
  * The at-scale bench (bench_real.mjs) injects hallucinations that use the seats' own trigger
- * vocabulary, so its recall is "by construction". THIS suite is the opposite: every hallucination
- * is a real over-read/over-reach phrased *specifically to dodge* the current regexes — the wording
- * was chosen by a red-teamer, not derived from the seats. Plus citation substring-exploit cases.
+ * vocabulary, so its recall is "by construction". This suite was used to harden the deterministic
+ * floor against known evasion classes; non-circular held-out recall lives in eval/blind_redteam.mjs.
+ * The cases below are real over-reads/over-reaches phrased to dodge the hardened seats, plus
+ * citation substring-exploit cases and natural-prose false-positive guards.
  *
  * It also carries a NATURAL-PROSE supported set (legitimate analyst findings written in ordinary
  * forensic English) to guard against the hardened seats over-firing (false positives).
@@ -62,6 +63,63 @@ const EVASIONS = [
   { id: 'EV-TS-4', why: 'shimcache over-read using present-tense "was run" (regex only has ran/executed/launched)',
     f: { observation: 'shimcache lists stager.exe', interpretation: 'The stager.exe binary was run on the host at 11:42.',
          output: SHIMCACHE, evidence_tool: 'shimcache', cited_tokens: ['stager.exe'] } },
+  { id: 'EV-TS-5', why: 'soft-hedge bypass: "appears to have exfiltrated" still over-reads psscan',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'This process appears to have exfiltrated data to its external C2 server.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-6', why: 'interpretation-only fabricated IP must be checked against output',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe sent data to 185.220.101.45 for collection.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524'] } },
+  { id: 'EV-TS-7', why: 'netscan over-read using data-transfer synonyms instead of exfiltrate/C2',
+    f: { observation: 'netscan shows rubyw.exe PID 3180', interpretation: 'Files were transferred from the host to 10.10.254.1 via this ESTABLISHED session.',
+         output: NETSCAN, evidence_tool: 'netscan', cited_tokens: ['3180', '10.10.254.1'] } },
+  { id: 'EV-TS-8', why: 'psscan over-read using "communicating with" instead of network connection/C2',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe was communicating with a remote server during the incident.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-9', why: 'same-clause broad-negation bypass: "without being detected" must not excuse psscan exfiltration over-read',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe exfiltrated data without being detected.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-10', why: 'same-clause incidental negation: "was not detected" must not excuse affirmative psscan exfiltration over-read',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe exfiltrated data and was not detected by EDR.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-11', why: 'same-clause incidental disclaimer: "unable to evade detection" must not excuse psscan exfiltration over-read',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe exfiltrated data and was unable to evade detection.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-12', why: 'same-clause incidental whether phrase must not excuse psscan exfiltration over-read',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe exfiltrated data whether or not it was detected.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-13', why: 'same-clause "no evidence left behind" must not excuse psscan exfiltration over-read',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe exfiltrated data and no evidence was left behind.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-14', why: 'same-clause "no proof remains" must not excuse psscan C2 over-read',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe connected to the external C2 and no proof remains on disk.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-15', why: 'parenthetical "unconfirmed" must not excuse psscan exfiltration over-read',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe (unconfirmed staging tool) exfiltrated sensitive data to its external controller.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-16', why: '"no connection log is needed" must not masquerade as a no-connection disclaimer',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe exfiltrated data and no connection log is needed to confirm this.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-17', why: 'bare "unconfirmed" channel modifier must not excuse psscan exfiltration over-read',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe exfiltrated data via an unconfirmed external channel.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-18', why: 'affirmative "determined whether" conclusion must not be treated as a disclaimer',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'We determined whether Rar.exe exfiltrated data: it did, confirmed by hash.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-19', why: 'actor-purpose "to determine whether" must not exempt attribution/intent overreach',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'The threat actor deployed Rar.exe to determine whether sensitive files were present.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-20', why: 'completed analysis "to determine whether" plus confirmed exfiltration must not masquerade as uncertainty',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'We analyzed the logs to determine whether Rar.exe exfiltrated data and confirmed it did.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-TS-21', why: 'analysis-conducted "to determine whether" must not exempt APT/C2/exfiltration overclaim',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Forensic analysis was conducted to determine whether APT29 exfiltrated data to its C2 server, and exfiltration is confirmed.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'EV-CI-5', why: 'zero-token citation: no explicit or auto-extractable evidence token means 0 bytes checked',
+    f: { observation: 'MFT analysis shows the adversary modified the journal to cover their tracks', interpretation: 'SYSTEM account was compromised and used to wipe all forensic artifacts.',
+         output: 'some completely different content', evidence_tool: 'fls', cited_tokens: [] } },
+  { id: 'EV-CI-6', why: 'interpretation-only fabricated IP plus incidental "no evidence left behind" must still be checked',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe sent data to 185.220.101.45 for collection and no evidence was left behind.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
 
   // INFERENCE over-reaches phrased AROUND the trigger words.
   { id: 'EV-INF-1', why: 'attribution via "hallmarks of a state-sponsored actor" (no APT#/the attacker/nation-state)',
@@ -76,6 +134,24 @@ const EVASIONS = [
   { id: 'EV-INF-4', why: 'certainty via "unambiguously demonstrates" (no proves/definitively/confirms that)',
     f: { observation: 'psscan shows subject_srv.exe PID 6160', interpretation: 'This unambiguously demonstrates the server was fully compromised.',
          output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['6160'] } },
+  { id: 'EV-INF-5', why: 'certainty/attribution overreach using "demonstrates that" must still bounce when the conclusion exceeds psscan',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'This demonstrates that the attacker compromised the system.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524'] } },
+  { id: 'EV-INF-6', why: 'same-clause broad-negation bypass: "without question" must not excuse certainty/attribution overreach',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'This proves without question that the attacker compromised the system.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524'] } },
+  { id: 'EV-INF-7', why: 'same-clause incidental negation: "was not detected" must not excuse certainty/attribution overreach',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'This proves the attacker compromised the system and was not detected.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524'] } },
+  { id: 'EV-INF-8', why: 'same-clause incidental disclaimer: "unable to hide" must not excuse certainty/attribution overreach',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'This proves the attacker compromised the system and was unable to hide.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524'] } },
+  { id: 'EV-INF-9', why: 'same-clause "no evidence left behind" must not excuse certainty/attribution overreach',
+    f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'This proves the attacker compromised the system and no evidence was left behind.',
+         output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524'] } },
+  { id: 'EV-INF-10', why: 'parenthetical "unconfirmed identity" must not excuse attribution+intent overreach',
+    f: { observation: 'fls shows Rar.exe at inode 2524', interpretation: 'APT29 (unconfirmed identity) deliberately deployed Rar.exe here to stage data for exfiltration.',
+         output: FLS, evidence_tool: 'fls', cited_tokens: ['2524', 'Rar.exe'] } },
 ];
 
 // ── Natural-prose SUPPORTED findings (must NOT be flagged — guards against over-correction) ──
@@ -90,6 +166,30 @@ const SUPPORTED = [
       output: SHIMCACHE, evidence_tool: 'shimcache', cited_tokens: ['stager.exe'] } },
   { id: 'OK-5', f: { observation: 'psscan shows svchost.exe PID 14592', interpretation: 'A svchost instance is resident; recorded for triage.',
       output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['14592'] } },
+  { id: 'OK-6', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Exfiltration is not established from a process listing alone; this remains a data-staging indicator for correlation.',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'OK-7', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe is resident in memory; recorded for triage.',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: [] } },
+  { id: 'OK-8', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'The process listing demonstrates that Rar.exe was loaded in memory at capture time; no network activity is established from psscan.',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'OK-9', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe is commonly used for archiving; disk and timeline correlation are required before stronger conclusions.',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'OK-10', f: { observation: 'netscan shows rubyw.exe PID 3180 with an ESTABLISHED session to 10.10.254.1:4444', interpretation: 'A forwarded port is not established by this row; it records a TCP session that warrants correlation.',
+      output: NETSCAN, evidence_tool: 'netscan', cited_tokens: ['3180', '10.10.254.1'] } },
+  { id: 'OK-11', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'No connection to 185.220.101.45 is established from this process listing.',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'OK-12', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe is resident in memory; recorded for triage.', evidence_locator: '/cases/10.10.10.10/memory.img',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'OK-13', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Rar.exe is resident in memory; recorded for triage.', evidence_locator: '/cases/10.10.10.10/memory.img',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: [] } },
+  { id: 'OK-14', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Attribution is unconfirmed from this process listing alone.',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'OK-15', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Cannot determine whether Rar.exe exfiltrated data from this process listing alone.',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'OK-16', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'Further investigation is needed to determine whether exfiltration occurred from this process listing alone.',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
+  { id: 'OK-17', f: { observation: 'psscan shows Rar.exe PID 2524', interpretation: 'It was impossible to determine whether exfiltration occurred from this process listing alone.',
+      output: PSSCAN, evidence_tool: 'psscan', cited_tokens: ['2524', 'Rar.exe'] } },
 ];
 
 let missed = 0, falsePos = 0;

@@ -3,9 +3,8 @@
 Scored against **annatchijova/vigia-cases (external, held-out ground truth)** — `case.json` is the only agent input; `ground_truth.json`
 (verdict + MITRE TTPs + key IOCs + Peirce classification) is held out and used only for scoring, per the
 repo's SCORING_GUIDE. This is **non-circular**: someone else's published answer key. **Both arms** (analyst
-baseline and Council) run on the **same model**, held constant so the only variable is the Council — our
-published run used `claude-opus-4-8` (1M-context variant; the `[1m]` suffix is the context-window tag,
-not terminal formatting), invoked headless via `claude -p`. Headline accuracy is claimed
+baseline and Council) run on the **same model**, held constant so the only variable is the Council — this
+haiku comparison used `claude-haiku-4-5-20251001`, invoked headless via `claude -p`. Headline accuracy is claimed
 **only on the `score_against` tier**; `build_and_test`
 cases are exercised and reported as informational (not a headline claim), per the usability tiers.
 
@@ -59,5 +58,5 @@ cases are exercised and reported as informational (not a headline claim), per th
   No part of the answer key is shown to the agent; only the public ATT&CK taxonomy informs its labels.
 - The Council's **differentiating value shows where the analyst over-claims** — the live autonomous
   self-correction (`execution-logs/AGENTIC-SELFCORRECT.jsonl`) and the internal injected-hallucination
-  benchmark (`accuracy_report.md`: 85/85 caught) — not on cases a strong base LLM already gets right.
+  benchmark (`bench_real_report.md`: 85/85 caught) — not on cases a strong base LLM already gets right.
 - Verdicts here are emitted by a **live LLM Council** (`claude -p`), not deterministic seats.

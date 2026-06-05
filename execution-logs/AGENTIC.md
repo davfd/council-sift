@@ -35,8 +35,9 @@ memory · 3 cases (SRL-2018, ROCBA, SRL-2015).** The SRL-2015 run analyzed **mem
 single investigation (PyInstaller malware, a recycled-binary masquerade, registry persistence, Recycle-Bin
 anti-forensics).
 
-Every finding traces to its tool execution (`csift trace <id>`) and is independently re-runnable
-(`csift trace --rerun <id>`). The verdicts are hash-chained Council Receipts.
+Every finding traces to its tool execution (`csift trace <id>`). Concrete recorded commands can be
+independently re-run (`csift trace --rerun <id>`) when the evidence path is present; receipt/hash checks
+remain valid for placeholder or non-rerunnable commands. The verdicts are hash-chained Council Receipts.
 
 ---
 

@@ -1,17 +1,17 @@
 /**
  * llm_skeptic.mjs — Option B: the ADDITIVE LLM skeptic panel.
  *
- * The deterministic seats (seats.mjs) are the un-gameable PRECISION FLOOR: they never wrongly reject a
- * correctly-cited, well-scoped finding, and they reproduce with no API key. But their recall is bounded
- * by an enumerable vocabulary (see eval/adversarial_evasions.mjs). This panel lifts recall on phrasings
- * no regex will ever enumerate — WITHOUT giving an LLM the power to reject real findings:
+ * The deterministic seats (seats.mjs) are the reproducible precision floor: they are measured at FP=0
+ * on the injected-class regression supported set, with blind-red-team precision reported separately.
+ * Their recall is bounded by enumerable vocabulary (see eval/adversarial_evasions.mjs). This panel lifts
+ * recall on phrasings no regex will ever enumerate — while remaining additive-only:
  *
  *   1. ADDITIVE-ONLY. The panel runs ONLY on findings the deterministic floor already PASSED. It can
  *      turn a pass into a bounce; it can NEVER turn a deterministic refute into a pass (it is never
  *      consulted on a refuted finding). The LLM cannot rescue a hallucination the floor caught.
  *   2. MAJORITY-GATED. A bounce requires >= ceil(n/2) [floor(n/2)+1] independent skeptics, each on a
- *      DISTINCT lens, to refute. One trigger-happy LLM cannot reject a real finding — this protects the
- *      FP=0 property the floor guarantees.
+ *      DISTINCT lens, to refute. One trigger-happy LLM cannot reject a real finding by itself; panel
+ *      FP/recall is measured separately from the deterministic floor.
  *   3. ABSTAIN WITHOUT AUTH. With no Claude Agent SDK / auth, the panel ABSTAINS (ran=false): the
  *      deterministic floor stands unchanged, so the reproducible baseline is identical.
  *

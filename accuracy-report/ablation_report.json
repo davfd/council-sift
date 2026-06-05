@@ -1,0 +1,88 @@
+{
+  "generated_for": "SANS FIND EVIL! — Council-SIFT Accuracy Report",
+  "dataset_size": 9,
+  "unsupported_in_dataset": 6,
+  "unsupported_claim_passthrough": {
+    "council_off": 6,
+    "council_on": 0
+  },
+  "council_panel": {
+    "true_positive": 6,
+    "false_positive": 0,
+    "false_negative": 0,
+    "true_negative": 3,
+    "precision": 1,
+    "recall": 1
+  },
+  "per_finding": [
+    {
+      "id": "mem-supported",
+      "truth": "supported",
+      "council_verdict": "SUPPORTED",
+      "caught": false,
+      "reasoning": "all seats supported"
+    },
+    {
+      "id": "mem-hallucinated-c2",
+      "truth": "unsupported",
+      "council_verdict": "UNSUPPORTED",
+      "caught": true,
+      "reasoning": "seat:citation: Cited token(s) NOT present in the tool output as a standalone token (hallucinated/unsupported): 185.220.101.45."
+    },
+    {
+      "id": "tsk-supported",
+      "truth": "supported",
+      "council_verdict": "SUPPORTED",
+      "caught": false,
+      "reasoning": "all seats supported"
+    },
+    {
+      "id": "tsk-hallucinated-inode",
+      "truth": "unsupported",
+      "council_verdict": "UNSUPPORTED",
+      "caught": true,
+      "reasoning": "seat:citation: Cited token(s) NOT present in the tool output as a standalone token (hallucinated/unsupported): 99."
+    },
+    {
+      "id": "hash-supported",
+      "truth": "supported",
+      "council_verdict": "SUPPORTED",
+      "caught": false,
+      "reasoning": "all seats supported"
+    },
+    {
+      "id": "hash-hallucinated",
+      "truth": "unsupported",
+      "council_verdict": "UNSUPPORTED",
+      "caught": true,
+      "reasoning": "seat:citation: Cited token(s) NOT present in the tool output as a standalone token (hallucinated/unsupported): 1111111111111111111111111111111111111111."
+    },
+    {
+      "id": "mem-toolmisread",
+      "truth": "unsupported",
+      "council_verdict": "MISREAD_TOOL",
+      "caught": true,
+      "reasoning": "seat:tool-semantics: A process listing (psscan/pslist) cannot establish network activity; netscan/netstat is required to claim C2, beaconing, callback, communication with a remote peer, or exfiltration. Offending clause: \"p.exe is actively beaconing C2 to its handler\"."
+    },
+    {
+      "id": "tsk-timestomp",
+      "truth": "unsupported",
+      "council_verdict": "CONTRADICTED",
+      "caught": true,
+      "reasoning": "seat:contradiction: Timestomp: $SI time (2021-01-01 00:00:00) contradicts $FN time (2026-05-30 14:22:10); the claim treats the forgeable $SI creation time as authoritative."
+    },
+    {
+      "id": "inference-overreach",
+      "truth": "unsupported",
+      "council_verdict": "UNSUPPORTED",
+      "caught": true,
+      "reasoning": "seat:inference: Inference overreach (ATTRIBUTION): attribution to a specific actor cannot be established from one artifact — corroborate with intel + multiple artifacts. Offending clause: \"This proves APT29 deliberately deployed p.exe to exfiltrate data\"."
+    }
+  ],
+  "honest_notes": [
+    "Four deterministic seats: Citation (every cited token must be in the tool output), Tool-semantics (no over-reading a tool — e.g. psscan/pslist cannot establish C2; Shimcache != execution), Contradiction (timestomp: $SI vs $FN), Inference (no attribution/intent/causation/unjustified-certainty leap from a single artifact).",
+    "Remaining gap: a subtle semantic misinterpretation that matches none of the deterministic rules would still pass. That residue is what the AGENTIC council mode (council/run_agentic.mjs — OpenClaw/LLM seats grounded in these same primitives) is for; it is counted honestly here as not-caught, never as caught.",
+    "cited_tokens are analyst-declared; regex auto-extraction is the weaker fallback for free-text claims.",
+    "These numbers are on a small hand-crafted set and are NOT generalizable until run against the official dataset and real images."
+  ]
+}

@@ -6,7 +6,7 @@
  * with the Council OFF vs ON — same analyst output, one variable (the Council).
  * Also reports the Citation seat's precision/recall against ground truth.
  *
- * Writes accuracy-report/accuracy_report.json + accuracy_report.md (the required deliverable).
+ * Writes accuracy-report/ablation_report.json + ablation_report.md (quick sanity report).
  *
  * Run:  node eval/ablation.mjs
  */
@@ -56,7 +56,7 @@ const report = {
 };
 
 mkdirSync(resolve(__dir, '..', 'accuracy-report'), { recursive: true });
-writeFileSync(resolve(__dir, '..', 'accuracy-report', 'accuracy_report.json'), JSON.stringify(report, null, 2));
+writeFileSync(resolve(__dir, '..', 'accuracy-report', 'ablation_report.json'), JSON.stringify(report, null, 2));
 
 const md = `# Council-SIFT — Accuracy Report
 
@@ -70,7 +70,7 @@ Same analyst output; the only variable is the Council.
 | **Council OFF** | ${passthroughOFF} / ${totalUnsupported} |
 | **Council ON**  | ${passthroughON} / ${totalUnsupported} |
 
-## Council panel (Citation + Tool-semantics + Contradiction) vs ground truth
+## Council panel (Citation + Tool-semantics + Contradiction + Inference) vs ground truth
 
 | metric | value |
 |---|---|
@@ -90,9 +90,9 @@ ${rows.map((r) => `| ${r.id} | ${r.truth} | ${r.council_verdict} | ${r.caught ? 
 
 ${report.honest_notes.map((n) => `- ${n}`).join('\n')}
 `;
-writeFileSync(resolve(__dir, '..', 'accuracy-report', 'accuracy_report.md'), md);
+writeFileSync(resolve(__dir, '..', 'accuracy-report', 'ablation_report.md'), md);
 
 console.log(`Council OFF → ${passthroughOFF}/${totalUnsupported} unsupported reach review`);
 console.log(`Council ON  → ${passthroughON}/${totalUnsupported} unsupported reach review`);
 console.log(`Council panel: precision=${precision.toFixed(3)} recall=${recall.toFixed(3)} (TP=${tp} FP=${fp} FN=${fn} TN=${tn})`);
-console.log('wrote accuracy-report/accuracy_report.{json,md}');
+console.log('wrote accuracy-report/ablation_report.{json,md}');

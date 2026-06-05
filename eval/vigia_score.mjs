@@ -197,7 +197,7 @@ ${rows.map((r) => `| ${r.case_id} ${r.name.slice(0, 26)} | ${r.tier} | ${r.truth
   No part of the answer key is shown to the agent; only the public ATT&CK taxonomy informs its labels.
 - The Council's **differentiating value shows where the analyst over-claims** — the live autonomous
   self-correction (\`execution-logs/AGENTIC-SELFCORRECT.jsonl\`) and the internal injected-hallucination
-  benchmark (\`accuracy_report.md\`: 85/85 caught) — not on cases a strong base LLM already gets right.
+  benchmark (\`bench_real_report.md\`: 85/85 caught) — not on cases a strong base LLM already gets right.
 - Verdicts here are emitted by a **live LLM Council** (\`claude -p\`), not deterministic seats.
 `;
 writeFileSync(resolve(__dir, '..', 'accuracy-report', `vigia_external_report${OUT_SUFFIX}.md`), md);

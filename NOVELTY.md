@@ -27,13 +27,14 @@ during the hackathon window.
 - The **Council-OFF vs Council-ON ablation** + Accuracy Report, and integration with the
   SIFT Workstation toolchain (real `fls`/Sleuth Kit execution in the VM).
 - The **two-tier verification design**: a hardened **deterministic precision floor** (token-boundary
-  citation that defeats substring-citation exploits; clause-local hedging that defeats the
-  stray-negation bypass; broadened tool-semantics/inference vocabularies) **plus** an **additive LLM
-  skeptic panel** (`council/llm_skeptic.mjs`) — three independent lenses, **≥2/3 majority**, that can
-  only *add* a bounce to a floor-passed finding and never rescue a refuted one, so it lifts recall on
-  non-enumerable over-reads without lowering the floor's FP=0 precision. Backed by a self-red-team
-  evasion suite (`eval/adversarial_evasions.mjs`), a deterministic gate-logic test
-  (`eval/skeptic_panel_test.mjs`), and a live demonstration (`eval/skeptic_live_demo.mjs`).
+  citation that defeats substring-citation exploits; clause-local negation/disclaimer handling that
+  defeats the stray-negation and soft-hedge bypasses; broadened tool-semantics/inference
+  vocabularies) **plus** an **additive LLM skeptic panel** (`council/llm_skeptic.mjs`) — three
+  independent lenses, **≥2/3 majority**, that can only *add* a bounce to a floor-passed finding and
+  never rescue a refuted one. The panel is reported as additive recall evidence, with its own
+  precision/FP measurements, not as a global FP=0 guarantee. Backed by the regression evasion suite
+  (`eval/adversarial_evasions.mjs`), a deterministic gate-logic test (`eval/skeptic_panel_test.mjs`),
+  and a live demonstration (`eval/skeptic_live_demo.mjs`).
 
 ## Positioning
 

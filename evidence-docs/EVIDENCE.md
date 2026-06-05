@@ -41,11 +41,12 @@ absent in the real output), not author opinion:
 | unsupported reaching "human review" — Council **ON** | **0 / 85** |
 | precision / recall · FP / FN | 1.000 / 1.000 · 0 / 0 |
 
-**Honest scope:** precision/FP=0 is the un-gameable signal (the Council never wrongly rejects a real,
-correctly-cited finding). Recall is measured against **our injected** hallucination classes (fabricated
+**Honest scope:** precision/FP=0 is measured on this injected-class regression set (template-scoped
+supported findings). The blind red-team report is the unseen precision signal and records 3 FP in that
+run. Recall here is measured against **our injected** hallucination classes (fabricated
 token / tool over-read / inference over-reach), which map onto the seats — so high recall is expected by
 construction and is **not** a substitute for an external key. Layer C-bis removes that circularity; layer D
-scores against someone else's answer key.
+is external supporting evidence with its own scope.
 
 ## C-bis. Blind red-team — the floor's *real* recall, held-out and non-circular
 
@@ -62,15 +63,16 @@ is **frozen**, and the deterministic floor is scored on the held-out set.
 **Honest:** this is the floor's *true* recall — the regex seats catch ~two-thirds of unseen hallucinations
 at high precision and **miss the rest** (the report enumerates the specific `true_holes`). That residual gap
 is exactly what the **additive LLM skeptic panel** addresses: it runs only after the floor passes a finding
-and bounces second-order over-reads no regex enumerates, lifting recall without lowering the floor's
-precision. Outputs: `accuracy-report/blind_redteam_report.json` (+ `blind_findings.jsonl`).
+and bounces second-order over-reads no regex enumerates. Panel recall/FP is measured separately from the
+floor's deterministic precision. Outputs: `accuracy-report/blind_redteam_report.json` (+ `blind_findings.jsonl`).
 
-## D. External held-out benchmark (non-circular)
+## D. External benchmark (supporting evidence, scoped)
 
 `eval/vigia_score.mjs` scores against the community **`vigia-cases`** benchmark
 (annatchijova/vigia-cases): `case.json` is the only agent input; `ground_truth.json` is held out and
-used only for scoring (SCORING_GUIDE protocol). Same model on both arms (`claude-opus-4-8`, the
-1M-context variant); the only variable is the Council. Headline accuracy is claimed only on the `score_against` tier.
+used only for scoring (SCORING_GUIDE protocol). This path is a live LLM specificity-prompt comparison,
+not the deterministic `runSeats` verifier. Headline accuracy is claimed only on the `score_against` tier,
+which currently contains 3 cases and all are MALICE ground truth.
 
 | | value |
 |---|---|
@@ -80,10 +82,10 @@ used only for scoring (SCORING_GUIDE protocol). Same model on both arms (`claude
 | MITRE TTP — parent technique / exact sub-technique | 31% / ~7% |
 
 **Honest:** on this set the baseline LLM was already strong, so the Council **matched** it (delta ≈ 0)
-rather than beating it — and the benchmark surfaced an over-abstention we then calibrated. The Council's
-*differentiating* value shows on over-claim cases (the live SRL self-correction; layer C). Verdicts come
-from a **live LLM** Council and are nondeterministic — re-runs vary slightly; the committed report is one
-canonical run. See `accuracy-report/vigia_external_report.md` for the full honesty section.
+rather than beating it. Because the `score_against` tier is only 3 all-MALICE cases and this is not the
+deterministic-seat code path, treat it as external supporting evidence, not proof of the Council floor.
+MITRE exact-TTP coverage is weak and reported as such. See `accuracy-report/vigia_external_report.md`
+for the full honesty section.
 
 ## What the agent found (representative)
 
@@ -94,8 +96,10 @@ canonical run. See `accuracy-report/vigia_external_report.md` for the full hones
 | **OFFICIAL — SRL-2018 (autonomous, live)** | `rubyw.exe` holding `10.10.4.5→10.10.254.1` named as attacker **C2** | **Bounced** (Tool-semantics: internal/loopback ≠ external C2; Inference: attribution) → agent **re-ran `vol3 netscan` itself** and self-corrected → verified. (`execution-logs/AGENTIC-SELFCORRECT.jsonl`) |
 
 Every verified finding carries a hash-chained Council Receipt; `csift trace` re-hashes the stored tool
-output to the recorded `output_sha256`, and `csift trace --rerun` independently re-executes the recorded
-command through the SIFT wrapper and compares the fresh hash.
+output to the recorded `output_sha256`. For receipts whose recorded command is concrete and whose evidence
+path is available, `csift trace --rerun` independently re-executes the command through the SIFT wrapper and
+compares the fresh hash; placeholder/pseudo commands should be treated as receipt/hash evidence, not as
+rerun-verified evidence.
 
 ## Honest limitations
 

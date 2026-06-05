@@ -11,7 +11,7 @@
  *
  *   corpus: eval/corpus/*.txt   (real tool output; gitignored — derived from the organizer evidence)
  *   run:    node eval/bench_real.mjs
- *   out:    accuracy-report/accuracy_report.{json,md}
+ *   out:    accuracy-report/bench_real_report.{json,md}
  */
 import { readFileSync, readdirSync, mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { dirname, resolve, basename } from 'node:path';
@@ -115,17 +115,17 @@ const report = {
   by_class: byClass, by_scenario: byScenario,
   honest_notes: [
     'Findings are GROUNDED IN REAL tool output from the organizer images; supported findings cite tokens that genuinely appear, hallucinations inject tokens/over-reads that genuinely do not. Ground truth = present-vs-absent in the real output (mechanical, not author opinion).',
-    'PRECISION / false-positive rate is the un-gameable signal here: across the real supported findings the Council raised ZERO false flags (FP=0) — it does not wrongly reject correctly-cited real findings.',
+    'PRECISION / false-positive rate on THIS injected-class regression set: across the template-scoped supported findings the Council raised ZERO false flags (FP=0). The blind red-team report is the unseen precision signal and records 3 FP; do not read this as a global guarantee.',
     'RECALL on THIS set is measured against OUR injected hallucination classes (fabricated token, tool over-read, inference overreach), which map onto the seats — so this recall is expected by construction and is NOT a substitute for an external answer key.',
-    'RECALL was RED-TEAMED separately (eval/adversarial_evasions.mjs): hallucinations phrased to DODGE the seat vocabulary (substring-citation exploits, synonym over-reads, a hedge-bypass) initially caught 0/12 — proving the deterministic recall was vocabulary-bounded. The seats were then hardened (token-boundary citation, clause-local hedging, broadened vocab) to catch all 12 with FP=0 preserved here. NOTE: that suite was used to harden, so it is a REGRESSION test, not a held-out benchmark.',
+    'RECALL was RED-TEAMED separately (eval/adversarial_evasions.mjs): hallucinations phrased to DODGE the seat vocabulary (substring-citation exploits, synonym over-reads, hedge-bypasses, zero-token citations) initially exposed misses — proving the deterministic recall was vocabulary-bounded. The seats were then hardened (token-boundary citation, narrowed hedging, broadened vocab, interpretation-token checks) to pass the regression suite with FP=0 preserved here. NOTE: that suite was used to harden, so it is a REGRESSION test, not a held-out benchmark.',
     'HELD-OUT NON-CIRCULAR RECALL (eval/blind_redteam.mjs): an INDEPENDENT LLM attacker writes 130 fresh findings (57 supported / 73 hallucinated) the seats were never tuned on, the detector is FROZEN, and the deterministic floor scores ~65-69% recall at ~93-96% precision — the floor\'s TRUE recall on unseen hallucinations (the report lists the misses). See accuracy-report/blind_redteam_report.json.',
-    'The truly NON-tuned recall signal is the ADDITIVE LLM skeptic panel (council/llm_skeptic.mjs): on SECOND-ORDER evasions that pass even the hardened floor (no regex trigger), a >=2/3 independent-skeptic majority bounces them (demonstrated live, eval/skeptic_live_demo.mjs). It can ONLY add a bounce to a floor-passed finding — never rescue a refuted one — so it lifts recall without lowering the floor\'s FP=0 precision.',
-    'EXTERNAL held-out benchmark COMPLETED (non-circular): scored against the community vigia-cases answer key (NIST Hacking/Data Leakage, Nitroba) — 100% verdict accuracy on the score_against tier + false-positive gate PASS. See accuracy-report/vigia_external_report.md.',
+    'The ADDITIVE LLM skeptic panel (council/llm_skeptic.mjs) is reported separately: on SECOND-ORDER evasions that pass even the hardened floor (no regex trigger), a >=2/3 independent-skeptic majority can add a bounce (demonstrated live, eval/skeptic_live_demo.mjs). It can ONLY add a bounce to a floor-passed finding — never rescue a refuted one — so panel recall/FP must be measured separately from the deterministic floor.',
+    'EXTERNAL benchmark (supporting evidence, scoped): eval/vigia_score.mjs is a live LLM specificity-prompt comparison, not the deterministic runSeats verifier. Its score_against tier has 3 cases, all MALICE; Council-OFF and Council-ON both reached 100% verdict accuracy there (delta ~0). See accuracy-report/vigia_external_report.md.',
     'Council-OFF approximates an unverified Protocol-SIFT-style baseline (same analyst findings, no Council verification): every unsupported finding reaches the human.',
   ],
 };
 mkdirSync(resolve(__dir, '..', 'accuracy-report'), { recursive: true });
-writeFileSync(resolve(__dir, '..', 'accuracy-report', 'accuracy_report.json'), JSON.stringify(report, null, 2));
+writeFileSync(resolve(__dir, '..', 'accuracy-report', 'bench_real_report.json'), JSON.stringify(report, null, 2));
 
 const md = `# Council-SIFT — Accuracy Report (real evidence, at scale)
 
@@ -170,8 +170,8 @@ ${Object.entries(byScenario).map(([k, v]) => `| ${k} | ${v.n} | ${v.unsupported}
 
 ${report.honest_notes.map((n) => `- ${n}`).join('\n')}
 `;
-writeFileSync(resolve(__dir, '..', 'accuracy-report', 'accuracy_report.md'), md);
+writeFileSync(resolve(__dir, '..', 'accuracy-report', 'bench_real_report.md'), md);
 console.log(`corpus artifacts: ${files.length} | findings: ${findings.length} | unsupported: ${totalUnsup}`);
 console.log(`Council OFF → ${totalUnsup}/${totalUnsup} reach review | Council ON → ${fn}/${totalUnsup}`);
 console.log(`precision=${precision.toFixed(3)} recall=${recall.toFixed(3)} (TP=${tp} FP=${fp} FN=${fn} TN=${tn})`);
-console.log('wrote accuracy-report/accuracy_report.{json,md}');
+console.log('wrote accuracy-report/bench_real_report.{json,md}');
