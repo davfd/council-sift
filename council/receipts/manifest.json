@@ -1,0 +1,569 @@
+{
+  "version": 1,
+  "latest_by_finding": {
+    "F-analyst-DEMO-1-002": {
+      "file": "F-analyst-DEMO-1-002.json",
+      "receipt_sha256": "0e9bf0b9575edc0621e2e647362651740c2ea15b60ea93b2604877d3df8e4180",
+      "created_at": "2026-06-02T16:26:14.534Z",
+      "rerun_status": null
+    },
+    "F-analyst-ROCBA-002": {
+      "file": "F-analyst-ROCBA-002.json",
+      "receipt_sha256": "4d522fe789b30fd89e1b88ac037439f035b03ef59b9ed8277bb30e2eccfcf48d",
+      "created_at": "2026-06-02T20:26:07.551Z",
+      "rerun_status": "STORED_OUTPUT_ONLY"
+    },
+    "F-analyst-ROCBA-DISK-001": {
+      "file": "F-analyst-ROCBA-DISK-001.json",
+      "receipt_sha256": "46207f531b7d2c8d304c2e26120cfca856b9adbafa59dc69b5b031bcb59e0892",
+      "created_at": "2026-06-04T02:58:46.852Z",
+      "rerun_status": null
+    },
+    "F-analyst-ROCBA-DISK-002": {
+      "file": "F-analyst-ROCBA-DISK-002.json",
+      "receipt_sha256": "15174bfb5ab7918f40f032e6d8b8fdb44394f07a58d15ce4be4919606b6fddfb",
+      "created_at": "2026-06-04T03:00:55.373Z",
+      "rerun_status": null
+    },
+    "F-analyst-ROCBA-DISK-003": {
+      "file": "F-analyst-ROCBA-DISK-003.json",
+      "receipt_sha256": "9653b18d5168e0d952f8d623f0d74cf2060cebd9c778f87a4679e4fb4c7b8468",
+      "created_at": "2026-06-04T03:10:06.427Z",
+      "rerun_status": null
+    },
+    "F-analyst-ROCBA-DISK-004": {
+      "file": "F-analyst-ROCBA-DISK-004.json",
+      "receipt_sha256": "e1ab563016221d9353b2359dd8a6dc154bd35c0b30649b620eefc0035039dace",
+      "created_at": "2026-06-04T03:10:46.833Z",
+      "rerun_status": null
+    },
+    "F-analyst-ROCBA-DISK-005": {
+      "file": "F-analyst-ROCBA-DISK-005.json",
+      "receipt_sha256": "c98251a62b9943d40f431cc877607501557a95f561b25eb09d0fb091d22976a5",
+      "created_at": "2026-06-04T03:11:33.901Z",
+      "rerun_status": null
+    },
+    "F-analyst-ROCBA-MEM-001": {
+      "file": "F-analyst-ROCBA-MEM-001.json",
+      "receipt_sha256": "e85d2b806bf5922f7ceada0b92572e3163860b0f02da6cd24ccaca494d0a3517",
+      "created_at": "2026-06-04T03:32:17.035Z",
+      "rerun_status": null
+    },
+    "F-analyst-ROCBA-MEM-002": {
+      "file": "F-analyst-ROCBA-MEM-002.json",
+      "receipt_sha256": "2501f3fda015830f6650d3c5131149c52b7728df31637718db280b6a8ab282b6",
+      "created_at": "2026-06-04T03:32:46.500Z",
+      "rerun_status": null
+    },
+    "F-analyst-ROCBA-MEM-003": {
+      "file": "F-analyst-ROCBA-MEM-003.json",
+      "receipt_sha256": "6261559cdbcf1f1ff39fc446974cd6dace4f58fb84f8440f102c0264c125413d",
+      "created_at": "2026-06-04T03:33:33.024Z",
+      "rerun_status": null
+    },
+    "F-analyst-ROCBA-Q-002": {
+      "file": "F-analyst-ROCBA-Q-002.json",
+      "receipt_sha256": "569ead9e6d8d15ccd3590a524906169e56919c165d5746e171e1d9cda38ee6de",
+      "created_at": "2026-06-02T20:26:24.785Z",
+      "rerun_status": null
+    },
+    "F-analyst-SIFT-DEMO-002": {
+      "file": "F-analyst-SIFT-DEMO-002.json",
+      "receipt_sha256": "57fa4c1eebf1562ff1225b2aadd8ab2cfff4464235a278772c87b5535ffc8d1e",
+      "created_at": "2026-06-02T20:24:42.187Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL-LIVE-001": {
+      "file": "F-analyst-SRL-LIVE-001.json",
+      "receipt_sha256": "f88c38659804b078b846b5c58428e82c857178d37446e5560ce4dce34fbf2517",
+      "created_at": "2026-06-02T21:06:01.691Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL-LIVE2-002": {
+      "file": "F-analyst-SRL-LIVE2-002.json",
+      "receipt_sha256": "199102203d467adf83ec1058c66b1a982edc618c9cc1d537c5d28c6d6781e978",
+      "created_at": "2026-06-02T21:11:17.273Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL-MEM-002": {
+      "file": "F-analyst-SRL-MEM-002.json",
+      "receipt_sha256": "e1d79971537e067697f2c5c2e8df175bcd7f7bf8df9880e1165693506e27ad8a",
+      "created_at": "2026-06-02T23:22:51.179Z",
+      "rerun_status": "INDEPENDENT_RERUN_VERIFIED"
+    },
+    "F-analyst-SRL18-DC-DISK-001": {
+      "file": "F-analyst-SRL18-DC-DISK-001.json",
+      "receipt_sha256": "55953c3e72b4fad8614ff185852bb1e6978db1f27d5ba1c3795a985d29b8d787",
+      "created_at": "2026-06-04T02:54:06.639Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL18-DC-DISK-004": {
+      "file": "F-analyst-SRL18-DC-DISK-004.json",
+      "receipt_sha256": "4529a74a3cee8fd1b5050dc882c0008bef5a7c3126c87e681dd19b4a145a5fa5",
+      "created_at": "2026-06-04T03:03:39.163Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL18-DC-DISK-007": {
+      "file": "F-analyst-SRL18-DC-DISK-007.json",
+      "receipt_sha256": "e98bfb60e0fb75a2c7d7d42dcde07bbc98e2dcbc703db6f9d516ca7da865ac26",
+      "created_at": "2026-06-04T03:08:01.795Z",
+      "rerun_status": "STORED_OUTPUT_ONLY"
+    },
+    "F-analyst-SRL18-DC-DISK-008": {
+      "file": "F-analyst-SRL18-DC-DISK-008.json",
+      "receipt_sha256": "db7e7ba3de4876511a644134c52e5b32022f049e8dbb44f18f521b5c96b368ee",
+      "created_at": "2026-06-04T03:10:12.346Z",
+      "rerun_status": "STORED_OUTPUT_ONLY"
+    },
+    "F-analyst-SRL18-FILE-DISK-001": {
+      "file": "F-analyst-SRL18-FILE-DISK-001.json",
+      "receipt_sha256": "a78dc236fccad682f6be3725541285bfde15992db40dc349d6bbaf1e03c81f93",
+      "created_at": "2026-06-04T03:07:02.049Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL18-FILE-DISK-003": {
+      "file": "F-analyst-SRL18-FILE-DISK-003.json",
+      "receipt_sha256": "0931122c6e01fdf8ef15bedef7e38c8677a2a74b4ed24977b8cae7ee81ef0042",
+      "created_at": "2026-06-04T03:08:20.957Z",
+      "rerun_status": "STORED_OUTPUT_ONLY"
+    },
+    "F-analyst-SRL18-FILE-DISK-004": {
+      "file": "F-analyst-SRL18-FILE-DISK-004.json",
+      "receipt_sha256": "44947807e9f003331fc99cac20f88f0c1ba8c42de189654870946a7e31e56b2a",
+      "created_at": "2026-06-04T03:10:12.646Z",
+      "rerun_status": "STORED_OUTPUT_ONLY"
+    },
+    "F-analyst-SRL18-FILE-DISK-005": {
+      "file": "F-analyst-SRL18-FILE-DISK-005.json",
+      "receipt_sha256": "ae68bf235cbe60b9095d48f15d4a2c52347d521443840688a47d3e6466c925d2",
+      "created_at": "2026-06-04T03:10:34.491Z",
+      "rerun_status": "STORED_OUTPUT_ONLY"
+    },
+    "F-analyst-SRL18-FILE-DISK-006": {
+      "file": "F-analyst-SRL18-FILE-DISK-006.json",
+      "receipt_sha256": "9c48d16b65aefd2580fe346e8b684a4c91fb17479ef79f9099a4dd63125edb78",
+      "created_at": "2026-06-04T03:13:33.193Z",
+      "rerun_status": "STORED_OUTPUT_ONLY"
+    },
+    "F-analyst-SRL18-RD-NET-001": {
+      "file": "F-analyst-SRL18-RD-NET-001.json",
+      "receipt_sha256": "920601971fc74e4243978f271ab32a148fdfed89368ffa9ac88da9f28836143a",
+      "created_at": "2026-06-04T03:26:40.701Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL18-RD-NET-003": {
+      "file": "F-analyst-SRL18-RD-NET-003.json",
+      "receipt_sha256": "6bce5dd2eb5b66912b30c5f713d8f4e622445188810a82240770371fa050d3b7",
+      "created_at": "2026-06-04T03:27:13.409Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL18-RD-NET-004": {
+      "file": "F-analyst-SRL18-RD-NET-004.json",
+      "receipt_sha256": "99991e753d49a0f76157d5df6e33e84b7f17c49143b1bed95b77ef3b95f6aee5",
+      "created_at": "2026-06-04T03:27:37.113Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL18-RD-NET-007": {
+      "file": "F-analyst-SRL18-RD-NET-007.json",
+      "receipt_sha256": "caf4428ba9f445a3fd5cde267ab7aea0e2fdea12a7415b526c190e81f1784a8e",
+      "created_at": "2026-06-04T03:31:27.919Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL18-RD-NET-008": {
+      "file": "F-analyst-SRL18-RD-NET-008.json",
+      "receipt_sha256": "9f0570de4239d46fc6250fda1d967978ed3e4d4f1dddc183b3dc80f0240916a6",
+      "created_at": "2026-06-04T03:32:45.978Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL18-WKSTN-MEM-001": {
+      "file": "F-analyst-SRL18-WKSTN-MEM-001.json",
+      "receipt_sha256": "f25fe083954a3d2ed264c6b599dd610f4f3407c3530729423077c9061553c566",
+      "created_at": "2026-06-04T03:19:48.349Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL18-WKSTN-MEM-002": {
+      "file": "F-analyst-SRL18-WKSTN-MEM-002.json",
+      "receipt_sha256": "8955c9bf834478e4ff52f915bc02a431a29588ed76659531eb689961a864ef88",
+      "created_at": "2026-06-04T03:20:29.621Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL18-WKSTN-MEM-003": {
+      "file": "F-analyst-SRL18-WKSTN-MEM-003.json",
+      "receipt_sha256": "43e124b9d74bee4ff2fdce9a0d42e7a20fdfa31d40fb07b6be9432ec8232a735",
+      "created_at": "2026-06-04T03:21:02.322Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL18-WKSTN-MEM-004": {
+      "file": "F-analyst-SRL18-WKSTN-MEM-004.json",
+      "receipt_sha256": "bbcc90a155e1ef14546be9ddd9fe5bed753867700c0dff2a3a169c8f912001e7",
+      "created_at": "2026-06-04T03:22:29.116Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL2015-NFURY-001": {
+      "file": "F-analyst-SRL2015-NFURY-001.json",
+      "receipt_sha256": "748a3efd9c81c7c38bded152111d6885dd81161f097e9aeba33cac6d5f00946f",
+      "created_at": "2026-06-04T03:41:20.027Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL2015-NFURY-002": {
+      "file": "F-analyst-SRL2015-NFURY-002.json",
+      "receipt_sha256": "b99bc0e6863c29c46408994b9ddd82078ab54fa47a4d4e5fa883044fcfab2e5a",
+      "created_at": "2026-06-04T03:41:28.423Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL2015-NFURY-003": {
+      "file": "F-analyst-SRL2015-NFURY-003.json",
+      "receipt_sha256": "aa84d701610278dcc501dff015981c59425ff414d5baf0788702d51f885e2df7",
+      "created_at": "2026-06-04T03:41:33.427Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL2015-NFURY-004": {
+      "file": "F-analyst-SRL2015-NFURY-004.json",
+      "receipt_sha256": "cd7e5b6035061151998d3d1025d7f3d4ca588b24823881ff5fe539ee56326d6c",
+      "created_at": "2026-06-04T03:49:57.274Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL2015-NFURY-005": {
+      "file": "F-analyst-SRL2015-NFURY-005.json",
+      "receipt_sha256": "48493870fb824564228f3139a5b1bc52fc7cf571b486a6fe45e1d4533b39327c",
+      "created_at": "2026-06-04T03:49:57.608Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL2015-NFURY-007": {
+      "file": "F-analyst-SRL2015-NFURY-007.json",
+      "receipt_sha256": "1763f46c129892322077da95cc9277ed7d08a144195327e5095f836bbbf1869b",
+      "created_at": "2026-06-04T03:53:16.896Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL2015-NFURY-008": {
+      "file": "F-analyst-SRL2015-NFURY-008.json",
+      "receipt_sha256": "66866b32a586fb068bd93727a21eef3d723761c98a8b2cd4bc2d40d2de7e8f42",
+      "created_at": "2026-06-04T03:53:17.249Z",
+      "rerun_status": null
+    },
+    "F-analyst-SRL2015-NFURY-009": {
+      "file": "F-analyst-SRL2015-NFURY-009.json",
+      "receipt_sha256": "e5ae96abc830fb3627694c6973c72b0a1dbe565487d71df2889d33b4000432fe",
+      "created_at": "2026-06-04T03:53:45.890Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-001": {
+      "file": "F-analyst-VANKO-001-ae5db0ba166b.json",
+      "receipt_sha256": "ae5db0ba166b72a8a9a4cb954ac48028bff8f02dd895a21a6d53adc542e91d34",
+      "created_at": "2026-06-09T16:33:17.344Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-002": {
+      "file": "F-analyst-VANKO-002-6fbcf0294e56.json",
+      "receipt_sha256": "6fbcf0294e56f157b7bc9f79605d5c6c8d9d96f87c2ddb6744286114902b14dd",
+      "created_at": "2026-06-09T16:33:50.432Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-003": {
+      "file": "F-analyst-VANKO-003-d895d4b3652c.json",
+      "receipt_sha256": "d895d4b3652cbecfb8afe77ff5b71a8aa9129bbf09f956aa1fcbf1666d63f1a1",
+      "created_at": "2026-06-09T16:33:56.023Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-AUTO-001": {
+      "file": "F-analyst-VANKO-AUTO-001-c08029c65be6.json",
+      "receipt_sha256": "c08029c65be6d22bd53d54d2730449632292766ea72a4637b9ec8dd1ab507a42",
+      "created_at": "2026-06-09T16:38:02.568Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-AUTO-002": {
+      "file": "F-analyst-VANKO-AUTO-002-92cb15e3d855.json",
+      "receipt_sha256": "92cb15e3d8552f53d2e61383b62d9276698898f97a39a3318f3ac159d19f3929",
+      "created_at": "2026-06-09T16:39:57.147Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-AUTO-003": {
+      "file": "F-analyst-VANKO-AUTO-003-06897047d366.json",
+      "receipt_sha256": "06897047d366f9ddf3bb554fee8392a7a8b51c9e0fb248064f347a4abaef93f1",
+      "created_at": "2026-06-09T16:39:57.431Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-AUTO-004": {
+      "file": "F-analyst-VANKO-AUTO-004-cb098347af9b.json",
+      "receipt_sha256": "cb098347af9b8b3b37ac7cf352778130ff060ab090f0f7109d881cdace4be2c6",
+      "created_at": "2026-06-09T16:40:58.568Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-AUTO-006": {
+      "file": "F-analyst-VANKO-AUTO-006-710832ff9e32.json",
+      "receipt_sha256": "710832ff9e3274017b7191bf5910c8b4cb9418591acea96b1096ea1d2a4fd222",
+      "created_at": "2026-06-09T16:42:15.546Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-NEXT-001": {
+      "file": "F-analyst-VANKO-NEXT-001-ee795940b5b3.json",
+      "receipt_sha256": "ee795940b5b3826dd67e4d6439c560f745dd1fc57181fec0e553b63c87ea248d",
+      "created_at": "2026-06-09T17:03:03.260Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-NEXT-002": {
+      "file": "F-analyst-VANKO-NEXT-002-fc28598f43ee.json",
+      "receipt_sha256": "fc28598f43ee36cb9c09e649d8ecb9f80e6408df396eb45a3477178aba0404b9",
+      "created_at": "2026-06-09T17:03:03.914Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-NEXT-004": {
+      "file": "F-analyst-VANKO-NEXT-004-0666ee27d9f5.json",
+      "receipt_sha256": "0666ee27d9f5c3629483817f30e126f35b9d385582c07d9351c9ca9fcac5f131",
+      "created_at": "2026-06-09T17:03:05.279Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-NEXT-005": {
+      "file": "F-analyst-VANKO-NEXT-005-49c745e739dc.json",
+      "receipt_sha256": "49c745e739dc02d1936e66624c880f3345badf7da33d5f1b7b8b85987d3d9f90",
+      "created_at": "2026-06-09T17:03:32.420Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-NEXT-006": {
+      "file": "F-analyst-VANKO-NEXT-006-92b9f0d7f683.json",
+      "receipt_sha256": "92b9f0d7f683c62ac6029520aac0152ddeb636d6a097af75ab5134550d8e633e",
+      "created_at": "2026-06-09T17:06:44.706Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-NEXT-007": {
+      "file": "F-analyst-VANKO-NEXT-007-6be1102fd782.json",
+      "receipt_sha256": "6be1102fd7820222f66a79ccc50006c6e9af442799765d5eceabb258c2130bf8",
+      "created_at": "2026-06-09T17:06:45.504Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-001": {
+      "file": "F-analyst-VANKO-DEEP-001-7a0046507ca4.json",
+      "receipt_sha256": "7a0046507ca40929f06f1595de8be651e29720c865b724d6b39702fee59343b0",
+      "created_at": "2026-06-09T17:56:29.427Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-002": {
+      "file": "F-analyst-VANKO-DEEP-002-ccfcc706185a.json",
+      "receipt_sha256": "ccfcc706185aa343cff1625b0099e360c21472c7a7ae842353995af654a33f03",
+      "created_at": "2026-06-09T17:56:30.629Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-003": {
+      "file": "F-analyst-VANKO-DEEP-003-7abbc6745d88.json",
+      "receipt_sha256": "7abbc6745d8869bf487dd5eb71eb2013970d0e8af0e24bc2e6c7481b548ef982",
+      "created_at": "2026-06-09T17:56:31.367Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-004": {
+      "file": "F-analyst-VANKO-DEEP-004-811db90cb7c1.json",
+      "receipt_sha256": "811db90cb7c1f16bec8463d56db5ba73b9fb97b637062744f3a263823aa2c0f8",
+      "created_at": "2026-06-09T17:57:58.726Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-005": {
+      "file": "F-analyst-VANKO-DEEP-005-ee53b1bec4c0.json",
+      "receipt_sha256": "ee53b1bec4c0ef2b3b390f713dd9a2f4ad804a7f4cce011c99a2610d6b38b376",
+      "created_at": "2026-06-09T18:02:53.805Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-006": {
+      "file": "F-analyst-VANKO-DEEP-006-36bf34e5ea8b.json",
+      "receipt_sha256": "36bf34e5ea8b07196fc4764e69b2d36afa2fdb6bef8a034afce8b4d8d9235506",
+      "created_at": "2026-06-09T18:26:32.107Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-007": {
+      "file": "F-analyst-VANKO-DEEP-007-c249f5166161.json",
+      "receipt_sha256": "c249f51661615fd57e8559449f7ef83b82f91bb491c66bd28c8b9d8f11f7c4c1",
+      "created_at": "2026-06-09T18:26:32.889Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-008": {
+      "file": "F-analyst-VANKO-DEEP-008-ea937ca376f5.json",
+      "receipt_sha256": "ea937ca376f53b8a24b55d5629d124004462a7fbede5ace5bcbff4b24e88ed6a",
+      "created_at": "2026-06-09T18:38:42.363Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-011": {
+      "file": "F-analyst-VANKO-DEEP-011-b58c10b86921.json",
+      "receipt_sha256": "b58c10b86921250f1432309afc02dcce879235d21fed9ba26dbeb7cbb3eb4078",
+      "created_at": "2026-06-09T18:39:45.850Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-012": {
+      "file": "F-analyst-VANKO-DEEP-012-0dd25af1b6e6.json",
+      "receipt_sha256": "0dd25af1b6e687544e73e96bbed0a25db558860b2301b54539708edad61eb7a6",
+      "created_at": "2026-06-09T18:45:17.765Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-013": {
+      "file": "F-analyst-VANKO-DEEP-013-4ac00159a1e8.json",
+      "receipt_sha256": "4ac00159a1e865552e14d5d61ae818cc677106fa4a581fd3c94805a4df0964f4",
+      "created_at": "2026-06-09T18:56:08.724Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-014": {
+      "file": "F-analyst-VANKO-DEEP-014-2f3f64f78ae3.json",
+      "receipt_sha256": "2f3f64f78ae3d0bbe587e87cb34369caf597f2ad943fb1d8b9ef8ad7316a95f7",
+      "created_at": "2026-06-09T18:56:09.495Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-015": {
+      "file": "F-analyst-VANKO-DEEP-015-c576ad9143b6.json",
+      "receipt_sha256": "c576ad9143b61d2774e17fe637eba26bffad7490bc0c57d1e32d209d3be4dfc5",
+      "created_at": "2026-06-09T19:01:03.421Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-016": {
+      "file": "F-analyst-VANKO-DEEP-016-18227e4a0485.json",
+      "receipt_sha256": "18227e4a048505d3f70e677341d67e89381071f5b53a2345604e1c147c862f1e",
+      "created_at": "2026-06-09T19:01:04.079Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-017": {
+      "file": "F-analyst-VANKO-DEEP-017-369b1f758e49.json",
+      "receipt_sha256": "369b1f758e490ee20e14af27c90d8338599b3a4969e3cc4534b6da76480b701a",
+      "created_at": "2026-06-09T19:18:49.370Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-018": {
+      "file": "F-analyst-VANKO-DEEP-018-9ae23ef67957.json",
+      "receipt_sha256": "9ae23ef6795709de63c98f97538d49c040ed34e25fd0fb697033cab94399c875",
+      "created_at": "2026-06-09T19:18:50.095Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-019": {
+      "file": "F-analyst-VANKO-DEEP-019-0d17c806955f.json",
+      "receipt_sha256": "0d17c806955f73120efd189908e438830b80d1114297e9cf4c18dad60ad7eaf3",
+      "created_at": "2026-06-09T19:18:50.820Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-020": {
+      "file": "F-analyst-VANKO-DEEP-020-9ad33dd375cb.json",
+      "receipt_sha256": "9ad33dd375cb637d3739fdd4402b572f0cea36d6f5c8f8255c9fbfd506fbf6a9",
+      "created_at": "2026-06-09T19:23:06.119Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-021": {
+      "file": "F-analyst-VANKO-DEEP-021-bf6e3f66aa07.json",
+      "receipt_sha256": "bf6e3f66aa07b58a07b206a3cec60415ca352f356c4e9b9dfc400c356763b3c0",
+      "created_at": "2026-06-09T20:11:18.770Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-022": {
+      "file": "F-analyst-VANKO-DEEP-022-c0fd252f2f23.json",
+      "receipt_sha256": "c0fd252f2f237c66d6a44b1e1a41f0dc923fa77b73dbd6357a4086d57ad570b5",
+      "created_at": "2026-06-09T20:11:19.574Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-023": {
+      "file": "F-analyst-VANKO-DEEP-023-5c39e118f956.json",
+      "receipt_sha256": "5c39e118f956c83d33b2c0d48ba0cf8688378514f5b696ae408bcc578c0f784c",
+      "created_at": "2026-06-09T20:11:20.218Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-024": {
+      "file": "F-analyst-VANKO-DEEP-024-e33b0ddd3bbe.json",
+      "receipt_sha256": "e33b0ddd3bbe0d052b752ab0628de84f442d631d31a8d497fdd386f43e65e01e",
+      "created_at": "2026-06-09T20:15:33.936Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-026": {
+      "file": "F-analyst-VANKO-DEEP-026-5fdfe5e1ac5e.json",
+      "receipt_sha256": "5fdfe5e1ac5ecbb8bfea3115e3828dd56a6774b2402fba0f0f1127fad4d9cab3",
+      "created_at": "2026-06-09T20:20:00.644Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-028": {
+      "file": "F-analyst-VANKO-DEEP-028-819721632471.json",
+      "receipt_sha256": "8197216324711849f90e5137855c83429d7a0e05a56ce24719ea750e9bc9d9d5",
+      "created_at": "2026-06-09T20:45:52.087Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-029": {
+      "file": "F-analyst-VANKO-DEEP-029-3d7b21e257d0.json",
+      "receipt_sha256": "3d7b21e257d0a9f0ec2516bab718d529254a298123405f6d98a3aae27eb68abb",
+      "created_at": "2026-06-09T20:50:08.121Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-030": {
+      "file": "F-analyst-VANKO-DEEP-030-9405dfcc8c2e.json",
+      "receipt_sha256": "9405dfcc8c2e916b5532dd1d503562b06edff31ec2b2af2eb88692095e41c6d6",
+      "created_at": "2026-06-09T20:56:04.544Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-032": {
+      "file": "F-analyst-VANKO-DEEP-032-7a054a80068c.json",
+      "receipt_sha256": "7a054a80068c87f5b7ad3fc92324bd1f48559cbea59b0d5145f0415881424e9d",
+      "created_at": "2026-06-09T21:04:02.027Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-033": {
+      "file": "F-analyst-VANKO-DEEP-033-48d49e96660a.json",
+      "receipt_sha256": "48d49e96660ac1f999dc191dc74eecb552817f054a676c5f5b7cec3aa836e2ac",
+      "created_at": "2026-06-09T22:16:19.330Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-034": {
+      "file": "F-analyst-VANKO-DEEP-034-e01b7f287b1f.json",
+      "receipt_sha256": "e01b7f287b1f2d8b5b85b18907691f07f7d2f978d306ec980285fd0daffdc08c",
+      "created_at": "2026-06-09T22:33:45.481Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-035": {
+      "file": "F-analyst-VANKO-DEEP-035-6c52563883df.json",
+      "receipt_sha256": "6c52563883df8f854e0ff9ae34aa6f0be5820fa4398a0089e277aaf581fa7c1c",
+      "created_at": "2026-06-09T23:10:42.288Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-036": {
+      "file": "F-analyst-VANKO-DEEP-036-b5da1f04b29a.json",
+      "receipt_sha256": "b5da1f04b29ac878c008f7fb8139fa8ecd710ba4cd3c0373e36ab7aa3bc9ebbe",
+      "created_at": "2026-06-09T23:17:31.886Z",
+      "rerun_status": null
+    },
+    "F-analyst-VANKO-DEEP-038": {
+      "file": "F-analyst-VANKO-DEEP-038-805d99a59daa.json",
+      "receipt_sha256": "805d99a59daad10ef404470f42cbbeb114159af47ca07f9bc1f99f88c64cc9f7",
+      "created_at": "2026-06-09T23:31:48.519Z",
+      "rerun_status": null
+    }
+  },
+  "rerun_status_by_finding": {
+    "F-analyst-ROCBA-002": {
+      "status": "STORED_OUTPUT_ONLY",
+      "file": "F-analyst-ROCBA-002.json",
+      "note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
+    },
+    "F-analyst-SRL-MEM-002": {
+      "status": "INDEPENDENT_RERUN_VERIFIED",
+      "file": "F-analyst-SRL-MEM-002.json",
+      "note": "Canonical demo receipt independently reran and reproduced recorded output hash."
+    },
+    "F-analyst-SRL18-DC-DISK-007": {
+      "status": "STORED_OUTPUT_ONLY",
+      "file": "F-analyst-SRL18-DC-DISK-007.json",
+      "note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
+    },
+    "F-analyst-SRL18-DC-DISK-008": {
+      "status": "STORED_OUTPUT_ONLY",
+      "file": "F-analyst-SRL18-DC-DISK-008.json",
+      "note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
+    },
+    "F-analyst-SRL18-FILE-DISK-003": {
+      "status": "STORED_OUTPUT_ONLY",
+      "file": "F-analyst-SRL18-FILE-DISK-003.json",
+      "note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
+    },
+    "F-analyst-SRL18-FILE-DISK-004": {
+      "status": "STORED_OUTPUT_ONLY",
+      "file": "F-analyst-SRL18-FILE-DISK-004.json",
+      "note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
+    },
+    "F-analyst-SRL18-FILE-DISK-005": {
+      "status": "STORED_OUTPUT_ONLY",
+      "file": "F-analyst-SRL18-FILE-DISK-005.json",
+      "note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
+    },
+    "F-analyst-SRL18-FILE-DISK-006": {
+      "status": "STORED_OUTPUT_ONLY",
+      "file": "F-analyst-SRL18-FILE-DISK-006.json",
+      "note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
+    }
+  }
+}

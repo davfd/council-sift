@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Council-SIFT tool entrypoint. The identity kernel runs LIVE here: destructive/forbidden tools
+# (dd, mkfs, rm, wipefs, fdisk, shutdown, mount-rw, ...) are refused at the kernel's Layer-1 BEFORE the
+# command reaches the SIFT VM; read-only forensic + shell tooling passes through unchanged.
+# The underlying SIFT wrapper is overridable via $SIFT_WRAPPER (default: ~/sift-workstation/sift).
+HERE="$(cd "$(dirname "$0")/.." && pwd)"
+SIFT_WRAPPER="${SIFT_WRAPPER:-$HOME/sift-workstation/sift}"
+if ! authz="$(python3 "$HERE/identity-kernel/authorize.py" --scan-command "$*" 2>&1 >/dev/null)"; then
+  echo "[bin/sift] REFUSED by Council-SIFT identity kernel: ${authz}" >&2
+  exit 13
+fi
+exec "$SIFT_WRAPPER" "$@"

@@ -1,0 +1,81 @@
+{
+  "finding_id": "F-analyst-ROCBA-DISK-001",
+  "nodeId": "da368e59-c092-5cf2-bf9c-4ae07f99a450",
+  "case": "ROCBA-DISK",
+  "claim": {
+    "observation": "fsstat on rocba-cdrive.e01 reports: File System Type: NTFS; Volume Name: Windows; Version: Windows XP; Volume Serial Number: F0E0FE66E0FE3288; Cluster Size: 4096; MFT entry range 0 - 479488.",
+    "interpretation": "The evidence is a single NTFS volume from a Windows XP system (no partition table; mmls returned nothing), so user data lives under 'Documents and Settings'. This establishes the forensic baseline for the ROCBA disk triage.",
+    "confidence": "HIGH",
+    "content_sha256": "a63f8794a16acc06379ba76cfa08f4cb6c3a6075570bb12c4bce0cd85df1ac8b"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01",
+    "locator": "volume fsstat / VSN F0E0FE66E0FE3288",
+    "tool": "fsstat",
+    "command": "fsstat \"/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01\"",
+    "output_sha256": "5b963eba0121a84862fb7d60831de553f2eeb9004249ac3d948b45b164ef2245"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 3 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "NTFS",
+          "present": true
+        },
+        {
+          "token": "Windows XP",
+          "present": true
+        },
+        {
+          "token": "F0E0FE66E0FE3288",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T02:58:46.852Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "46207f531b7d2c8d304c2e26120cfca856b9adbafa59dc69b5b031bcb59e0892"
+}

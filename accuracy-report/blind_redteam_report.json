@@ -1,0 +1,131 @@
+{
+  "detector_frozen": true,
+  "config": {
+    "files": 13,
+    "per_file": 5,
+    "seeds": 2,
+    "panel_cap": 45
+  },
+  "total": 130,
+  "supported": 56,
+  "unsupported": 74,
+  "floor": {
+    "tp": 57,
+    "fp": 1,
+    "fn": 17,
+    "tn": 55,
+    "recall": 0.7702702702702703,
+    "precision": 0.9827586206896551
+  },
+  "floor_by_class": {
+    "TOOL_OVERREAD": {
+      "n": 24,
+      "caught": 16
+    },
+    "INTENT": {
+      "n": 8,
+      "caught": 7
+    },
+    "FABRICATED_TOKEN": {
+      "n": 22,
+      "caught": 20
+    },
+    "CAUSATION": {
+      "n": 8,
+      "caught": 5
+    },
+    "SCOPE": {
+      "n": 3,
+      "caught": 1
+    },
+    "ATTRIBUTION": {
+      "n": 6,
+      "caught": 6
+    },
+    "CERTAINTY": {
+      "n": 3,
+      "caught": 2
+    }
+  },
+  "floor_by_scenario": {
+    "ROCBA": {
+      "n": 18,
+      "caught": 10
+    },
+    "SRL-2015": {
+      "n": 22,
+      "caught": 18
+    },
+    "SRL-2018": {
+      "n": 34,
+      "caught": 29
+    }
+  },
+  "floor_per_seed": [
+    {
+      "tp": 26,
+      "fp": 1,
+      "fn": 12,
+      "tn": 26,
+      "recall": 0.6842105263157895,
+      "precision": 0.9629629629629629
+    },
+    {
+      "tp": 31,
+      "fp": 0,
+      "fn": 5,
+      "tn": 29,
+      "recall": 0.8611111111111112,
+      "precision": 1
+    }
+  ],
+  "panel_scope": {
+    "floor_only": {
+      "tp": 57,
+      "fp": 1,
+      "fn": 15,
+      "tn": 30,
+      "recall": 0.7916666666666666,
+      "precision": 0.9827586206896551
+    },
+    "floor_plus_panel": {
+      "tp": 70,
+      "fp": 1,
+      "fn": 2,
+      "tn": 30,
+      "recall": 0.9722222222222222,
+      "precision": 0.9859154929577465
+    },
+    "panel_runs": 45,
+    "recovered": 13,
+    "sample_misses": 15,
+    "panel_fp": 0
+  },
+  "true_holes": [
+    {
+      "class": "CAUSATION",
+      "interpretation": "These three directories were created consecutively by the same user-profile provisioning event during initial account setup."
+    },
+    {
+      "class": "CAUSATION",
+      "interpretation": "The three folders were almost certainly created in a single operation during the same user-profile provisioning event, in that order."
+    }
+  ],
+  "false_positives": [
+    {
+      "by": "seat:citation",
+      "cited_tokens": [
+        "TCPv4",
+        "10.3.58.9",
+        "445",
+        "10.3.58.5",
+        "49805",
+        "ESTABLISHED",
+        "4",
+        "System"
+      ],
+      "interpretation": "The artifact shows an active SMB session terminating on this host's port 445 from internal peer 10.3.58.5; consistent with normal Windows file-sharing traffic between two hosts on the 10.3.58.0 subnet.",
+      "note": "Restates connection tuple, state, and PID exactly as shown; SMB is the registered service for 445, stays within what netscan reveals."
+    }
+  ]
+}

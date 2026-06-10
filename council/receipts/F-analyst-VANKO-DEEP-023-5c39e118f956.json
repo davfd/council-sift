@@ -1,0 +1,124 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-023",
+  "nodeId": "23864869-bef7-5c13-83fb-841416e1ef1a",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted cloud receipt hunt summary records a bounded Chrome cache marker scan: 615 cache files, zero cache files modified in the target window, and provider marker counts including Docs Google=1665, Googleusercontent=389, and Drive Google=341. The cache also contains receipt-like marker words, but the scan reports zero target-window cache modified files.",
+    "interpretation": "Chrome cache contains cloud/provider and receipt-like strings as cache text context, not a target-window receipt. This supports further cache triage only if a target identifier is supplied; it does not establish upload completion or target-window cloud use.",
+    "confidence": "MEDIUM",
+    "content_sha256": "9906815f144e571cc46d6e8ca4ba646391fe743790e8a422cb723e820202af95"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "cloud-receipt-hunt:v3",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_cloud_receipt_out/cloud_receipt_hunt_summary.txt",
+    "output_sha256": "20748cb16c6bc22d38e82c722f24451d18efd5ce612e62e39fb39f9d104923ff"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-9fd051dcdc90e06c",
+    "execution_record_sha256": "9fd051dcdc90e06ca79b5ba2c7ed2aca3f6920e16f20e0ad6aaf2a22bf562950",
+    "evidence_excerpt_sha256": "ea5550e0e5b490a29b562be6a0de1242d0985889f3e5c20973c451108adfe7b7"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "20748cb16c6bc22d38e82c722f24451d18efd5ce612e62e39fb39f9d104923ff",
+    "total_chars": 5152,
+    "excerpt_chars": 1759,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_CLOUD_RECEIPT_HUNT_V3=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nCLOUD_INVENTORY_ROWS=97\nCLOUD_INVENTORY_CSV_SHA256=0bffe3740014a0ec0a774182f76078f511945a9e7961764a509213c319c3959c\nCLOUD_FILENAME_NEEDLE_COUNTS=GOOGLE:40,SYNC:15,DRIVE:13,DROPBOX:11,ONEDRIVE:7,CLOUD:5,ICLOUD:4\nCLOUD_FILENAME_NEEDLE_GOOGLE_COUNT=40\nCLOUD_FILENAME_NEEDLE_SYNC_COUNT=15\nCLOUD_FILENAME_NEEDLE_DRIVE_COUNT=13\nCLOUD_FILENAME_NEEDLE_DROPBOX_COUNT=11\nCLOUD_FILENAME_NEEDLE_ONEDRIVE_COUNT=7\nCLOUD_FILENAME_NEEDLE_CLOUD_COUNT=5\nCLOUD_FILENAME_NEEDLE_ICLOUD_COUNT=4\nCLOUD_ARTIFACT_CLASS_COUNTS=CHROME_LOCALSTORAGE_GOOGLE_OTHER:22,CHROME_OTHER:19,PREFETCH_CLOUD_RELATED:13,CHROME_INDEXEDDB_DRIVE_GOOGLE:11,OTHER_CLOUD_NAME:8,CHROME_INDEXEDDB_DOCS_GOOGLE:8,RECENT_LNK_CLOUD_NAME:3,PREFETCH_OTHER:3,CHROME_INDEXEDDB_GOOGLE_OTHER:2,CHROME_LOCALSTORAGE_DRIVE_GOOGLE:2,CHROME_LOCALSTORAGE_DROPBOX:2,DROPBOX_PATH:2,OUTLOOK_OST_ICLOUD_ACCOUNT_NAME:1,RECENT_LNK_OTHER:1\nCLOUD_ARTIFACT_CLASS_CHROME_INDEXEDDB_DRIVE_GOOGLE_COUNT=11\nCLOUD_ARTIFACT_CLASS_CHROME_INDEXEDDB_DOCS_GOOGLE_COUNT=8\nCLOUD_ARTIFACT_CLASS_CHROME_LOCALSTORAGE_DRIVE_GOOGLE_COUNT=2\nCLOUD_ARTIFACT_CLASS_CHROME_LOCALSTORAGE_DROPBOX_COUNT=2\nCLOUD_ARTIFACT_CLASS_PREFETCH_CLOUD_RELATED_COUNT=13\nCLOUD_ARTIFACT_CLASS_RECENT_LNK_CLOUD_NAME_COUNT=3\nCLOUD_ARTIFACT_CLASS_OUTLOOK_OST_ICLOUD_ACCOUNT_NAME_COUNT=1\nCLOUD_ARTIFACT_PROFILE_COUNTS=PROFILE_PC_USER:70,SYSTEM_WINDOWS:20,PROFILE_DEFAULTPRINTER:7\nCLOUD_ARTIFACT_CLASS_MTIME_WINDOW_COUNTS=PREFETCH_CLOUD_RELATED:6,PREFETCH_OTHER:2,DROPBOX_PATH:1,OTHER_CLOUD_NAME:1\nCLOUD_ARTIFACT_CLASS_MTIME_WINDOW_CHROME_INDEXEDDB_DRIVE_GOOGLE_COUNT=0\nCLOUD_ARTIFACT_CLASS_MTIME_WINDOW_CHROME_INDEXEDDB_DOCS_GOOGLE_COUNT=0\n[... omitted lines 24-87; full output hash below ...]",
+    "excerpt_sha256": "ea5550e0e5b490a29b562be6a0de1242d0985889f3e5c20973c451108adfe7b7"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 8 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "CHROME_CACHE_MARKER_SCAN_FILES=615",
+          "present": true
+        },
+        {
+          "token": "CHROME_CACHE_MARKER_SCAN_BYTES=134990023",
+          "present": true
+        },
+        {
+          "token": "CHROME_CACHE_MTIME_WINDOW_FILES=0",
+          "present": true
+        },
+        {
+          "token": "CHROME_CACHE_RECEIPT_MARKER_FILE_COUNT=250",
+          "present": true
+        },
+        {
+          "token": "CHROME_CACHE_PROVIDER_MARKER_FILE_COUNT=137",
+          "present": true
+        },
+        {
+          "token": "CHROME_CACHE_PROVIDER_MARKER_COUNTS=DOCS_GOOGLE:1665,GOOGLEUSERCONTENT:389,DRIVE_GOOGLE:341,DROPBOX:0,ONEDRIVE:0,ICLOUD:0",
+          "present": true
+        },
+        {
+          "token": "CHROME_CACHE_RECEIPT_MARKER_COUNTS=SYNC:4336,REVISION:4108,UPLOAD:3863,SERVER:2016,SUCCESS:1710,CID=:216,SLASH_UPLOAD:201,FILEID:142,REVISIONID:75,COMMIT:51,RESID:15,COMMITTED:0,FILE_ID:0",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=marker_counts_are_string_presence_counts_not_target_file_upload_completion",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T20:11:20.218Z",
+  "prev_receipt_sha256": "c0fd252f2f237c66d6a44b1e1a41f0dc923fa77b73dbd6357a4086d57ad570b5",
+  "receipt_sha256": "5c39e118f956c83d33b2c0d48ba0cf8688378514f5b696ae408bcc578c0f784c"
+}

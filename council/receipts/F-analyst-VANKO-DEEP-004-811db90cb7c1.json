@@ -1,0 +1,116 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-004",
+  "nodeId": "6b271d73-022d-52eb-be9a-3b87b7e54e60",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted deep EVTX summary separates Security-log counts from non-Security selected EventIds: Security has 4624=6564, 4672=6415, 4648=200, 4634=177, 4688=150, 4647=14; non-Security selected counts are 7045=57 and 4625=36. Security 4624 logon types are 5=6254, 7=104, 11=102, 2=58, 3=31, 0=15; Security 4688 command-line-present count is 0.",
+    "interpretation": "This rerunnable cat-capture equivalent of the EVTX finding is a time-window and event-class lead map only. The 36 EventId 4625 rows in this capture are Application.evtx rows, not a Security failed-logon finding; authentication/process/service claims still require payload-level correlation and exact event windows.",
+    "confidence": "HIGH",
+    "content_sha256": "5c7452ae72fba9af704d031d834a83a3fc58e4b91503962bf4c46bc69d7ade9d"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "deep:v1",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_deep_out/safe_summary.txt",
+    "output_sha256": "cdf056257199874e9483d6f6593ae3916175b07a89e2c5ff689cb721c44ac298"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-5cafa8f1313fa10c",
+    "execution_record_sha256": "5cafa8f1313fa10c68a8aecf323e6b8f6c83cde8ede9e18e64e75ad4dd90319e",
+    "evidence_excerpt_sha256": "5e59c1717e07b60c12751c8f5a70888c718e90932f5e6c810f27d22f2b3fc1ad"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "cdf056257199874e9483d6f6593ae3916175b07a89e2c5ff689cb721c44ac298",
+    "total_chars": 10502,
+    "excerpt_chars": 2364,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_DEEP_SAFE_SUMMARY_V1=1\nSOURCE_SCOPE=CYLR_EXTRACTED_COPY_PLUS_PRIOR_PARSER_OUTPUTS\nCYLR_BASE_EXISTS=True\nEVTX_CSV_EXISTS=True\nEVTX_CSV_SHA256=a666272795ede464c014b955a033c4bf3c027e89a0656320505fb0bec02488e4\nEVTX_SELECTED_EVENT_COUNTS=4624:6564,4672:6415,4648:200,4634:177,4688:150,7045:57,4625:36,4647:14\nEVTX_EVENT_1102_TIME_RANGE=..\nEVTX_EVENT_4624_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:08:55Z\nEVTX_EVENT_4625_TIME_RANGE=2016-03-15T10:44:40Z..2018-05-12T22:55:01Z\nEVTX_EVENT_4634_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:05:36Z\nEVTX_EVENT_4647_TIME_RANGE=2016-06-29T20:11:04Z..2018-05-12T22:56:59Z\nEVTX_EVENT_4648_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:05:36Z\nEVTX_EVENT_4672_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:08:55Z\nEVTX_EVENT_4688_TIME_RANGE=2016-06-28T23:17:36Z..2018-05-12T22:55:00Z\nEVTX_EVENT_7045_TIME_RANGE=2016-03-15T10:44:13Z..2017-03-21T12:50:34Z\nEVTX_SELECTED_EVENT_SOURCE_COUNTS=4624@security.evtx:6564,4672@security.evtx:6415,4648@security.evtx:200,4634@security.evtx:177,4688@security.evtx:150,7045@system.evtx:57,4625@application.evtx:36,4647@security.evtx:14\nEVTX_SECURITY_SELECTED_COUNTS=4624:6564,4672:6415,4648:200,4634:177,4688:150,4647:14\nEVTX_NONSECURITY_SELECTED_COUNTS=7045:57,4625:36\nEVTX_TOP_SELECTED_HOUR_BUCKETS=4624@2016-06-30T14Z:58,4648@2016-06-29T19Z:52,4672@2016-06-30T14Z:46,4624@2016-06-30T15Z:43,7045@2016-03-15T10Z:35,4672@2016-06-30T15Z:35,4624@2016-09-30T11Z:32,4624@2016-06-28T23Z:31,4688@2016-06-30T14Z:30,4624@2016-07-02T01Z:29,4624@2016-08-08T18Z:29,4672@2016-06-28T23Z:27,4624@2016-07-01T22Z:26,4672@2016-09-30T11Z:26,4624@2018-05-12T22Z:26,4624@2016-06-30T16Z:25,4672@2016-07-02T01Z:25,4624@2016-06-29T20Z:24,4672@2016-08-08T18Z:23,4672@2016-07-01T22Z:22,4648@2016-06-29T20Z:21,4688@2016-06-30T15Z:20,4624@2016-10-30T23Z:20,4672@2018-05-12T22Z:20,4672@2016-06-29T20Z:19,4672@2016-06-30T16Z:19,4624@2017-05-20T20Z:19,4624@2016-11-04T13Z:18,4624@2016-07-02T22Z:17,4624@2016-08-08T16Z:17\nSECURITY_4624_LOGON_TYPE_COUNTS=5:6254,7:104,11:102,2:58,3:31,0:15\nSECURITY_4625_LOGON_TYPE_COUNTS=\nSECURITY_4624_AUTH_PACKAGE_COUNTS=Negotiate:6519,NTLM:30,-:15\nSECURITY_4624_TARGET_DOMAIN_HASH12_COUNTS=207ef664c0d4:6299,bab9490cc11d:206,830b7dec09e4:58,9700626a5562:1\nSECURITY_4624_IP_CLASS_COUNTS=NO_IP:6448,LOOPBACK:102,PRIVATE_IP:14\n[... omitted lines 24-96; full output hash below ...]",
+    "excerpt_sha256": "5e59c1717e07b60c12751c8f5a70888c718e90932f5e6c810f27d22f2b3fc1ad"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 6 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "EVTX_SECURITY_SELECTED_COUNTS=4624:6564,4672:6415,4648:200,4634:177,4688:150,4647:14",
+          "present": true
+        },
+        {
+          "token": "EVTX_NONSECURITY_SELECTED_COUNTS=7045:57,4625:36",
+          "present": true
+        },
+        {
+          "token": "SECURITY_4624_LOGON_TYPE_COUNTS=5:6254,7:104,11:102,2:58,3:31,0:15",
+          "present": true
+        },
+        {
+          "token": "SECURITY_4688_COMMANDLINE_PRESENT_COUNT=0",
+          "present": true
+        },
+        {
+          "token": "SYSTEM_7045_IMAGE_PATH_CLASS_COUNTS=WINDOWS_SYSTEM_PATH:32,PROGRAM_FILES_PATH:15,LOCAL_DRIVE_PATH:3,USER_PROFILE_PATH:3,CLOUD_TOKEN_PATH:2,OTHER_PATH:2",
+          "present": true
+        },
+        {
+          "token": "application.evtx",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T17:57:58.726Z",
+  "prev_receipt_sha256": "7abbc6745d8869bf487dd5eb71eb2013970d0e8af0e24bc2e6c7481b548ef982",
+  "receipt_sha256": "811db90cb7c1f16bec8463d56db5ba73b9fb97b637062744f3a263823aa2c0f8"
+}

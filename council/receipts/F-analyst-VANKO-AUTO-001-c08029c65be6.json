@@ -1,0 +1,124 @@
+{
+  "finding_id": "F-analyst-VANKO-AUTO-001",
+  "nodeId": "5cbf988b-c9cf-5246-93ce-f728879c1d0a",
+  "case": "VANKO-AUTO",
+  "claim": {
+    "observation": "The FTK Imager acquisition log for surface_physical records: Case Number: 20161104; Evidence Number: 20161104-HD001; Unique description: Surface 3; Examiner: Ovie Carroll; Notes: Live Physical; Drive Model: Samsung MDGAGC; and reports the acquisition MD5 checksum 4032d556cc866c23f1e797410e95603c as 'verified' after image verification.",
+    "interpretation": "This evidence set is a forensically acquired physical disk image of a Microsoft Surface 3 device, captured live with AccessData FTK Imager under case 20161104 by examiner Ovie Carroll. The matching computed/verification MD5 indicates the image segments verified intact at acquisition time. This establishes provenance and integrity of the image surface only; it says nothing about the system's contents or any activity on it.",
+    "confidence": "HIGH",
+    "content_sha256": "667c31218a5eebbb8dbf0f40d53518cc6c9aa1131bf3d5904e6bd84cb95771f4"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01.txt",
+    "locator": "FTK Imager acquisition log",
+    "tool": "cat",
+    "command": "cat \"/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01.txt\"",
+    "output_sha256": "719c061ae75ecc648d2afa52ab2a8d6af0bfb5b5068043d031141924ddebae32"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-AUTO-5e393fe1e20be282",
+    "execution_record_sha256": "5e393fe1e20be2829a512d847f9278b4eb34309154aaa442ea9749008738dfc0",
+    "evidence_excerpt_sha256": "4e1f649ac6b04a028a85853ea3a8740914a6aa20bd9890e4cac8ab83fd6dfc0d"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "719c061ae75ecc648d2afa52ab2a8d6af0bfb5b5068043d031141924ddebae32",
+    "total_chars": 1790,
+    "excerpt_chars": 659,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "﻿Created By AccessData® FTK® Imager 2.9.0.1385 100406\n\nCase Information: \nCase Number: 20161104\nEvidence Number: 20161104-HD001\nUnique description: Surface 3\nExaminer: Ovie Carroll\nNotes: Live Physical \n\n--------------------------------------------------------------\n\nInformation for D:\\surface_physical:\n\nPhysical Evidentiary Item (Source) Information:\n[Drive Geometry]\n Cylinders: 15,205\n Tracks per Cylinder: 255\n Sectors per Track: 63\n Bytes per Sector: 512\n Sector Count: 244,277,248\n[Physical Drive Information]\n Drive Model: Samsung MDGAGC\n Drive Serial Number: e65f5f86\n Drive Interface Type: SCSI\n[... omitted lines 24-61; full output hash below ...]",
+    "excerpt_sha256": "4e1f649ac6b04a028a85853ea3a8740914a6aa20bd9890e4cac8ab83fd6dfc0d"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 8 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "Case Number: 20161104",
+          "present": true
+        },
+        {
+          "token": "Evidence Number: 20161104-HD001",
+          "present": true
+        },
+        {
+          "token": "Unique description: Surface 3",
+          "present": true
+        },
+        {
+          "token": "Examiner: Ovie Carroll",
+          "present": true
+        },
+        {
+          "token": "Notes: Live Physical",
+          "present": true
+        },
+        {
+          "token": "Drive Model: Samsung MDGAGC",
+          "present": true
+        },
+        {
+          "token": "4032d556cc866c23f1e797410e95603c",
+          "present": true
+        },
+        {
+          "token": "verified",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T16:38:02.568Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "c08029c65be6d22bd53d54d2730449632292766ea72a4637b9ec8dd1ab507a42"
+}

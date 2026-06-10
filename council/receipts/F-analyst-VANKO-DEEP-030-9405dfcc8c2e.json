@@ -1,0 +1,180 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-030",
+  "nodeId": "17884a8f-c25e-5f9b-80d7-b7c4e7609a49",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted TerminalServices/RDP window summary records the selected CYLR extract has 4 EVTX files and zero TerminalServices/RDP-named EVTX files; the parsed EVTX CSV has 60371 rows. The scan found 5 TerminalServices/RDP-like rows globally in System.evtx, with time range 2016-06-18T20:40:57Z..2018-01-16T18:32:16Z, and zero TerminalServices/RDP-like rows in the 2018-05-13T10:05Z..10:15Z target window.",
+    "interpretation": "This is a bounded availability/timing boundary for the parsed EVTX set and named EVTX availability. It does not prove no remote access occurred elsewhere, and it does not establish human identity, file transfer, or cloud upload completion.",
+    "confidence": "MEDIUM",
+    "content_sha256": "d7f1a5d4189be65a035f5603bc608e36dd05909745086eaf0aa07121f811063c"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "terminalservices-rdp-window:v1",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_ts_rdp_window_out/ts_rdp_window_summary.txt",
+    "output_sha256": "8ce87a8f4049106d4116e27b3b98d3cf536b3d4ef1fe6c664768d798b0661e36"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-434e090303d6709b",
+    "execution_record_sha256": "434e090303d6709b305ea565c83e9bb6dfd08a996fdd04e4e4102f459b597dbf",
+    "evidence_excerpt_sha256": "e14c27dd0b966aa3469f8004df1cad1bde80d7d1ec9c3920e71ce3c5b8e86e15"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "8ce87a8f4049106d4116e27b3b98d3cf536b3d4ef1fe6c664768d798b0661e36",
+    "total_chars": 1463,
+    "excerpt_chars": 1109,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_TERMINALSERVICES_RDP_WINDOW_V1=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nROOT_CYLR_EXTRACT_EXISTS=1\nROOT_DERIVED_VANKO_NEXT_EXISTS=1\nROOT_CYLR_EXTRACT_EVTX_FILE_COUNT=4\nROOT_DERIVED_VANKO_NEXT_EVTX_FILE_COUNT=0\nROOT_CYLR_EXTRACT_TS_RDP_NAME_MATCH_FILE_COUNT=0\nROOT_DERIVED_VANKO_NEXT_TS_RDP_NAME_MATCH_FILE_COUNT=0\nEVTX_CSV_EXISTS=1\nEVTX_CSV_SHA256=a666272795ede464c014b955a033c4bf3c027e89a0656320505fb0bec02488e4\nEVTX_TOTAL_ROWS_SCANNED=60371\nTS_RDP_GLOBAL_MATCH_ROWS=5\nTS_RDP_GLOBAL_TIME_RANGE=2016-06-18T20:40:57Z..2018-01-16T18:32:16Z\nTS_RDP_GLOBAL_EVENT_COUNTS=1056:4,7031:1\nTS_RDP_GLOBAL_SOURCE_CLASS_COUNTS=SYSTEM.EVTX:5\nTS_RDP_GLOBAL_CHANNEL_COUNTS=System:5\nTS_RDP_GLOBAL_PROVIDER_CLASS_COUNTS=TERMINALSERVICES_PROVIDER:4,OTHER_PROVIDER:1\nTS_RDP_GLOBAL_REMOTE_HOST_CLASS_COUNTS=BLANK:5\nTS_RDP_GLOBAL_USER_HASH12_COUNTS=2fa929d49a80:5\nTS_RDP_GLOBAL_REMOTE_HOST_HASH12_COUNTS=2fa929d49a80:5\nTS_RDP_WINDOW_MATCH_ROWS=0\nTS_RDP_WINDOW_EVENT_COUNTS=NONE\nTS_RDP_WINDOW_SOURCE_CLASS_COUNTS=NONE\nTS_RDP_WINDOW_PROVIDER_CLASS_COUNTS=NONE\n[... omitted lines 24-31; full output hash below ...]",
+    "excerpt_sha256": "e14c27dd0b966aa3469f8004df1cad1bde80d7d1ec9c3920e71ce3c5b8e86e15"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 22 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_TERMINALSERVICES_RDP_WINDOW_V1=1",
+          "present": true
+        },
+        {
+          "token": "WINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z",
+          "present": true
+        },
+        {
+          "token": "ROOT_CYLR_EXTRACT_EVTX_FILE_COUNT=4",
+          "present": true
+        },
+        {
+          "token": "ROOT_CYLR_EXTRACT_TS_RDP_NAME_MATCH_FILE_COUNT=0",
+          "present": true
+        },
+        {
+          "token": "ROOT_DERIVED_VANKO_NEXT_TS_RDP_NAME_MATCH_FILE_COUNT=0",
+          "present": true
+        },
+        {
+          "token": "EVTX_CSV_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "EVTX_TOTAL_ROWS_SCANNED=60371",
+          "present": true
+        },
+        {
+          "token": "TS_RDP_GLOBAL_MATCH_ROWS=5",
+          "present": true
+        },
+        {
+          "token": "TS_RDP_GLOBAL_TIME_RANGE=2016-06-18T20:40:57Z..2018-01-16T18:32:16Z",
+          "present": true
+        },
+        {
+          "token": "TS_RDP_GLOBAL_EVENT_COUNTS=1056:4,7031:1",
+          "present": true
+        },
+        {
+          "token": "TS_RDP_GLOBAL_SOURCE_CLASS_COUNTS=SYSTEM.EVTX:5",
+          "present": true
+        },
+        {
+          "token": "TS_RDP_GLOBAL_CHANNEL_COUNTS=System:5",
+          "present": true
+        },
+        {
+          "token": "TS_RDP_GLOBAL_PROVIDER_CLASS_COUNTS=TERMINALSERVICES_PROVIDER:4,OTHER_PROVIDER:1",
+          "present": true
+        },
+        {
+          "token": "TS_RDP_GLOBAL_REMOTE_HOST_CLASS_COUNTS=BLANK:5",
+          "present": true
+        },
+        {
+          "token": "TS_RDP_WINDOW_MATCH_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "TS_RDP_WINDOW_EVENT_COUNTS=NONE",
+          "present": true
+        },
+        {
+          "token": "TS_RDP_WINDOW_SOURCE_CLASS_COUNTS=NONE",
+          "present": true
+        },
+        {
+          "token": "TS_RDP_WINDOW_PROVIDER_CLASS_COUNTS=NONE",
+          "present": true
+        },
+        {
+          "token": "RAW_USER_VALUES_EMITTED=0",
+          "present": true
+        },
+        {
+          "token": "RAW_REMOTE_HOST_VALUES_EMITTED=0",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=absence_of_terminalservices_rdp_window_rows_is_scoped_to_parsed_evtx_csv_and_named_evtx_availability",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=terminalservices_rdp_rows_are_session_telemetry_not_human_identity_or_file_transfer_proof",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T20:56:04.544Z",
+  "prev_receipt_sha256": "3d7b21e257d0a9f0ec2516bab718d529254a298123405f6d98a3aae27eb68abb",
+  "receipt_sha256": "9405dfcc8c2e916b5532dd1d503562b06edff31ec2b2af2eb88692095e41c6d6"
+}

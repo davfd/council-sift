@@ -1,0 +1,106 @@
+{
+  "finding_id": "F-analyst-SRL18-DC-DISK-007",
+  "nodeId": "2417377b-85d9-58aa-ad4b-282853d1d822",
+  "case": "SRL18-DC-DISK",
+  "claim": {
+    "observation": "Parsing Security.evtx (icat inode 103887 -> /tmp/sec.evtx) and extracting all 4697 'service installed' records (event identifier 0x00001259) yields 12 events, all on computer base-dc.shieldbase.lan, dated Sep 06 2018. Two are non-standard: a service named 'F-Response Subject' with image 'C:\\windows\\subject_srv.exe -s \"base-hunt.shieldbase.lan:5682\" -l 3262 -v \"F-Response Subject\" -k \"155522845\"', and a service named 'mnemosyne' with image 'C:\\windows/Mnemosyne.sys' (this driver service installed three times). The remaining ten are routine Windows Defender driver services (MpKsl657a2bb2, MpKsl68a89100) and per-user svchost services ('svchost.exe -k UnistackSvcGroup').",
+    "interpretation": "Two of the installed services on this DC are not native OS components: (a) 'F-Response Subject' / subject_srv.exe is consistent with a commercial remote disk-and-memory forensic-acquisition agent, configured by its command line to connect to host base-hunt.shieldbase.lan on TCP 5682; (b) 'mnemosyne' is a kernel-mode driver (.sys) loaded from C:\\windows, recorded as installed three times. The remaining ten are routine Windows Defender driver services (MpKsl*) and per-user svchost services. These Security-log 4697 records indicate that service installations for a remote-acquisition-style agent and a kernel driver were logged on this DC on Sep 06 2018. This may be material context for the shadow-copy/collection commands in finding-004 and the staged C:\\temp copies in finding-001; the log alone does not indicate the authorization or purpose of those activities.",
+    "confidence": "MEDIUM",
+    "content_sha256": "43febf6f3e9bcb2ff1799aab7e5efc81aa24440741dea965c06f6e9c61f496e8"
+  },
+  "evidence_pointer": {
+    "artifact": "C:\\Windows\\System32\\winevt\\Logs\\Security.evtx (Microsoft-Windows-Security-Auditing, EID 4697)",
+    "locator": "inode 103887; 4697 records at Sep 06 2018 (e.g. 08:30:02 UTC); host base-dc.shieldbase.lan",
+    "tool": "evtxexport (libevtx) on icat-extracted Security.evtx",
+    "command": "icat <img> 103887 > /tmp/sec.evtx ; evtxexport -f text /tmp/sec.evtx ; awk 'BEGIN{RS=\"\\n\\n\"}/0x00001259/{print}'",
+    "output_sha256": "149adb056be25ef5b259bf2521a48dcfa7a05daa76745109867e48784f5940ac",
+    "rerun_status": "STORED_OUTPUT_ONLY",
+    "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 8 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "0x00001259 (4697)",
+          "present": true
+        },
+        {
+          "token": "F-Response Subject",
+          "present": true
+        },
+        {
+          "token": "subject_srv.exe -s \"base-hunt.shieldbase.lan:5682\"",
+          "present": true
+        },
+        {
+          "token": "mnemosyne",
+          "present": true
+        },
+        {
+          "token": "C:\\windows/Mnemosyne.sys",
+          "present": true
+        },
+        {
+          "token": "base-dc.shieldbase.lan",
+          "present": true
+        },
+        {
+          "token": "MpKsl657a2bb2",
+          "present": true
+        },
+        {
+          "token": "svchost.exe -k UnistackSvcGroup",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:08:01.795Z",
+  "prev_receipt_sha256": "4529a74a3cee8fd1b5050dc882c0008bef5a7c3126c87e681dd19b4a145a5fa5",
+  "receipt_sha256": "e98bfb60e0fb75a2c7d7d42dcde07bbc98e2dcbc703db6f9d516ca7da865ac26",
+  "rerun_status": "STORED_OUTPUT_ONLY",
+  "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here.",
+  "receipt_hash_scope_note": "receipt_sha256 is the original Council receipt hash; rerun_status fields are Tier 2 audit metadata labels."
+}

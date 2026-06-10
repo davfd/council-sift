@@ -1,0 +1,132 @@
+{
+  "finding_id": "F-analyst-VANKO-NEXT-005",
+  "nodeId": "6bda08e4-013e-5fdb-aaf8-a0a02417fe35",
+  "case": "VANKO-NEXT",
+  "claim": {
+    "observation": "The safe summary records 237 parsed LNK rows, 390 AutomaticDestinations rows, 50 CustomDestinations rows, 3,469 Amcache rows, and 937 AppCompat rows, with counted shell path classes, drive types, JumpList app descriptions, and selected application-name hit counts.",
+    "interpretation": "This is a lead inventory for follow-up only: it identifies counted shell-link categories, JumpList application categories, and application-cache name hits that should be corroborated with more specific artifacts before any stronger activity claim is made.",
+    "confidence": "MEDIUM",
+    "content_sha256": "a8097609a7196af8d7e30d632fcf80655edaefad40350ec4ca5091bd6f9cd974"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/vanko_next_out/safe_summary.txt",
+    "locator": "safe-summary:v1",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_next_out/safe_summary.txt",
+    "output_sha256": "79edde49bc2383189b9b9755ed8c86d2e0b6182aec508f401ee3620b90bc9547"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-NEXT-ae8e6bb8c66599d7",
+    "execution_record_sha256": "ae8e6bb8c66599d760ddd5b95f5a764fffa149f7b492546f458277eddecb190a",
+    "evidence_excerpt_sha256": "cccfe59b5771f2ae2f896e80fdcc687c300e682c098f5aaf7ef02dedcf7911a5"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "79edde49bc2383189b9b9755ed8c86d2e0b6182aec508f401ee3620b90bc9547",
+    "total_chars": 5183,
+    "excerpt_chars": 821,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_NEXT_SAFE_SUMMARY_V1=1\nBASE_EXISTS=1\nEVTX_ROW_COUNT=60371\nEVTX_TIME_MIN=2016-03-15 10:43:29.8240062\nEVTX_TIME_MAX=2018-05-13 10:15:20.2394104\nEVTX_LOG_SECURITY_EVTX_ROWS=26052\nEVTX_LOG_APPLICATION_EVTX_ROWS=20077\nEVTX_LOG_OALERTS_EVTX_ROWS=12\nEVTX_LOG_SYSTEM_EVTX_ROWS=14230\nEVTX_EVENT_4624_COUNT=6564\nEVTX_EVENT_4625_COUNT=36\nEVTX_EVENT_4634_COUNT=177\nEVTX_EVENT_4647_COUNT=14\nEVTX_EVENT_4648_COUNT=200\nEVTX_EVENT_4672_COUNT=6415\nEVTX_EVENT_4688_COUNT=150\nEVTX_EVENT_4720_COUNT=0\nEVTX_EVENT_4726_COUNT=0\nEVTX_EVENT_4732_COUNT=0\nEVTX_EVENT_7045_COUNT=57\nEVTX_EVENT_7036_COUNT=0\nEVTX_EVENT_1102_COUNT=0\nEVTX_TOP_EVENT_IDS=0:12084,4624:6564,4672:6415,4799:3337,4798:3267,16:2641,5058:2497,5061:2490,1001:1515,51:1060,1004:1000,10010:956\nCHROME_HISTORY_DB_COUNT=2\n[... omitted lines 24-123; full output hash below ...]",
+    "excerpt_sha256": "cccfe59b5771f2ae2f896e80fdcc687c300e682c098f5aaf7ef02dedcf7911a5"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 10 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "LNK_PARSED_ROWS=237",
+          "present": true
+        },
+        {
+          "token": "JUMPLIST_AUTOMATIC_ROWS=390",
+          "present": true
+        },
+        {
+          "token": "JUMPLIST_CUSTOM_ROWS=50",
+          "present": true
+        },
+        {
+          "token": "AMCACHE_PARSED_ROWS=3469",
+          "present": true
+        },
+        {
+          "token": "APPCOMPAT_PARSED_ROWS=937",
+          "present": true
+        },
+        {
+          "token": "LNK_CLASS_COUNTS=CLOUD_PATH_STRING:2,LOCAL_DRIVE_PATH:54,NETWORK_PATH:100,OTHER_NONEMPTY_TARGET:81",
+          "present": true
+        },
+        {
+          "token": "LNK_DRIVETYPE_COUNTS=FIXED_STORAGE_MEDIA_HARD_DRIVE:109,NONE:96,REMOVABLE_STORAGE_MEDIA_FLOPPY_USB:32",
+          "present": true
+        },
+        {
+          "token": "AMCACHE_DROPBOX_HITS=125",
+          "present": true
+        },
+        {
+          "token": "AMCACHE_ONEDRIVE_HITS=142",
+          "present": true
+        },
+        {
+          "token": "APPCOMPAT_POWERSHELL_HITS=8",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T17:03:32.420Z",
+  "prev_receipt_sha256": "0666ee27d9f5c3629483817f30e126f35b9d385582c07d9351c9ca9fcac5f131",
+  "receipt_sha256": "49c745e739dc02d1936e66624c880f3345badf7da33d5f1b7b8b85987d3d9f90"
+}

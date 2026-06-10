@@ -1,0 +1,168 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-028",
+  "nodeId": "c5c66588-0c43-5544-812a-7be84a452303",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "The trusted audit-availability summary scanned the SIFT-visible case evidence, CYLR extract, and derived VANKO outputs. It reports all selected roots present, 6644 files visited, 1808 small text/config/database-like files content-scanned, zero admin-CLI-config name candidates, and zero precise server-audit content-marker files, while still recording 34 local client-cloud marker files.",
+    "interpretation": "This is a local artifact availability boundary only: the scanned local evidence did not expose a Google Workspace/Admin/GAM/GWS-style server audit export or admin CLI config surface. It does not prove no provider-side cloud event; completed cloud-event proof would still require an external/server-side audit export or equivalent receipt.",
+    "confidence": "MEDIUM",
+    "content_sha256": "3542e71149dcc32e360408cbf9da177d22303fa8f58c92c98ef74c064670979f"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "audit-availability-boundary:v2-corrected",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_audit_boundary_out/audit_boundary_summary.txt",
+    "output_sha256": "59eff1b6e7461d89ce31f0bcd106e4299fa5170709d2ca637fe57e025d340c06"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-5fbbc1738c194524",
+    "execution_record_sha256": "5fbbc1738c194524626b2fa5bb50b0d98b8aec31c8cd79da05e1be2d1d491861",
+    "evidence_excerpt_sha256": "982a54b9bbdf714e8b9a248166bcb0900274f48a4101e43d7f53d72d5a15b97d"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "59eff1b6e7461d89ce31f0bcd106e4299fa5170709d2ca637fe57e025d340c06",
+    "total_chars": 2349,
+    "excerpt_chars": 1764,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_AUDIT_AVAILABILITY_SCAN_V2=1\nROOT_EVIDENCE_CASE2_EXISTS=1\nROOT_CYLR_EXTRACT_G_EXISTS=1\nROOT_DERIVED_VANKO_NEXT_EXISTS=1\nROOT_DERIVED_CLOUD_RECEIPT_EXISTS=1\nROOT_DERIVED_SRUM_EXISTS=1\nFILES_VISITED=6644\nDIRS_VISITED=1751\nROOT_FILE_COUNTS=CYLR_EXTRACT_G:6574,DERIVED_VANKO_NEXT:41,EVIDENCE_CASE2:26,DERIVED_CLOUD_RECEIPT:2,DERIVED_SRUM:1\nROOT_DIR_COUNTS=CYLR_EXTRACT_G:1748,DERIVED_VANKO_NEXT:2,EVIDENCE_CASE2:1\nFILE_EXTENSION_COUNTS=.png:2326,<none>:1272,.json:1193,.lnk:238,.pf:238,.txt:170,.pak:115,.crwl:82,.sol:82,.db:80,.dat:75,.log:66,.js:62,.localstorage-journal:61,.localstorage:61,.tmp:37,.automaticdestinations-ms:35,.html:32,.old:27,.vcrd:22,.customdestinations-ms:19,.css:18,.exe:18,.jpg:17,.dll:16,.bin:14,.sth:14,.store:11,.xml:11,.ldb:9,.csv:9,.ico:8,.pcpkey:8,.gif:7,.fingerprint:7,.torrent:7,.jrs:6,.db-journal:6,.gthr:5,.fx:5,.log1:4,.log2:4,.etl:4,.asar:4,.vsch:4,.eot:4,.btapp:4,.lru:4,.evtx:4,.chk:3,.vpol:3,.md5:3,.bdic:3,.bak:3,.woff:3,.ttf:3,.svg:3,.lng:3,.dic:3,.000:2,.001:2,.002:2,.nupkg:2,.ost:2,.sqlite3:2,.sqlite3-journal:2,.1:2,.7:2,.8:2,.4:2,.0:2,.6:2,.5:2,.2:2,.3:2,.lck:2,.url:2,.data:2,.lock:2,.job:2\nNAME_CLASS_COUNTS=OTHER:6383,LOCAL_CLIENT_CLOUD_NAME_HINT:218,SERVER_AUDIT_EXPORT_NAME_HINT:43\nNAME_CLASS_SERVER_AUDIT_EXPORT_NAME_HINT_COUNT=43\nNAME_CLASS_ADMIN_CLI_CONFIG_NAME_HINT_COUNT=0\nNAME_CLASS_LOCAL_CLIENT_CLOUD_NAME_HINT_COUNT=218\nSERVER_AUDIT_NAME_CANDIDATE_FILES=43\nADMIN_CLI_CONFIG_NAME_CANDIDATE_FILES=0\nLOCAL_CLIENT_CLOUD_NAME_CANDIDATE_FILES=218\nCONTENT_SCANNED_FILES=1808\nCONTENT_SCANNED_BYTES=38021939\nCONTENT_SCAN_ERRORS=0\nSERVER_AUDIT_CONTENT_MARKER_FILES_BY_ROOT=NONE\nSERVER_AUDIT_CONTENT_MARKER_FILE_TOTAL=0\nSERVER_AUDIT_CONTENT_MARKER_COUNTS=NONE\n[... omitted lines 24-32; full output hash below ...]",
+    "excerpt_sha256": "982a54b9bbdf714e8b9a248166bcb0900274f48a4101e43d7f53d72d5a15b97d"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 19 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_AUDIT_AVAILABILITY_SCAN_V2=1",
+          "present": true
+        },
+        {
+          "token": "ROOT_EVIDENCE_CASE2_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "ROOT_CYLR_EXTRACT_G_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "ROOT_DERIVED_VANKO_NEXT_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "FILES_VISITED=6644",
+          "present": true
+        },
+        {
+          "token": "CONTENT_SCANNED_FILES=1808",
+          "present": true
+        },
+        {
+          "token": "CONTENT_SCANNED_BYTES=38021939",
+          "present": true
+        },
+        {
+          "token": "CONTENT_SCAN_ERRORS=0",
+          "present": true
+        },
+        {
+          "token": "NAME_CLASS_ADMIN_CLI_CONFIG_NAME_HINT_COUNT=0",
+          "present": true
+        },
+        {
+          "token": "ADMIN_CLI_CONFIG_NAME_CANDIDATE_FILES=0",
+          "present": true
+        },
+        {
+          "token": "SERVER_AUDIT_CONTENT_MARKER_FILES_BY_ROOT=NONE",
+          "present": true
+        },
+        {
+          "token": "SERVER_AUDIT_CONTENT_MARKER_FILE_TOTAL=0",
+          "present": true
+        },
+        {
+          "token": "SERVER_AUDIT_CONTENT_MARKER_COUNTS=NONE",
+          "present": true
+        },
+        {
+          "token": "CLIENT_CLOUD_CONTENT_MARKER_FILE_TOTAL=34",
+          "present": true
+        },
+        {
+          "token": "CANDIDATE_CSV_SHA256=15e4430bae18cbecf237a8c75f007079d2ff783450d015ee12eeb6def0c57856",
+          "present": true
+        },
+        {
+          "token": "CANDIDATE_CSV_NO_RAW_PATHS_OR_NAMES=1",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=scan_reports_local_artifact_availability_not_provider_side_nonexistence",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=suspect_client_tokens_or_cache_markers_are_evidence_not_google_workspace_admin_authority",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=server_side_audit_export_required_for_completed_cloud_event_proof",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T20:45:52.087Z",
+  "prev_receipt_sha256": "5fdfe5e1ac5ecbb8bfea3115e3828dd56a6774b2402fba0f0f1127fad4d9cab3",
+  "receipt_sha256": "8197216324711849f90e5137855c83429d7a0e05a56ce24719ea750e9bc9d9d5"
+}

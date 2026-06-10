@@ -1,0 +1,132 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-003",
+  "nodeId": "c7cae4f3-a31b-5ccc-89a0-85e4a0135ac6",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted browser/shell lead summary records Chrome download rows=5 with extensions jpg=3, exe=1, zip=1 and download URL host classes OTHER_HOST=6. LNK deep rows=237 with class counts NETWORK_PATH=100, DOC_MEDIA_ARCHIVE_EXT=95, REMOVABLE_DRIVE_TYPE=32, CLOUD_TOKEN_PATH=4. JumpList automatic rows=390, document/media/archive extension rows=204, and custom JumpList app counts include PowerShell, Tor Browser, Outlook, and Dropbox App entries.",
+    "interpretation": "These are lead-prioritization surfaces only. The Chrome download rows do not show selected cloud-provider host classes in this safe summary, and LNK/JumpList path/app co-presence does not prove file transfer, completed upload/download, directionality, or human attribution.",
+    "confidence": "MEDIUM",
+    "content_sha256": "f88474e3ce165ba6b0abea57549b36792dc70098b2351ea20117a8de959a88fa"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "deep:v1",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_deep_out/safe_summary.txt",
+    "output_sha256": "cdf056257199874e9483d6f6593ae3916175b07a89e2c5ff689cb721c44ac298"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-5cafa8f1313fa10c",
+    "execution_record_sha256": "5cafa8f1313fa10c68a8aecf323e6b8f6c83cde8ede9e18e64e75ad4dd90319e",
+    "evidence_excerpt_sha256": "5e59c1717e07b60c12751c8f5a70888c718e90932f5e6c810f27d22f2b3fc1ad"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "cdf056257199874e9483d6f6593ae3916175b07a89e2c5ff689cb721c44ac298",
+    "total_chars": 10502,
+    "excerpt_chars": 2364,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_DEEP_SAFE_SUMMARY_V1=1\nSOURCE_SCOPE=CYLR_EXTRACTED_COPY_PLUS_PRIOR_PARSER_OUTPUTS\nCYLR_BASE_EXISTS=True\nEVTX_CSV_EXISTS=True\nEVTX_CSV_SHA256=a666272795ede464c014b955a033c4bf3c027e89a0656320505fb0bec02488e4\nEVTX_SELECTED_EVENT_COUNTS=4624:6564,4672:6415,4648:200,4634:177,4688:150,7045:57,4625:36,4647:14\nEVTX_EVENT_1102_TIME_RANGE=..\nEVTX_EVENT_4624_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:08:55Z\nEVTX_EVENT_4625_TIME_RANGE=2016-03-15T10:44:40Z..2018-05-12T22:55:01Z\nEVTX_EVENT_4634_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:05:36Z\nEVTX_EVENT_4647_TIME_RANGE=2016-06-29T20:11:04Z..2018-05-12T22:56:59Z\nEVTX_EVENT_4648_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:05:36Z\nEVTX_EVENT_4672_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:08:55Z\nEVTX_EVENT_4688_TIME_RANGE=2016-06-28T23:17:36Z..2018-05-12T22:55:00Z\nEVTX_EVENT_7045_TIME_RANGE=2016-03-15T10:44:13Z..2017-03-21T12:50:34Z\nEVTX_SELECTED_EVENT_SOURCE_COUNTS=4624@security.evtx:6564,4672@security.evtx:6415,4648@security.evtx:200,4634@security.evtx:177,4688@security.evtx:150,7045@system.evtx:57,4625@application.evtx:36,4647@security.evtx:14\nEVTX_SECURITY_SELECTED_COUNTS=4624:6564,4672:6415,4648:200,4634:177,4688:150,4647:14\nEVTX_NONSECURITY_SELECTED_COUNTS=7045:57,4625:36\nEVTX_TOP_SELECTED_HOUR_BUCKETS=4624@2016-06-30T14Z:58,4648@2016-06-29T19Z:52,4672@2016-06-30T14Z:46,4624@2016-06-30T15Z:43,7045@2016-03-15T10Z:35,4672@2016-06-30T15Z:35,4624@2016-09-30T11Z:32,4624@2016-06-28T23Z:31,4688@2016-06-30T14Z:30,4624@2016-07-02T01Z:29,4624@2016-08-08T18Z:29,4672@2016-06-28T23Z:27,4624@2016-07-01T22Z:26,4672@2016-09-30T11Z:26,4624@2018-05-12T22Z:26,4624@2016-06-30T16Z:25,4672@2016-07-02T01Z:25,4624@2016-06-29T20Z:24,4672@2016-08-08T18Z:23,4672@2016-07-01T22Z:22,4648@2016-06-29T20Z:21,4688@2016-06-30T15Z:20,4624@2016-10-30T23Z:20,4672@2018-05-12T22Z:20,4672@2016-06-29T20Z:19,4672@2016-06-30T16Z:19,4624@2017-05-20T20Z:19,4624@2016-11-04T13Z:18,4624@2016-07-02T22Z:17,4624@2016-08-08T16Z:17\nSECURITY_4624_LOGON_TYPE_COUNTS=5:6254,7:104,11:102,2:58,3:31,0:15\nSECURITY_4625_LOGON_TYPE_COUNTS=\nSECURITY_4624_AUTH_PACKAGE_COUNTS=Negotiate:6519,NTLM:30,-:15\nSECURITY_4624_TARGET_DOMAIN_HASH12_COUNTS=207ef664c0d4:6299,bab9490cc11d:206,830b7dec09e4:58,9700626a5562:1\nSECURITY_4624_IP_CLASS_COUNTS=NO_IP:6448,LOOPBACK:102,PRIVATE_IP:14\n[... omitted lines 24-96; full output hash below ...]",
+    "excerpt_sha256": "5e59c1717e07b60c12751c8f5a70888c718e90932f5e6c810f27d22f2b3fc1ad"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 10 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "CHROME_DOWNLOAD_TOTAL_ROWS_DEEP=5",
+          "present": true
+        },
+        {
+          "token": "CHROME_DOWNLOAD_EXT_COUNTS=jpg:3,exe:1,zip:1",
+          "present": true
+        },
+        {
+          "token": "CHROME_DOWNLOAD_URL_HOST_CLASS_COUNTS=OTHER_HOST:6",
+          "present": true
+        },
+        {
+          "token": "LNK_DEEP_ROWS=237",
+          "present": true
+        },
+        {
+          "token": "LNK_DEEP_CLASS_COUNTS=NETWORK_PATH:100,DOC_MEDIA_ARCHIVE_EXT:95,REMOVABLE_DRIVE_TYPE:32,CLOUD_TOKEN_PATH:4",
+          "present": true
+        },
+        {
+          "token": "JUMPLIST_AUTOMATIC_DEEP_ROWS=390",
+          "present": true
+        },
+        {
+          "token": "JUMPLIST_AUTOMATIC_DOC_MEDIA_ARCHIVE_EXT_ROWS=204",
+          "present": true
+        },
+        {
+          "token": "JUMPLIST_CUSTOM_APP_TOP_DEEP=GOOGLE CHROME",
+          "present": true
+        },
+        {
+          "token": "WINDOWS POWERSHELL 5.0 64-BIT:3",
+          "present": true
+        },
+        {
+          "token": "DROPBOX APP 5.4.24:1",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T17:56:31.367Z",
+  "prev_receipt_sha256": "ccfcc706185aa343cff1625b0099e360c21472c7a7ae842353995af654a33f03",
+  "receipt_sha256": "7abbc6745d8869bf487dd5eb71eb2013970d0e8af0e24bc2e6c7481b548ef982"
+}

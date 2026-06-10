@@ -1,0 +1,144 @@
+{
+  "finding_id": "F-analyst-VANKO-AUTO-003",
+  "nodeId": "b6bd4efc-19fb-5af0-b2fa-0806b16d4fc0",
+  "case": "VANKO-AUTO",
+  "claim": {
+    "observation": "fls -o 1411072 of surface_physical.E01 lists the root directory of the partition. Entries include NTFS metadata files $MFT, $MFTMirr, $Boot, $LogFile, $Bitmap, $Secure, $UpCase, and $RECYCLE.BIN, alongside directories Windows, Windows.old, Users, ProgramData, Program Files, Program Files (x86), Recovery, $Windows.~GWX and $Windows.~WS, and files hiberfil.sys, pagefile.sys and swapfile.sys.",
+    "interpretation": "The slot-003 partition at sector offset 1411072 is an NTFS filesystem (presence of $MFT, $Boot, $LogFile, $RECYCLE.BIN) hosting a Windows operating system (Windows, ProgramData, Program Files, Users directories). A separate 'Windows.old' directory plus '$Windows.~GWX'/'$Windows.~WS' staging directories indicate a prior Windows installation was retained, consistent with an in-place Windows upgrade/reinstall on this volume. hiberfil.sys/pagefile.sys/swapfile.sys are present. This identifies and characterises the OS volume; it does not establish any user, account, execution, or activity.",
+    "confidence": "HIGH",
+    "content_sha256": "81b8167b300b5bff3bbf64dbb065db1e47e794b32f9e39f76754f927d2aa5150"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01",
+    "locator": "NTFS root @ partition offset 1411072 (fls)",
+    "tool": "fls",
+    "command": "fls -o 1411072 \"/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01\"",
+    "output_sha256": "ce12c9df5f96739feac76ff4ba836f200415083cb291485241add8a29ab318c3"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-AUTO-e931712fecdc9bc2",
+    "execution_record_sha256": "e931712fecdc9bc25601ec98797c385c251cb8e69a22a54e8c7cbfc726c76901",
+    "evidence_excerpt_sha256": "457ed080e6cc2221e26673adc9c63864f8baae9ba569fc7a5abd380ac0a118cb"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "ce12c9df5f96739feac76ff4ba836f200415083cb291485241add8a29ab318c3",
+    "total_chars": 1140,
+    "excerpt_chars": 656,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "d/d 163010-144-1:\tDocuments and Settings\nd/- * 2889:\tUsers\nd/d 81473-144-6:\tProgramData\nd/d 81647-144-5:\tUsers\nr/r 4-128-4:\t$AttrDef\nr/r 8-128-2:\t$BadClus\nr/r 8-128-1:\t$BadClus:$Bad\nr/r 6-128-4:\t$Bitmap\nr/r 7-128-1:\t$Boot\nd/d 11-144-4:\t$Extend\nr/r 2-128-1:\t$LogFile\nr/r 0-128-6:\t$MFT\nr/r 1-128-1:\t$MFTMirr\nd/d 141928-144-1:\t$RECYCLE.BIN\nr/r 9-144-17:\t$Secure:$SDH\nr/r 9-144-16:\t$Secure:$SII\nr/r 9-128-18:\t$Secure:$SDS\nr/r 10-128-1:\t$UpCase\nr/r 10-128-4:\t$UpCase:$Info\nr/r 3-128-3:\t$Volume\nd/d 27560-144-1:\t$Windows.~GWX\nd/d 50158-144-1:\t$Windows.~WS\nr/r 100130-128-1:\tBOOTNXT\nd/d 9743-144-5:\tConfig.Msi\n[... omitted lines 24-43; full output hash below ...]",
+    "excerpt_sha256": "457ed080e6cc2221e26673adc9c63864f8baae9ba569fc7a5abd380ac0a118cb"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 13 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "$MFT",
+          "present": true
+        },
+        {
+          "token": "$Boot",
+          "present": true
+        },
+        {
+          "token": "$LogFile",
+          "present": true
+        },
+        {
+          "token": "$RECYCLE.BIN",
+          "present": true
+        },
+        {
+          "token": "Windows",
+          "present": true
+        },
+        {
+          "token": "Windows.old",
+          "present": true
+        },
+        {
+          "token": "Users",
+          "present": true
+        },
+        {
+          "token": "ProgramData",
+          "present": true
+        },
+        {
+          "token": "Program Files",
+          "present": true
+        },
+        {
+          "token": "Program Files (x86)",
+          "present": true
+        },
+        {
+          "token": "$Windows.~GWX",
+          "present": true
+        },
+        {
+          "token": "hiberfil.sys",
+          "present": true
+        },
+        {
+          "token": "pagefile.sys",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T16:39:57.431Z",
+  "prev_receipt_sha256": "92cb15e3d8552f53d2e61383b62d9276698898f97a39a3318f3ac159d19f3929",
+  "receipt_sha256": "06897047d366f9ddf3bb554fee8392a7a8b51c9e0fb248064f347a4abaef93f1"
+}

@@ -1,0 +1,13 @@
+# Agent Execution Log — case SRL-MEM
+
+Ordered, timestamped event stream from the Council-SIFT audit substrate. Every finding traces to the
+tool execution (with output hash), the Council verdict, and (if verified) the Council Receipt.
+
+| ts | event | actor | finding | detail |
+|---|---|---|---|---|
+| 2026-06-02T23:22:49.834Z | finding_deposited | agent:analyst | F-analyst-SRL-MEM-001 | HIGH — vol3 windows.psscan shows Rar.exe PID 2524 (parent PID 6352) |
+| 2026-06-02T23:22:50.038Z | tool_executed | agent:analyst | F-analyst-SRL-MEM-001 | `vol -q -f /tmp/srlmem/base-file-memory.img windows.psscan | grep -E "Rar.exe|rdpclip.exe|subject_srv|reg.exe" | head -6` → output_sha256 931cf671eece… |
+| 2026-06-02T23:22:50.038Z | tool_executed | agent:analyst | F-analyst-SRL-MEM-002 | `vol -q -f /tmp/srlmem/base-file-memory.img windows.psscan | grep -E "Rar.exe|rdpclip.exe|subject_srv|reg.exe" | head -6` → output_sha256 931cf671eece… |
+| 2026-06-02T23:22:50.377Z | council_refuted | seat:citation→seat:synthesis | F-analyst-SRL-MEM-001 | [seat:tool-semantics] A process listing (psscan/pslist) cannot establish network activity; netscan/netstat is required to claim C2/connections. [seat:inference] Inference overreach (ATTRIBUTION): attribution to a specific actor cannot be established from one artifact — corroborate with intel + multiple artifacts. |
+| 2026-06-02T23:22:50.655Z | finding_deposited | agent:analyst | F-analyst-SRL-MEM-002 | MEDIUM — vol3 windows.psscan shows Rar.exe PID 2524 (parent PID 6352) |
+| 2026-06-02T23:22:51.179Z | council_verified | seat:synthesis | F-analyst-SRL-MEM-002 | receipt e1d79971537e… |

@@ -1,0 +1,132 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-005",
+  "nodeId": "bedff62a-af6e-5bbd-bca3-460700d5ba08",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted EWF fls capture at NTFS offset 1411072 records selected Windows/Prefetch paths for Chrome, OneDrive, Dropbox/DropboxUpdate, CMD, Firefox, Internet Explorer, WinWord, WhatsApp, uTorrent, and 7-Zip families; the listing includes both allocated and deleted-marked entries.",
+    "interpretation": "This corroborates selected Prefetch path presence in the EWF filesystem namespace, separate from the CYLR Prefetch parse. It is path-level corroboration only; it does not establish byte equality with CYLR, Prefetch last-run times from EWF, human operator, intent, or file-transfer direction.",
+    "confidence": "HIGH",
+    "content_sha256": "36dd1e06b9e53fcc68812b3143d885c393b02bea8e231728ee1c576cbedc5db6"
+  },
+  "evidence_pointer": {
+    "artifact": "ewf-fls",
+    "locator": "prefetch-selected:v1",
+    "tool": "fls|grep",
+    "command": "fls -r -p -o 1411072 \"/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01\" | grep -Ei \"Windows/Prefetch/(CHROME|ONEDRIVE|DROPBOX|POWERSHELL|CMD|WHATSAPP|UTORRENT|WINWORD|FIREFOX|IEXPLORE|7Z).*\\.pf\"",
+    "output_sha256": "064718c5e2b2e2498b47c2aa1f4d55484bc2fb74f6ecb4712b938d8bcf235e14"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-f122aee22052dd6a",
+    "execution_record_sha256": "f122aee22052dd6a553f70b8f004ab29b615d23f5fd2c2264287d43cdafac2b0",
+    "evidence_excerpt_sha256": "a28fea86d11bb573aa491e3f29b8789d0009dbff23172338264c27a9e45544ec"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "064718c5e2b2e2498b47c2aa1f4d55484bc2fb74f6ecb4712b938d8bcf235e14",
+    "total_chars": 1434,
+    "excerpt_chars": 1427,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "r/r 33159-128-4:\tWindows/Prefetch/7Z1602-X64.EXE-D5C6A9F5.pf\nr/r 19841-128-4:\tWindows/Prefetch/7ZFM.EXE-44040917.pf\nr/r 36498-128-4:\tWindows/Prefetch/7ZG.EXE-D9AA3A0B.pf\nr/r 15680-128-4:\tWindows/Prefetch/FIREFOX.EXE-D8019162.pf\nr/r 15925-128-4:\tWindows/Prefetch/CMD.EXE-CD245F9E.pf\nr/r 3100-128-4:\tWindows/Prefetch/DROPBOXUPDATE.EXE-E72FEFE1.pf\nr/r 68747-128-4:\tWindows/Prefetch/UTORRENT.EXE-B8C1E45F.pf\nr/- * 79898:\tWindows/Prefetch/WHATSAPPSETUP.EXE-0A1FC195.pf\nr/r 2686-128-4:\tWindows/Prefetch/CHROME.EXE-CCF9F3F5.pf\nr/r 9711-128-4:\tWindows/Prefetch/CMD.EXE-2EB3E6E2.pf\nr/- * 2094:\tWindows/Prefetch/CMD.EXE-2EB3E6E2.pf\nr/- * 37639:\tWindows/Prefetch/CMD.EXE-2EB3E6E2.pf\nr/- * 11531:\tWindows/Prefetch/CMD.EXE-2EB3E6E2.pf\nr/r 10271-128-4:\tWindows/Prefetch/IEXPLORE.EXE-7A9337F2.pf\nr/r 10277-128-4:\tWindows/Prefetch/IEXPLORE.EXE-F4FB5D2F.pf\nr/r 2337-128-4:\tWindows/Prefetch/WINWORD.EXE-4987BA32.pf\nr/- * 0:\tWindows/Prefetch/DROPBOXUPDATE.EXE-E72FEFE1.pf\nr/- * 76151:\tWindows/Prefetch/DROPBOXUPDATE.EXE-E72FEFE1.pf\nr/- * 0:\tWindows/Prefetch/DROPBOXUPDATEONDEMAND.EXE-4977E146.pf\nr/r 10575-128-4:\tWindows/Prefetch/ONEDRIVE.EXE-CA84A5C1.pf\nr/r 80133-128-4:\tWindows/Prefetch/WHATSAPP.EXE-7EF6C991.pf\nr/- * 0:\tWindows/Prefetch/WHATSAPP.EXE-7EF6C991.pf\n-/r * 149508-128-4:\tWindows/Prefetch/DROPBOX.EXE-8DACDCF4.pf\n-/r * 156168-128-4:\tWindows/Prefetch/ONEDRIVESETUP.EXE-F6FEB8A9.pf\n[... omitted lines 24-25; full output hash below ...]",
+    "excerpt_sha256": "a28fea86d11bb573aa491e3f29b8789d0009dbff23172338264c27a9e45544ec"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 10 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "Windows/Prefetch/CHROME.EXE-CCF9F3F5.pf",
+          "present": true
+        },
+        {
+          "token": "Windows/Prefetch/ONEDRIVE.EXE-CA84A5C1.pf",
+          "present": true
+        },
+        {
+          "token": "Windows/Prefetch/DROPBOX.EXE-8DACDCF4.pf",
+          "present": true
+        },
+        {
+          "token": "Windows/Prefetch/CMD.EXE-CD245F9E.pf",
+          "present": true
+        },
+        {
+          "token": "Windows/Prefetch/FIREFOX.EXE-D8019162.pf",
+          "present": true
+        },
+        {
+          "token": "Windows/Prefetch/IEXPLORE.EXE-7A9337F2.pf",
+          "present": true
+        },
+        {
+          "token": "Windows/Prefetch/WINWORD.EXE-4987BA32.pf",
+          "present": true
+        },
+        {
+          "token": "Windows/Prefetch/WHATSAPP.EXE-7EF6C991.pf",
+          "present": true
+        },
+        {
+          "token": "Windows/Prefetch/UTORRENT.EXE-B8C1E45F.pf",
+          "present": true
+        },
+        {
+          "token": "Windows/Prefetch/7ZFM.EXE-44040917.pf",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T18:02:53.805Z",
+  "prev_receipt_sha256": "811db90cb7c1f16bec8463d56db5ba73b9fb97b637062744f3a263823aa2c0f8",
+  "receipt_sha256": "ee53b1bec4c0ef2b3b390f713dd9a2f4ad804a7f4cce011c99a2610d6b38b376"
+}

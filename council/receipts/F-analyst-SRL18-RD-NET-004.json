@@ -1,0 +1,97 @@
+{
+  "finding_id": "F-analyst-SRL18-RD-NET-004",
+  "nodeId": "f7128088-7636-5ae0-ab47-f1d673a48678",
+  "case": "SRL18-RD-NET",
+  "claim": {
+    "observation": "windows.netscan lists a TCPv4 endpoint (offset 0xbda06cf0) with local port 59638 and foreign address 10.10.5.28 foreign port 5985, state CLOSED, owned by PID 392 svchost.exe. The same scan shows this host LISTENING locally on 0.0.0.0:5985 (System, PID 4) and 0.0.0.0:47001 (System).",
+    "interpretation": "TCP 5985 is the WinRM / Windows Remote Management (PowerShell Remoting) HTTP port. In this entry the FOREIGN port is 5985 while the LOCAL port is an ephemeral 59638, which indicates this host acted as the WinRM CLIENT toward 10.10.5.28 -- an OUTBOUND remote-management connection FROM this host TO 10.10.5.28. The CLOSED state means the session was torn down before capture. This is consistent with this host being used to remotely manage/execute against 10.10.5.28 (outbound lateral movement). CAVEAT: netscan evidences the socket and peer, not the commands carried over the WinRM session.",
+    "confidence": "MEDIUM",
+    "content_sha256": "566c9903e36bb8764025b0a0618d828828b455755a7064c2e8e8068cf0348419"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/rd05/base-rd-05-memory.img",
+    "locator": "netscan offset 0xbda06cf0 (local 59638 -> 10.10.5.28:5985 CLOSED, PID 392)",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -f /tmp/rd05/base-rd-05-memory.img windows.netscan",
+    "output_sha256": "974fc6d7847b1a77af92f7e3d405623c5c8adcc3dbb4f7de28b1ca721f0e5c67"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 7 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "59638",
+          "present": true
+        },
+        {
+          "token": "10.10.5.28",
+          "present": true
+        },
+        {
+          "token": "5985",
+          "present": true
+        },
+        {
+          "token": "CLOSED",
+          "present": true
+        },
+        {
+          "token": "svchost.exe",
+          "present": true
+        },
+        {
+          "token": "392",
+          "present": true
+        },
+        {
+          "token": "47001",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:27:37.113Z",
+  "prev_receipt_sha256": "6bce5dd2eb5b66912b30c5f713d8f4e622445188810a82240770371fa050d3b7",
+  "receipt_sha256": "99991e753d49a0f76157d5df6e33e84b7f17c49143b1bed95b77ef3b95f6aee5"
+}

@@ -1,0 +1,105 @@
+{
+  "finding_id": "F-analyst-SRL18-DC-DISK-001",
+  "nodeId": "bc965e13-a81f-57a2-a9ba-ac6d122d6911",
+  "case": "SRL18-DC-DISK",
+  "claim": {
+    "observation": "fls -r -l of inode 69647 (C:\\temp) on the DC NTFS volume lists two subdirectories created 2018-09-05: 'Active Directory' containing 'ntds.dit' (67,108,864 bytes) and 'ntds.jfm' (16,384 bytes), and 'registry' containing 'SYSTEM' (16,252,928 bytes) and 'SECURITY' (65,536 bytes).",
+    "interpretation": "The co-located set ntds.dit + ntds.jfm (the Active Directory database and its ESE checkpoint) together with the SYSTEM and SECURITY registry hives, staged under C:\\temp\\Active Directory and C:\\temp\\registry, is the canonical on-disk output of an 'ntdsutil ... ifm create full c:\\temp' (Install-From-Media) operation. This is a domain-controller credential-theft artifact: ntds.dit holds every domain account's password hash and the SYSTEM hive supplies the boot key needed to decrypt them. The folders are dated 2018-09-05, well after DC provisioning.",
+    "confidence": "HIGH",
+    "content_sha256": "bdd94d564a5d1c8a50614bda6596aea4e5b42318ba0fd49fa27d1cbcf3b5316f"
+  },
+  "evidence_pointer": {
+    "artifact": "C:\\temp (NTFS root) — Active Directory\\ntds.dit, registry\\SYSTEM, registry\\SECURITY",
+    "locator": "inode 69647 (C:\\temp); ntds.dit inode 132832; SYSTEM inode 132833; SECURITY inode 132834; created 2018-09-05 12:16-12:17 UTC",
+    "tool": "fls (The Sleuth Kit)",
+    "command": "fls -r -l \"/mnt/evidence/Compromised APT Attack Scenarios/SRL 2018/base-dc-cdrive.E01\" 69647",
+    "output_sha256": "304fde7d184b027bf723fd4c8231a5c90b01de28db83db25001cb69dfa112a3e"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 9 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "ntds.dit",
+          "present": true
+        },
+        {
+          "token": "ntds.jfm",
+          "present": true
+        },
+        {
+          "token": "SYSTEM",
+          "present": true
+        },
+        {
+          "token": "SECURITY",
+          "present": true
+        },
+        {
+          "token": "Active Directory",
+          "present": true
+        },
+        {
+          "token": "registry",
+          "present": true
+        },
+        {
+          "token": "2018-09-05 12:17:02 (UTC)",
+          "present": true
+        },
+        {
+          "token": "67108864",
+          "present": true
+        },
+        {
+          "token": "16252928",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T02:54:06.639Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "55953c3e72b4fad8614ff185852bb1e6978db1f27d5ba1c3795a985d29b8d787"
+}

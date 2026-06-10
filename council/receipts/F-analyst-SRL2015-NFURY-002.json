@@ -1,0 +1,81 @@
+{
+  "finding_id": "F-analyst-SRL2015-NFURY-002",
+  "nodeId": "0510b231-7ca1-55e4-a23f-325c8ac17627",
+  "case": "SRL2015-NFURY",
+  "claim": {
+    "observation": "Volatility3 windows.netscan on the nfury memory image reports three TCP endpoints from this host to internal address 10.3.58.4: System (PID 4) 10.3.58.6:49325 -> 10.3.58.4:139 CLOSED; lsass.exe (PID 552) :49285 -> 10.3.58.4:135 CLOSED; and lsass.exe (PID 552) :49286 -> 10.3.58.4:49156 CLOSED.",
+    "interpretation": "Host nfury (10.3.58.6) initiated SMB/NetBIOS (139), RPC endpoint-mapper (135), and a dynamically-assigned RPC port (49156) connections to a single internal peer, 10.3.58.4. SMB plus RPC/EPM plus a high dynamic port directed from this host at one internal peer is consistent with host-to-host SMB/RPC access such as remote administration or lateral movement. The fact that lsass.exe (not a user process) owns the RPC sockets is notable. netscan residual sockets alone cannot establish intent, success, or which host was compromised first.",
+    "confidence": "MEDIUM",
+    "content_sha256": "2b1f265db3da1c36c00b5dfa7cafc1670cbf9ad9d5c9a81221489b109244c6a4"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/nfury/win7-64-nfury-memory/win7-64-nfury-memory-raw.001",
+    "locator": "netscan offsets 0x7dbad5e0 (System->139), 0x7dc7d650 (lsass->135), 0x7d8b8cf0 (lsass->49156)",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -f /tmp/nfury/win7-64-nfury-memory/win7-64-nfury-memory-raw.001 windows.netscan",
+    "output_sha256": "01e869325f860643b8ba462cdd156dc2f1a85aff26d29c169e6061abe9623de2"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 3 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "10.3.58.6\t49325\t10.3.58.4\t139\tCLOSED\t4\tSystem",
+          "present": true
+        },
+        {
+          "token": "49285\t10.3.58.4\t135\tCLOSED\t552\tlsass.exe",
+          "present": true
+        },
+        {
+          "token": "49286\t10.3.58.4\t49156\tCLOSED\t552\tlsass.exe",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:41:28.423Z",
+  "prev_receipt_sha256": "748a3efd9c81c7c38bded152111d6885dd81161f097e9aeba33cac6d5f00946f",
+  "receipt_sha256": "b99bc0e6863c29c46408994b9ddd82078ab54fa47a4d4e5fa883044fcfab2e5a"
+}

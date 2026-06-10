@@ -1,0 +1,77 @@
+{
+  "finding_id": "F-analyst-ROCBA-002",
+  "nodeId": "2ee7bd67-9b15-560c-b3fe-432f840e3d41",
+  "case": "ROCBA",
+  "claim": {
+    "observation": "fsstat/fls on rocba-cdrive.e01: NTFS volume 'Windows' serial F0E0FE66E0FE3288 with Users and ProgramData directories present",
+    "interpretation": "Standard Windows system volume; user-profile artifacts available for triage",
+    "confidence": "MEDIUM",
+    "content_sha256": "e4e6c49f117246a06dc37f251e216cf78dfe7a166480e4c90a0ec04874755649"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01",
+    "locator": "ntfs:root",
+    "tool": "fls/fsstat",
+    "command": "fsstat + fls -f ntfs rocba-cdrive.e01",
+    "output_sha256": "fd594eee31dd42b87abfdca6f7881d3d4a956a9e142915e14e524261acda78c1",
+    "rerun_status": "STORED_OUTPUT_ONLY",
+    "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 3 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "F0E0FE66E0FE3288",
+          "present": true
+        },
+        {
+          "token": "Users",
+          "present": true
+        },
+        {
+          "token": "ProgramData",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-02T20:26:07.551Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "4d522fe789b30fd89e1b88ac037439f035b03ef59b9ed8277bb30e2eccfcf48d",
+  "rerun_status": "STORED_OUTPUT_ONLY",
+  "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here.",
+  "receipt_hash_scope_note": "receipt_sha256 is the original Council receipt hash; rerun_status fields are Tier 2 audit metadata labels."
+}

@@ -1,0 +1,180 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-029",
+  "nodeId": "19b5e079-e619-5108-bd3f-04f66f1933df",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted Security.evtx target-window payload summary records 14 selected Security rows from 2018-05-13T10:05:00Z..10:15:59Z: 4624=6, 4672=4, 4648=2, 4634=2. The six 4624 logons are LogonType 11:2, 7:2, and 5:2, with IP classes NO_IP:4 and LOOPBACK:2. The two 4648 explicit-credential rows target LOCALHOST. No raw user, domain, or IP values are emitted.",
+    "interpretation": "This supports a bounded Security-logon account/session timing layer in the target window. It does not identify the human operator and does not establish file transfer, browser upload, completed cloud sync, or provider-side receipt. The absence of remote IP classes in these rows is scoped to this selected Security.evtx window summary only.",
+    "confidence": "HIGH",
+    "content_sha256": "2088655c1f2f1f356ed1c63ee8ba64f2fec12b4140b4ac040ae3a6267a641723"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "security-logon-window:v2",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_logon_window_out/security_logon_window_summary.txt",
+    "output_sha256": "0d1eec897908d85712d151e71def15f676cf6db89e40bf25dbaa005b45618aba"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-402aac29d4cb829c",
+    "execution_record_sha256": "402aac29d4cb829c3abd923dfbef2f145166e5b826cb1625ff9e2cff6363c09c",
+    "evidence_excerpt_sha256": "08f3c63c55f7aa15436b27796203cde9c593c9469c646987b1303273e334a4c9"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "0d1eec897908d85712d151e71def15f676cf6db89e40bf25dbaa005b45618aba",
+    "total_chars": 3415,
+    "excerpt_chars": 1605,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_SECURITY_LOGON_WINDOW_V2=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nEVTX_CSV_EXISTS=1\nEVTX_CSV_SHA256=a666272795ede464c014b955a033c4bf3c027e89a0656320505fb0bec02488e4\nSECURITY_WINDOW_SELECTED_ROWS=14\nSECURITY_WINDOW_PAYLOAD_PARSE_EMPTY_ROWS=0\nNONSECURITY_WINDOW_SELECTED_ROWS_SKIPPED=0\nSECURITY_WINDOW_SELECTED_EVENT_COUNTS=4624:6,4672:4,4648:2,4634:2\nSECURITY_WINDOW_SOURCE_COUNTS=security.evtx:14\nSECURITY_EVENT_4624_WINDOW_TIME_RANGE=2018-05-13T10:05:36Z..2018-05-13T10:08:55Z\nSECURITY_EVENT_4634_WINDOW_TIME_RANGE=2018-05-13T10:05:36Z..2018-05-13T10:05:36Z\nSECURITY_EVENT_4647_WINDOW_TIME_RANGE=..\nSECURITY_EVENT_4648_WINDOW_TIME_RANGE=2018-05-13T10:05:36Z..2018-05-13T10:05:36Z\nSECURITY_EVENT_4672_WINDOW_TIME_RANGE=2018-05-13T10:05:36Z..2018-05-13T10:08:55Z\nSECURITY_EVENT_4778_WINDOW_TIME_RANGE=..\nSECURITY_EVENT_4779_WINDOW_TIME_RANGE=..\nSECURITY_4624_WINDOW_LOGON_TYPE_COUNTS=11:2,7:2,5:2\nSECURITY_4624_WINDOW_LOGON_PROCESS_COUNTS=User32 :2,Negotiat:2,Advapi  :2\nSECURITY_4624_WINDOW_IP_CLASS_COUNTS=NO_IP:4,LOOPBACK:2\nSECURITY_4624_WINDOW_WORKSTATION_CLASS_COUNTS=NAME_ONLY:4,BLANK:2\nSECURITY_4624_WINDOW_TARGET_USER_HASH12_COUNTS=9c3e8038e975:4,d621c1a7169f:2\nSECURITY_4624_WINDOW_TARGET_DOMAIN_HASH12_COUNTS=bab9490cc11d:4,207ef664c0d4:2\nSECURITY_4624_WINDOW_LOGON_ID_HASH12_COUNTS=987ecdc3a7e6:2,74516503efd1:1,361931eef92e:1,09b6147273f3:1,5f3ccbc2b413:1\nSECURITY_4624_WINDOW_ROW=TIME=2018-05-13T10:05:36Z;LOGON_TYPE=11;IP_CLASS=LOOPBACK;USER_HASH12=9c3e8038e975;DOMAIN_HASH12=bab9490cc11d;LOGON_ID_HASH12=74516503efd1\n[... omitted lines 24-45; full output hash below ...]",
+    "excerpt_sha256": "08f3c63c55f7aa15436b27796203cde9c593c9469c646987b1303273e334a4c9"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 22 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_SECURITY_LOGON_WINDOW_V2=1",
+          "present": true
+        },
+        {
+          "token": "WINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z",
+          "present": true
+        },
+        {
+          "token": "EVTX_CSV_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "SECURITY_WINDOW_SELECTED_ROWS=14",
+          "present": true
+        },
+        {
+          "token": "SECURITY_WINDOW_PAYLOAD_PARSE_EMPTY_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "NONSECURITY_WINDOW_SELECTED_ROWS_SKIPPED=0",
+          "present": true
+        },
+        {
+          "token": "SECURITY_WINDOW_SELECTED_EVENT_COUNTS=4624:6,4672:4,4648:2,4634:2",
+          "present": true
+        },
+        {
+          "token": "SECURITY_WINDOW_SOURCE_COUNTS=security.evtx:14",
+          "present": true
+        },
+        {
+          "token": "SECURITY_EVENT_4624_WINDOW_TIME_RANGE=2018-05-13T10:05:36Z..2018-05-13T10:08:55Z",
+          "present": true
+        },
+        {
+          "token": "SECURITY_EVENT_4648_WINDOW_TIME_RANGE=2018-05-13T10:05:36Z..2018-05-13T10:05:36Z",
+          "present": true
+        },
+        {
+          "token": "SECURITY_EVENT_4778_WINDOW_TIME_RANGE=..",
+          "present": true
+        },
+        {
+          "token": "SECURITY_EVENT_4779_WINDOW_TIME_RANGE=..",
+          "present": true
+        },
+        {
+          "token": "SECURITY_4624_WINDOW_LOGON_TYPE_COUNTS=11:2,7:2,5:2",
+          "present": true
+        },
+        {
+          "token": "SECURITY_4624_WINDOW_IP_CLASS_COUNTS=NO_IP:4,LOOPBACK:2",
+          "present": true
+        },
+        {
+          "token": "SECURITY_4624_WINDOW_WORKSTATION_CLASS_COUNTS=NAME_ONLY:4,BLANK:2",
+          "present": true
+        },
+        {
+          "token": "SECURITY_4648_WINDOW_PROCESS_BASENAME_COUNTS=SVCHOST.EXE:1,LSASS.EXE:1",
+          "present": true
+        },
+        {
+          "token": "SECURITY_4648_WINDOW_TARGET_SERVER_CLASS_COUNTS=LOCALHOST:2",
+          "present": true
+        },
+        {
+          "token": "RAW_USER_OR_DOMAIN_VALUES_EMITTED=0",
+          "present": true
+        },
+        {
+          "token": "RAW_IP_VALUES_EMITTED=0",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=security_logon_events_support_account_session_timing_not_human_operator_identity",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=no_single_logon_event_establishes_file_transfer_or_cloud_upload_completion",
+          "present": true
+        },
+        {
+          "token": "security.evtx",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T20:50:08.121Z",
+  "prev_receipt_sha256": "8197216324711849f90e5137855c83429d7a0e05a56ce24719ea750e9bc9d9d5",
+  "receipt_sha256": "3d7b21e257d0a9f0ec2516bab718d529254a298123405f6d98a3aae27eb68abb"
+}

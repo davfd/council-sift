@@ -1,0 +1,93 @@
+{
+  "finding_id": "F-analyst-SRL2015-NFURY-004",
+  "nodeId": "feeb5406-d605-57be-8e5c-a7356349d7dc",
+  "case": "SRL2015-NFURY",
+  "claim": {
+    "observation": "ASCII strings extracted from the $DATA of NTFS inode 80517 (identified by fls/istat as Users/vibranium/AppData/Local/Temp/a.exe, a 9216-byte PE) include the embedded PDB path c:\\code\\httppump\\inner\\objchk_wxp_x86\\i386\\i.pdb and the imported APIs WriteProcessMemory, GetCurrentProcess, GetProcAddress, LoadLibraryA, VirtualAlloc and CreateThread.",
+    "interpretation": "a.exe is a small (~9 KB) standalone PE staged in a user's Temp directory whose import set (VirtualAlloc + WriteProcessMemory + CreateThread + LoadLibraryA + GetProcAddress) is the canonical primitive sequence for allocating memory and injecting/executing shellcode in a process. It carries a non-vendor developer PDB path (c:\\code\\httppump\\...\\i.pdb) and no legitimate publisher metadata. This is consistent with a malicious code-injection loader/stager rather than legitimate software. Static strings alone do not prove it executed or identify its C2.",
+    "confidence": "MEDIUM",
+    "content_sha256": "ab4981a63bb8f6b9de6f819ee53d6013e24262eb1ecc617fb586c93d87442b76"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/nfury/win7-64-nfury-c-drive/win7-64-nfury-c-drive.E01",
+    "locator": "NTFS inode 80517; Users/vibranium/AppData/Local/Temp/a.exe",
+    "tool": "sleuthkit icat + strings",
+    "command": "icat /tmp/nfury/win7-64-nfury-c-drive/win7-64-nfury-c-drive.E01 80517 | strings",
+    "output_sha256": "1c622d69294c39af31a649d193738ae2690d61fa80195cca1a4a20a0e6bc8578"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 6 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "c:\\code\\httppump\\inner\\objchk_wxp_x86\\i386\\i.pdb",
+          "present": true
+        },
+        {
+          "token": "WriteProcessMemory",
+          "present": true
+        },
+        {
+          "token": "VirtualAlloc",
+          "present": true
+        },
+        {
+          "token": "CreateThread",
+          "present": true
+        },
+        {
+          "token": "LoadLibraryA",
+          "present": true
+        },
+        {
+          "token": "GetProcAddress",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:49:57.274Z",
+  "prev_receipt_sha256": "aa84d701610278dcc501dff015981c59425ff414d5baf0788702d51f885e2df7",
+  "receipt_sha256": "cd7e5b6035061151998d3d1025d7f3d4ca588b24823881ff5fe539ee56326d6c"
+}

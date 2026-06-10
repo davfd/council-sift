@@ -1,0 +1,74 @@
+{
+  "description": "Labeled finding set for the Council ablation. Each finding carries its own tool output and a ground-truth label (supported = every cited token is in the output; unsupported = at least one cited token is hallucinated/absent).",
+  "findings": [
+    {
+      "id": "mem-supported",
+      "observation": "psscan shows p.exe PID 8260 with parent cmd.exe PID 5948",
+      "cited_tokens": ["8260", "5948"],
+      "output": "8260   p.exe   5948   cmd.exe   C:\\Windows\\Temp\\perfmon\\p.exe",
+      "truth": "supported"
+    },
+    {
+      "id": "mem-hallucinated-c2",
+      "observation": "p.exe PID 8260 established a C2 channel to 185.220.101.45",
+      "cited_tokens": ["8260", "185.220.101.45"],
+      "output": "8260   p.exe   5948   cmd.exe   C:\\Windows\\Temp\\perfmon\\p.exe",
+      "truth": "unsupported"
+    },
+    {
+      "id": "tsk-supported",
+      "observation": "fls shows p.exe recovered at inode 12 under lost+found",
+      "cited_tokens": ["12", "p.exe"],
+      "output": "d/d 11:\tlost+found\nr/r 12:\tp.exe\nV/V 4097:\t$OrphanFiles",
+      "truth": "supported"
+    },
+    {
+      "id": "tsk-hallucinated-inode",
+      "observation": "fls shows a hidden rootkit driver staged at inode 99",
+      "cited_tokens": ["99"],
+      "output": "d/d 11:\tlost+found\nr/r 12:\tp.exe\nV/V 4097:\t$OrphanFiles",
+      "truth": "unsupported"
+    },
+    {
+      "id": "hash-supported",
+      "observation": "the dropped binary matches known-bad SHA1 da39a3ee5e6b4b0d3255bfef95601890afd80709",
+      "cited_tokens": ["da39a3ee5e6b4b0d3255bfef95601890afd80709"],
+      "output": "yara hit: EvilDropper  /cases/p.exe  sha1=da39a3ee5e6b4b0d3255bfef95601890afd80709",
+      "truth": "supported"
+    },
+    {
+      "id": "hash-hallucinated",
+      "observation": "the binary matches known-bad SHA1 1111111111111111111111111111111111111111",
+      "cited_tokens": ["1111111111111111111111111111111111111111"],
+      "output": "yara hit: EvilDropper  /cases/p.exe  sha1=da39a3ee5e6b4b0d3255bfef95601890afd80709",
+      "truth": "unsupported"
+    },
+    {
+      "id": "mem-toolmisread",
+      "observation": "vol3 windows.psscan shows p.exe PID 8260 running",
+      "interpretation": "p.exe is actively beaconing C2 to its handler",
+      "cited_tokens": ["8260"],
+      "output": "8260   p.exe   5948   cmd.exe   C:\\Windows\\Temp\\perfmon\\p.exe",
+      "truth": "unsupported",
+      "note": "all cited tokens are real (Citation passes); the C2 inference is unsupportable from a process listing — caught by Tool-semantics"
+    },
+    {
+      "id": "tsk-timestomp",
+      "observation": "MFT entry for evil.dll: $SI 2021-01-01 00:00:00, $FN 2026-05-30 14:22:10",
+      "interpretation": "evil.dll was created on 2021-01-01 per its $SI timestamp",
+      "cited_tokens": ["evil.dll"],
+      "output": "MFT 4521  evil.dll  $SI 2021-01-01 00:00:00  $FN 2026-05-30 14:22:10",
+      "truth": "unsupported",
+      "note": "cited token present (Citation passes); $SI contradicts $FN (timestomp) — caught by Contradiction"
+    },
+    {
+      "id": "inference-overreach",
+      "observation": "fls shows p.exe recovered at inode 12",
+      "interpretation": "This proves APT29 deliberately deployed p.exe to exfiltrate data",
+      "cited_tokens": ["12", "p.exe"],
+      "output": "d/d 11:\tlost+found\nr/r 12:\tp.exe\nV/V 4097:\t$OrphanFiles",
+      "truth": "unsupported",
+      "note": "all tokens real (Citation passes), fls used correctly (Tool-semantics passes), no $SI/$FN (Contradiction passes) — only Inference catches the attribution+intent+certainty overreach"
+    }
+  ]
+}

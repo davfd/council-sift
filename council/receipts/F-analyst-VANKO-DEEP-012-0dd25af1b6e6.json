@@ -1,0 +1,168 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-012",
+  "nodeId": "6e700b0c-a13a-5818-ab14-3a25b3b74e93",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted full Prefetch drift summary maps allocated EWF Prefetch entries at NTFS offset 1411072 against CYLR same-name Prefetch files. FLS found 280 EWF Prefetch entries: 153 allocated and 127 deleted-marked. All 153 allocated entries extracted with icat and parsed with pyscca as Prefetch v30. Of the 153 allocated EWF entries, 144 had CYLR same-name files and 9 did not; among the 144 pairs, 100 were byte/semantic equal and 44 were byte/semantic different.",
+    "interpretation": "This is a filename-pair drift map for allocated EWF Prefetch items versus the CYLR Prefetch surface. It supports per-file snapshot discipline: many pairs align exactly, while 44 same-name pairs differ in parsed Prefetch semantics and have CYLR latest-run timestamps newer than EWF latest-run timestamps.",
+    "confidence": "HIGH",
+    "content_sha256": "f43e174ac78beb2b51c47d2a974e260138a41334634d85fff2a68bb937c8fb0d"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "prefetch-full-drift:v1",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_prefetch_full_out/prefetch_full_drift_summary.txt",
+    "output_sha256": "5039158e0504c4870fd80ab82977af5057928dc82701200480fe1ca598a2494a"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-8f564d91f8220c41",
+    "execution_record_sha256": "8f564d91f8220c41f269f6901e259055a64c7cbfaf0de5ed393448f13acbbec1",
+    "evidence_excerpt_sha256": "3fdf42f18b41b4c52cbd01985060cdf123328922b992d13284cec64a5757c639"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "5039158e0504c4870fd80ab82977af5057928dc82701200480fe1ca598a2494a",
+    "total_chars": 8943,
+    "excerpt_chars": 808,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_PREFETCH_FULL_DRIFT_V1=1\nEWF_IMAGE_EXISTS=1\nEWF_NTFS_OFFSET=1411072\nCYLR_PREFETCH_DIR_EXISTS=1\nPYSCCA_AVAILABLE=1\nFLS_RC=0\nFLS_STDERR_SHA256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nEWF_PREFETCH_FLS_TOTAL_PF_ENTRIES=280\nEWF_PREFETCH_ALLOCATED_PF_ENTRIES=153\nEWF_PREFETCH_DELETED_MARKED_PF_ENTRIES=127\nCYLR_PREFETCH_TOTAL_PF_FILES=238\nEWF_PREFETCH_ICAT_OK=153\nEWF_PREFETCH_ICAT_ERROR=0\nEWF_PREFETCH_EWF_PARSE_OK=153\nEWF_PREFETCH_EWF_PARSE_ERROR=0\nEWF_PREFETCH_CYLR_EXISTS=144\nEWF_PREFETCH_CYLR_MISSING=9\nEWF_PREFETCH_BYTE_EQUAL=100\nEWF_PREFETCH_BYTE_DIFFERENT=44\nEWF_PREFETCH_CYLR_PARSE_OK=144\nEWF_PREFETCH_CYLR_PARSE_ERROR=0\nEWF_PREFETCH_PAIRED_PARSE_OK=144\nEWF_PREFETCH_SEMANTIC_EQUAL=100\nEWF_PREFETCH_SEMANTIC_DIFFERENT=44\n[... omitted lines 24-51; full output hash below ...]",
+    "excerpt_sha256": "3fdf42f18b41b4c52cbd01985060cdf123328922b992d13284cec64a5757c639"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 19 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "EWF_PREFETCH_FLS_TOTAL_PF_ENTRIES=280",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_ALLOCATED_PF_ENTRIES=153",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_DELETED_MARKED_PF_ENTRIES=127",
+          "present": true
+        },
+        {
+          "token": "CYLR_PREFETCH_TOTAL_PF_FILES=238",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_ICAT_OK=153",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_ICAT_ERROR=0",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_EWF_PARSE_OK=153",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_EWF_PARSE_ERROR=0",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_CYLR_EXISTS=144",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_CYLR_MISSING=9",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_BYTE_EQUAL=100",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_BYTE_DIFFERENT=44",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_PAIRED_PARSE_OK=144",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_SEMANTIC_EQUAL=100",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_SEMANTIC_DIFFERENT=44",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_VERSION_COUNTS=30:153",
+          "present": true
+        },
+        {
+          "token": "EWF_PREFETCH_LATEST_RELATION_COUNTS=latest_equal:100,cylr_latest_newer:44",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=full_prefetch_drift_map_counts_allocated_ewf_prefetch_entries_only_deleted_marked_entries_counted_but_not_parsed_here",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=same_name_comparison_is_prefetch_filename_based_not_global_snapshot_identity",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T18:45:17.765Z",
+  "prev_receipt_sha256": "b58c10b86921250f1432309afc02dcce879235d21fed9ba26dbeb7cbb3eb4078",
+  "receipt_sha256": "0dd25af1b6e687544e73e96bbed0a25db558860b2301b54539708edad61eb7a6"
+}

@@ -1,0 +1,108 @@
+{
+  "case": "VANKO-DEEP",
+  "core_artifacts": {
+    "control_summary": {
+      "path": "/tmp/vanko_final_synthesis_out/final_synthesis_control_summary.txt"
+    },
+    "execution_log_jsonl": {
+      "path": "execution-logs/VANKO-DEEP.jsonl",
+      "sha256": "8bd21ac1bcfb75f68c3b57a0c0c860553b5089ac02de5dcbf57136890defde93"
+    },
+    "execution_log_md": {
+      "path": "execution-logs/VANKO-DEEP.md",
+      "sha256": "f16a0e6f3f1c77e753a6c45f46fc4743323d1539339c28111b317d0286ef0fd6"
+    },
+    "final_synthesis_report": {
+      "path": "reports/VANKO-DEEP-FINAL-CASE-SYNTHESIS.md",
+      "sha256": "55f1ab07554bf81a72bc1cf077ab40224a4dde3a0d46438f5466e001d1c7f7c5"
+    },
+    "main_report": {
+      "path": "reports/VANKO-DEEP.md",
+      "sha256": "580ec087c6469fde669553676b267fc03cab77825b7f7f9d9bc3aa6d74413aad"
+    }
+  },
+  "current_state": {
+    "council_verified_findings": 31,
+    "drafted_findings": 36,
+    "latest_verified_finding": "F-analyst-VANKO-DEEP-036",
+    "note": "Counts describe evidence findings before final packaging-control audit; subsequent control findings do not change disk-image posture.",
+    "receipt_file_count": 31,
+    "self_corrected_disputed_drafts": 5
+  },
+  "generated_utc": "2026-06-09T23:31:10Z",
+  "receipt_files": [
+    "council/receipts/F-analyst-VANKO-DEEP-001-7a0046507ca4.json",
+    "council/receipts/F-analyst-VANKO-DEEP-002-ccfcc706185a.json",
+    "council/receipts/F-analyst-VANKO-DEEP-003-7abbc6745d88.json",
+    "council/receipts/F-analyst-VANKO-DEEP-004-811db90cb7c1.json",
+    "council/receipts/F-analyst-VANKO-DEEP-005-ee53b1bec4c0.json",
+    "council/receipts/F-analyst-VANKO-DEEP-006-36bf34e5ea8b.json",
+    "council/receipts/F-analyst-VANKO-DEEP-007-c249f5166161.json",
+    "council/receipts/F-analyst-VANKO-DEEP-008-ea937ca376f5.json",
+    "council/receipts/F-analyst-VANKO-DEEP-011-b58c10b86921.json",
+    "council/receipts/F-analyst-VANKO-DEEP-012-0dd25af1b6e6.json",
+    "council/receipts/F-analyst-VANKO-DEEP-013-4ac00159a1e8.json",
+    "council/receipts/F-analyst-VANKO-DEEP-014-2f3f64f78ae3.json",
+    "council/receipts/F-analyst-VANKO-DEEP-015-c576ad9143b6.json",
+    "council/receipts/F-analyst-VANKO-DEEP-016-18227e4a0485.json",
+    "council/receipts/F-analyst-VANKO-DEEP-017-369b1f758e49.json",
+    "council/receipts/F-analyst-VANKO-DEEP-018-9ae23ef67957.json",
+    "council/receipts/F-analyst-VANKO-DEEP-019-0d17c806955f.json",
+    "council/receipts/F-analyst-VANKO-DEEP-020-9ad33dd375cb.json",
+    "council/receipts/F-analyst-VANKO-DEEP-021-bf6e3f66aa07.json",
+    "council/receipts/F-analyst-VANKO-DEEP-022-c0fd252f2f23.json",
+    "council/receipts/F-analyst-VANKO-DEEP-023-5c39e118f956.json",
+    "council/receipts/F-analyst-VANKO-DEEP-024-e33b0ddd3bbe.json",
+    "council/receipts/F-analyst-VANKO-DEEP-026-5fdfe5e1ac5e.json",
+    "council/receipts/F-analyst-VANKO-DEEP-028-819721632471.json",
+    "council/receipts/F-analyst-VANKO-DEEP-029-3d7b21e257d0.json",
+    "council/receipts/F-analyst-VANKO-DEEP-030-9405dfcc8c2e.json",
+    "council/receipts/F-analyst-VANKO-DEEP-032-7a054a80068c.json",
+    "council/receipts/F-analyst-VANKO-DEEP-033-48d49e96660a.json",
+    "council/receipts/F-analyst-VANKO-DEEP-034-e01b7f287b1f.json",
+    "council/receipts/F-analyst-VANKO-DEEP-035-6c52563883df.json",
+    "council/receipts/F-analyst-VANKO-DEEP-036-b5da1f04b29a.json"
+  ],
+  "scope": "final operator synthesis and submission packet; evidence-state counts are pre packaging-control audit; no new disk-image forensic claim",
+  "self_corrected_draft_ids": [
+    "F-analyst-VANKO-DEEP-009",
+    "F-analyst-VANKO-DEEP-010",
+    "F-analyst-VANKO-DEEP-025",
+    "F-analyst-VANKO-DEEP-027",
+    "F-analyst-VANKO-DEEP-031"
+  ],
+  "stop_condition": "do not continue local negative-boundary scans unless a new positive lead, specific theory test, settling receipt, server-side audit source, or demo need appears",
+  "verified_finding_ids": [
+    "F-analyst-VANKO-DEEP-001",
+    "F-analyst-VANKO-DEEP-002",
+    "F-analyst-VANKO-DEEP-003",
+    "F-analyst-VANKO-DEEP-004",
+    "F-analyst-VANKO-DEEP-005",
+    "F-analyst-VANKO-DEEP-006",
+    "F-analyst-VANKO-DEEP-007",
+    "F-analyst-VANKO-DEEP-008",
+    "F-analyst-VANKO-DEEP-011",
+    "F-analyst-VANKO-DEEP-012",
+    "F-analyst-VANKO-DEEP-013",
+    "F-analyst-VANKO-DEEP-014",
+    "F-analyst-VANKO-DEEP-015",
+    "F-analyst-VANKO-DEEP-016",
+    "F-analyst-VANKO-DEEP-017",
+    "F-analyst-VANKO-DEEP-018",
+    "F-analyst-VANKO-DEEP-019",
+    "F-analyst-VANKO-DEEP-020",
+    "F-analyst-VANKO-DEEP-021",
+    "F-analyst-VANKO-DEEP-022",
+    "F-analyst-VANKO-DEEP-023",
+    "F-analyst-VANKO-DEEP-024",
+    "F-analyst-VANKO-DEEP-026",
+    "F-analyst-VANKO-DEEP-028",
+    "F-analyst-VANKO-DEEP-029",
+    "F-analyst-VANKO-DEEP-030",
+    "F-analyst-VANKO-DEEP-032",
+    "F-analyst-VANKO-DEEP-033",
+    "F-analyst-VANKO-DEEP-034",
+    "F-analyst-VANKO-DEEP-035",
+    "F-analyst-VANKO-DEEP-036"
+  ]
+}

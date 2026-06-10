@@ -1,0 +1,81 @@
+{
+  "finding_id": "F-analyst-ROCBA-MEM-002",
+  "nodeId": "e1ebcb4c-2539-5111-a2ae-6844a68b899a",
+  "case": "ROCBA-MEM",
+  "claim": {
+    "observation": "vol3 windows.netscan shows process svchost.exe with PID 1248 owning TCP sockets in the LISTENING state on local address 0.0.0.0 port 3389 (TCPv4) and :: port 3389 (TCPv6), created 2020-11-11 08:13:16 UTC.",
+    "interpretation": "The Windows Remote Desktop Protocol service (Terminal Services, which runs inside an svchost.exe instance) is bound and listening on port 3389 across all network interfaces (0.0.0.0 / ::), meaning the host accepts inbound RDP connections from any network, including external networks. This exposes a remote-access service on the workstation.",
+    "confidence": "HIGH",
+    "content_sha256": "b09e3ba03840f4f8ca46166ef97adf5cf5a6243573ab761fe43447e2ee0c0e89"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/rocbamem/Rocba-Memory.raw",
+    "locator": "PID 1248; TCP 0.0.0.0:3389 LISTENING; socket offset 0xb78cfadb94f0",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -f /tmp/rocbamem/Rocba-Memory.raw windows.netscan",
+    "output_sha256": "4a02f60c9ce8a134d0a4ad38af47cc59d5c8cfc8430e694189e6551028e7e30d"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 3 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "0.0.0.0\t3389\t0.0.0.0\t0\tLISTENING\t1248\tsvchost.exe",
+          "present": true
+        },
+        {
+          "token": "::\t3389\t::\t0\tLISTENING\t1248\tsvchost.exe",
+          "present": true
+        },
+        {
+          "token": "2020-11-11 08:13:16.000000 UTC",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:32:46.500Z",
+  "prev_receipt_sha256": "e85d2b806bf5922f7ceada0b92572e3163860b0f02da6cd24ccaca494d0a3517",
+  "receipt_sha256": "2501f3fda015830f6650d3c5131149c52b7728df31637718db280b6a8ab282b6"
+}

@@ -1,0 +1,116 @@
+{
+  "finding_id": "F-analyst-VANKO-003",
+  "nodeId": "4bff5758-3c69-5050-8e10-1da4e4cff83c",
+  "case": "VANKO",
+  "claim": {
+    "observation": "The root directory listing at offset 1411072 includes Windows/user directories and deleted root entries runme.cmd and version.txt.",
+    "interpretation": "The main partition exposes a Windows filesystem surface suitable for deeper artifact digs. The deleted runme/version entries are investigative leads only; this listing alone does not prove execution, persistence, or operator attribution.",
+    "confidence": "MEDIUM",
+    "content_sha256": "aabc0b298b83c13bda0b36defcdb4c3417849cbe516120b4a15066cfc06e5a6a"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01",
+    "locator": "fls:offset-1411072-root",
+    "tool": "fls",
+    "command": "fls -o 1411072 '/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01' | sed -n '1,120p'",
+    "output_sha256": "ce12c9df5f96739feac76ff4ba836f200415083cb291485241add8a29ab318c3"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-2174beea415cbab5",
+    "execution_record_sha256": "2174beea415cbab5af216fa183e593b05ddd6949e3f55c2ede3257da4e79cba5",
+    "evidence_excerpt_sha256": "457ed080e6cc2221e26673adc9c63864f8baae9ba569fc7a5abd380ac0a118cb"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "ce12c9df5f96739feac76ff4ba836f200415083cb291485241add8a29ab318c3",
+    "total_chars": 1140,
+    "excerpt_chars": 656,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "d/d 163010-144-1:\tDocuments and Settings\nd/- * 2889:\tUsers\nd/d 81473-144-6:\tProgramData\nd/d 81647-144-5:\tUsers\nr/r 4-128-4:\t$AttrDef\nr/r 8-128-2:\t$BadClus\nr/r 8-128-1:\t$BadClus:$Bad\nr/r 6-128-4:\t$Bitmap\nr/r 7-128-1:\t$Boot\nd/d 11-144-4:\t$Extend\nr/r 2-128-1:\t$LogFile\nr/r 0-128-6:\t$MFT\nr/r 1-128-1:\t$MFTMirr\nd/d 141928-144-1:\t$RECYCLE.BIN\nr/r 9-144-17:\t$Secure:$SDH\nr/r 9-144-16:\t$Secure:$SII\nr/r 9-128-18:\t$Secure:$SDS\nr/r 10-128-1:\t$UpCase\nr/r 10-128-4:\t$UpCase:$Info\nr/r 3-128-3:\t$Volume\nd/d 27560-144-1:\t$Windows.~GWX\nd/d 50158-144-1:\t$Windows.~WS\nr/r 100130-128-1:\tBOOTNXT\nd/d 9743-144-5:\tConfig.Msi\n[... omitted lines 24-43; full output hash below ...]",
+    "excerpt_sha256": "457ed080e6cc2221e26673adc9c63864f8baae9ba569fc7a5abd380ac0a118cb"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 6 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "Program Files",
+          "present": true
+        },
+        {
+          "token": "ProgramData",
+          "present": true
+        },
+        {
+          "token": "Users",
+          "present": true
+        },
+        {
+          "token": "Windows",
+          "present": true
+        },
+        {
+          "token": "runme.cmd",
+          "present": true
+        },
+        {
+          "token": "version.txt",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T16:33:56.023Z",
+  "prev_receipt_sha256": "6fbcf0294e56f157b7bc9f79605d5c6c8d9d96f87c2ddb6744286114902b14dd",
+  "receipt_sha256": "d895d4b3652cbecfb8afe77ff5b71a8aa9129bbf09f956aa1fcbf1666d63f1a1"
+}

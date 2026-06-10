@@ -1,0 +1,140 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-013",
+  "nodeId": "0dfbe55a-7e49-56eb-8f90-1fdc1385fb70",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted MFT/USN extraction summary records EWF-derived $MFT and $UsnJrnl:$J binaries plus MFTECmd CSV outputs. $MFT is 325,320,704 bytes with SHA256 719d3220..., $UsnJrnl:$J is 2,665,094,304 bytes with SHA256 af296415..., MFT CSV is 188,373,476 bytes, and USN CSV is 58,044,743 bytes.",
+    "interpretation": "This establishes the read-only filesystem-metadata inputs and parser outputs used for the target-window filesystem-journal check.",
+    "confidence": "HIGH",
+    "content_sha256": "6894b35dff2fd900ee9a8eb16f8dc08954c288b9e031e3203f22681a1ec5712c"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "mft-usn-window:v2",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_mft_usn_window_out/mft_usn_window_summary_v2.txt",
+    "output_sha256": "28edb118f0a79ab8ae638453bf6476b40ac7a4869653844601e9b95976d09dc6"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-01097382f470f489",
+    "execution_record_sha256": "01097382f470f4895ab779cf8df56b3d27c862c77eb3313aac80f7be71874d02",
+    "evidence_excerpt_sha256": "969bad5c5a69b8c549c879694fa7b8a8c3b33ce11072611aae60321914d7d1f7"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "28edb118f0a79ab8ae638453bf6476b40ac7a4869653844601e9b95976d09dc6",
+    "total_chars": 1330,
+    "excerpt_chars": 1001,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_MFT_USN_WINDOW_V2=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nMFT_BIN_EXISTS=1\nMFT_BIN_SIZE=325320704\nMFT_BIN_SHA256=719d322022c7c783f3a80e5bf7bad17912ce14a251a3e6fdb94d7c0a4fc93a93\nUSN_J_BIN_EXISTS=1\nUSN_J_BIN_SIZE=2665094304\nUSN_J_BIN_SHA256=af29641589bd3a43d156504531e4751d10054a832b4d97a5b482b6e4847acd93\nMFT_CSV_EXISTS=1\nMFT_CSV_SIZE=188373476\nMFT_CSV_SHA256=1e8528fe67560d4d87f9b3bfca3d90723125f50c3f4b6ac414175769b3d70458\nUSN_CSV_EXISTS=1\nUSN_CSV_SIZE=58044743\nUSN_CSV_SHA256=23d2b5b4d8a529439bf05ea7a9999c69047752af96cb4e4e88ef2435e4b44c7b\nUSN_TOTAL_ROWS=210168\nUSN_GLOBAL_TIME_RANGE=2016-11-04T13:28:03Z..2016-11-04T17:51:17Z\nUSN_RETAINED_RANGE_OVERLAPS_TARGET_WINDOW=0\nUSN_WINDOW_ROWS=0\nUSN_CONTAINS_DATE_2018_05_13_ROWS=0\nUSN_CONTAINS_HOUR_2018_05_13_10_ROWS=0\nMFT_CSV_TEXT_LINES=410155\nMFT_CSV_CONTAINS_DATE_2018_05_13_LINES=0\nMFT_CSV_CONTAINS_HOUR_2018_05_13_10_LINES=0\nMFT_CSV_CONTAINS_WINDOW_1005_1015_TEXT_LINES=0\n[... omitted lines 24-27; full output hash below ...]",
+    "excerpt_sha256": "969bad5c5a69b8c549c879694fa7b8a8c3b33ce11072611aae60321914d7d1f7"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 12 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "MFT_BIN_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "MFT_BIN_SIZE=325320704",
+          "present": true
+        },
+        {
+          "token": "MFT_BIN_SHA256=719d322022c7c783f3a80e5bf7bad17912ce14a251a3e6fdb94d7c0a4fc93a93",
+          "present": true
+        },
+        {
+          "token": "USN_J_BIN_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "USN_J_BIN_SIZE=2665094304",
+          "present": true
+        },
+        {
+          "token": "USN_J_BIN_SHA256=af29641589bd3a43d156504531e4751d10054a832b4d97a5b482b6e4847acd93",
+          "present": true
+        },
+        {
+          "token": "MFT_CSV_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "MFT_CSV_SIZE=188373476",
+          "present": true
+        },
+        {
+          "token": "MFT_CSV_SHA256=1e8528fe67560d4d87f9b3bfca3d90723125f50c3f4b6ac414175769b3d70458",
+          "present": true
+        },
+        {
+          "token": "USN_CSV_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "USN_CSV_SIZE=58044743",
+          "present": true
+        },
+        {
+          "token": "USN_CSV_SHA256=23d2b5b4d8a529439bf05ea7a9999c69047752af96cb4e4e88ef2435e4b44c7b",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T18:56:08.724Z",
+  "prev_receipt_sha256": "0dd25af1b6e687544e73e96bbed0a25db558860b2301b54539708edad61eb7a6",
+  "receipt_sha256": "4ac00159a1e865552e14d5d61ae818cc677106fa4a581fd3c94805a4df0964f4"
+}

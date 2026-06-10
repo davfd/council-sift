@@ -1,0 +1,140 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-006",
+  "nodeId": "60542e46-5263-5885-97cc-2b1ced548d44",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted 2018-05-13T10:05Z..10:15Z window summary records 168 EVTX rows across security/system/application sources; selected Security events in-window are 4624=6, 4672=4, 4648=2, 4634=2. The same window has 61 Prefetch files with 82 last-run slots; selected Prefetch rows include Chrome files=6/slots=7/run_count_total=98, OneDrive files=1/slots=1/run_count_total=20, Explorer files=1/slots=1/run_count_total=16, while Chrome History visits/downloads, LNK rows, and JumpList rows are zero in this window.",
+    "interpretation": "This is a bounded host/account artifact timing layer for the 10:05Z..10:15Z window. It supports local program/activity timing leads, especially Prefetch and EVTX co-presence, but does not identify the human operator, intent, transfer direction, upload completion, or cloud-sync completion. The zero Chrome/LNK/JumpList rows are scoped to this window and captured artifacts only.",
+    "confidence": "HIGH",
+    "content_sha256": "29516dfe3671080c309af825d333298c8928e62e451bb26c070e94194ec036e4"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "continue-window-prefetch:v1",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_continue_out/window_prefetch_compare_summary.txt",
+    "output_sha256": "54d985ab6bbde4e26dce64eeb96822a0211e8aa372d151b06741b8ec467aa066"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-00a42d1966512a0b",
+    "execution_record_sha256": "00a42d1966512a0bd5ca1d5c4c8cf9d9ddeca6897c24295ec1a71128b5112a05",
+    "evidence_excerpt_sha256": "762f4b9b9f9d036d905789abd8c092f36b96e6096c31d2033e4c90546b94a139"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "54d985ab6bbde4e26dce64eeb96822a0211e8aa372d151b06741b8ec467aa066",
+    "total_chars": 11404,
+    "excerpt_chars": 3996,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_CONTINUE_WINDOW_COMPARE_V1=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nCYLR_BASE_EXISTS=True\nEVTX_CSV_EXISTS=True\nEVTX_CSV_SHA256=a666272795ede464c014b955a033c4bf3c027e89a0656320505fb0bec02488e4\nEVTX_WINDOW_TOTAL_ROWS=168\nEVTX_WINDOW_TIME_RANGE=2018-05-13T10:05:30Z..2018-05-13T10:15:20Z\nEVTX_WINDOW_SOURCE_COUNTS=security.evtx:106,system.evtx:37,application.evtx:25\nEVTX_WINDOW_EVENT_SOURCE_TOP=5058@security.evtx:40,5061@security.evtx:40,16@system.evtx:10,4624@security.evtx:6,4798@security.evtx:5,1001@application.evtx:4,342@system.evtx:4,5059@security.evtx:4,4672@security.evtx:4,1@system.evtx:3,0@application.evtx:2,1000@application.evtx:2,18@system.evtx:2,4738@security.evtx:2,4648@security.evtx:2,4634@security.evtx:2,900@application.evtx:1,1@application.evtx:1,1066@application.evtx:1,1003@application.evtx:1,902@application.evtx:1,100@application.evtx:1,16384@application.evtx:1,903@application.evtx:1,103@application.evtx:1,101@application.evtx:1,1005@application.evtx:1,102@application.evtx:1,300@application.evtx:1,301@application.evtx:1\nEVTX_WINDOW_PROVIDER_TOP=Microsoft-Windows-Security-Auditing:106,Microsoft-Windows-Kernel-General:11,Microsoft-Windows-Security-SPP:6,ESENT:6,Microsoft-Windows-Kernel-Boot:5,Microsoft-Windows-Bluetooth-BthLEEnum:4,SkypeUpdate:3,Windows Error Reporting:3,Microsoft-Windows-WPDClassInstaller:3,Microsoft-Windows-DriverFrameworks-UserMode:3,dbupdate:2,Application Error:2,Microsoft-Windows-LoadPerf:2,BTHUSB:2,Microsoft-Windows-UserPnp:2,Microsoft-Windows-Kernel-Power:2,SecurityCenter:1,Microsoft-Windows-Power-Troubleshooter:1,Microsoft-Windows-Winlogon:1,Lfsvc:1\nEVTX_WINDOW_SELECTED_EVENT_SOURCE_COUNTS=4624@security.evtx:6,4672@security.evtx:4,4648@security.evtx:2,4634@security.evtx:2\nEVTX_WINDOW_SECURITY_4624_LOGON_TYPES=11:2,7:2,5:2\nEVTX_WINDOW_SECURITY_4688_PROCESS_TOP=\nEVTX_WINDOW_7045_IMAGE_BASENAME_TOP=\nEVTX_WINDOW_7045_IMAGE_CLASS_COUNTS=\nPREFETCH_TOTAL_FILES=238\nPREFETCH_PARSED_FILES=238\nPREFETCH_PARSE_ERRORS=0\nPREFETCH_VERSION_COUNTS=30:238\nPREFETCH_WINDOW_FILE_HIT_COUNT=61\nPREFETCH_WINDOW_RUN_SLOT_COUNT=82\nPREFETCH_WINDOW_EXE_FILE_COUNTS=CHROME.EXE:6,SVCHOST.EXE:6,DLLHOST.EXE:4,BACKGROUNDTASKHOST.EXE:2,GOOGLEUPDATE.EXE:2,APPLEIEDAV.EXE:1,APPLICATIONFRAMEHOST.EXE:1,APSDAEMON.EXE:1,CONSENT.EXE:1,DPTFPOLICYLPMSERVICEHELPER.EX:1,DROPBOXUPDATE.EXE:1,DRVINST.EXE:1,DSMUSERTASK.EXE:1,EXPLORER.EXE:1,FTK IMAGER.EXE:1,ICLOUDDRIVE.EXE:1,ICLOUDSERVICES.EXE:1,INPUTPERSONALIZATION.EXE:1,LOCKAPP.EXE:1,LOCKAPPHOST.EXE:1,LOGONUI.EXE:1,MICROSOFT.PHOTOS.EXE:1,MOBSYNC.EXE:1,MPCMDRUN.EXE:1,ONEDRIVE.EXE:1,QTTASK.EXE:1,RUNDLL32.EXE:1,RUNTIMEBROKER.EXE:1,SEARCHFILTERHOST.EXE:1,SEARCHPROTOCOLHOST.EXE:1,SETTINGSYNCHOST.EXE:1,SIHOST.EXE:1,SYSTEMSETTINGS.EXE:1,TABTIP.EXE:1,TABTIP32.EXE:1,TASKENG.EXE:1,TASKHOSTW.EXE:1,UPDATER.EXE:1,USERINIT.EXE:1,VIDEO.UI.EXE:1,WERFAULT.EXE:1,WERMGR.EXE:1,WMIADAP.EXE:1,WMIPRVSE.EXE:1,WUDFHOST.EXE:1,WWAHOST.EXE:1\nPREFETCH_WINDOW_EXE_RUN_SLOT_COUNTS=DLLHOST.EXE:8,CHROME.EXE:7,SVCHOST.EXE:7,DROPBOXUPDATE.EXE:4,BACKGROUNDTASKHOST.EXE:3,GOOGLEUPDATE.EXE:3,TASKHOSTW.EXE:3,WMIADAP.EXE:3,CONSENT.EXE:2,DSMUSERTASK.EXE:2,SEARCHFILTERHOST.EXE:2,SEARCHPROTOCOLHOST.EXE:2,TABTIP.EXE:2,WUDFHOST.EXE:2,APPLEIEDAV.EXE:1,APPLICATIONFRAMEHOST.EXE:1,APSDAEMON.EXE:1,DPTFPOLICYLPMSERVICEHELPER.EX:1,DRVINST.EXE:1,EXPLORER.EXE:1,FTK IMAGER.EXE:1,ICLOUDDRIVE.EXE:1,ICLOUDSERVICES.EXE:1,INPUTPERSONALIZATION.EXE:1,LOCKAPP.EXE:1,LOCKAPPHOST.EXE:1,LOGONUI.EXE:1,MICROSOFT.PHOTOS.EXE:1,MOBSYNC.EXE:1,MPCMDRUN.EXE:1,ONEDRIVE.EXE:1,QTTASK.EXE:1,RUNDLL32.EXE:1,RUNTIMEBROKER.EXE:1,SETTINGSYNCHOST.EXE:1,SIHOST.EXE:1,SYSTEMSETTINGS.EXE:1,TABTIP32.EXE:1,TASKENG.EXE:1,UPDATER.EXE:1,USERINIT.EXE:1,VIDEO.UI.EXE:1,WERFAULT.EXE:1,WERMGR.EXE:1,WMIPRVSE.EXE:1,WWAHOST.EXE:1\nPREFETCH_WINDOW_EXE_RUN_COUNT_TOTALS=MPCMDRUN.EXE:478,BACKGROUNDTASKHOST.EXE:441,SEARCHFILTERHOST.EXE:257,CHROME.EXE:98,CONSENT.EXE:74,TASKENG.EXE:72,DROPBOXUPDATE.EXE:62,SEARCHPROTOCOLHOST.EXE:61,TASKHOSTW.EXE:60,LOCK\n[... excerpt truncated ...]",
+    "excerpt_sha256": "762f4b9b9f9d036d905789abd8c092f36b96e6096c31d2033e4c90546b94a139"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 12 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "WINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z",
+          "present": true
+        },
+        {
+          "token": "EVTX_WINDOW_TOTAL_ROWS=168",
+          "present": true
+        },
+        {
+          "token": "EVTX_WINDOW_SOURCE_COUNTS=security.evtx:106,system.evtx:37,application.evtx:25",
+          "present": true
+        },
+        {
+          "token": "EVTX_WINDOW_SELECTED_EVENT_SOURCE_COUNTS=4624@security.evtx:6,4672@security.evtx:4,4648@security.evtx:2,4634@security.evtx:2",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_WINDOW_FILE_HIT_COUNT=61",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_WINDOW_RUN_SLOT_COUNT=82",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_WINDOW_SELECTED=CHROME.EXE:files:6,slots:7,run_count_total:98,mtime_files:6;ONEDRIVE.EXE:files:1,slots:1,run_count_total:20,mtime_files:1;EXPLORER.EXE:files:1,slots:1,run_count_total:16,mtime_files:1",
+          "present": true
+        },
+        {
+          "token": "CHROME_WINDOW_VISIT_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "CHROME_WINDOW_DOWNLOAD_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "LNK_WINDOW_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "JUMPLIST_AUTOMATIC_WINDOW_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "JUMPLIST_CUSTOM_WINDOW_ROWS=0",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T18:26:32.107Z",
+  "prev_receipt_sha256": "ee53b1bec4c0ef2b3b390f713dd9a2f4ad804a7f4cce011c99a2610d6b38b376",
+  "receipt_sha256": "36bf34e5ea8b07196fc4764e69b2d36afa2fdb6bef8a034afce8b4d8d9235506"
+}

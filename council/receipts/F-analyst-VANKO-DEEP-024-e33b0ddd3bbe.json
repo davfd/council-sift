@@ -1,0 +1,208 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-024",
+  "nodeId": "7691cd40-f910-5d80-a7c5-6dd272bfb8d7",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted SRUM window summary records exported SRUM IdMap, network, and connectivity tables. The network table has 4 rows globally and 2 rows in the 2018-05-13T10:05Z..10:15Z target window; both target-window rows are WINLOGON.EXE/SPOOLER_SERVICE with sent=0 and received=0. Selected cloud/browser executable classes Chrome, OneDrive, Dropbox, DropboxUpdate, iCloudDrive, iCloudServices, GoogleUpdate, GoogleDriveFS, GoogleDrive, and Explorer all have zero SRUM network rows in the target window. The connectivity table has zero target-window rows.",
+    "interpretation": "This is an exported-SRUM aggregate network/connectivity boundary only. It does not prove no network activity elsewhere and does not identify a file, transfer direction, completed upload, or human operator.",
+    "confidence": "HIGH",
+    "content_sha256": "c27f938c83f254f133a3ad3e8849c516b477f8c284ee312cda71da4133631a35"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "srum-window:v2",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_srum_out/srum_window_summary.txt",
+    "output_sha256": "8df5c603bd709b060e7b1414bb2c60fd525cd07952aec63939790dd53cfbfe86"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-e805bc895325376e",
+    "execution_record_sha256": "e805bc895325376e9bbe9d18aef8893af1da8b0efe41fff9c86ed46d295b1103",
+    "evidence_excerpt_sha256": "803d1d496c7ad6cfc86dfb77a6b1134f4d8a0ebab05f675cb747359c5b856153"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "8df5c603bd709b060e7b1414bb2c60fd525cd07952aec63939790dd53cfbfe86",
+    "total_chars": 2914,
+    "excerpt_chars": 2175,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_SRUM_WINDOW_SUMMARY_V2=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nSRUM_IDMAP_EXISTS=1\nSRUM_IDMAP_SIZE=233302\nSRUM_IDMAP_SHA256=bac3497a8a4296e75c39bdd8438e2b9245bb9495500970a8d582d4befba49ab5\nSRUM_NETWORK_TABLE_EXISTS=1\nSRUM_NETWORK_TABLE_SIZE=308\nSRUM_NETWORK_TABLE_SHA256=51fab84a0c81fe63a3869f9f8fc786901d5979c6aac06a363335eb6ec42280aa\nSRUM_CONNECTIVITY_TABLE_EXISTS=1\nSRUM_CONNECTIVITY_TABLE_SIZE=913\nSRUM_CONNECTIVITY_TABLE_SHA256=5560ff2f276c8d0484bab467d2d52dcebc00c04d00546f786ec0bb184fa9218f\nSRUM_IDMAP_ROWS=800\nSRUM_IDMAP_IDTYPE_COUNTS=0:542,2:182,1:65,3:11\nSRUM_IDMAP_INTERESTING_COUNT=73\nSRUM_IDMAP_INTERESTING_CLASSES=7:WINLOGON.EXE,52:DROPBOXUPDATE.EXE,53:GOOGLEUPDATE.EXE,93:EXPLORER.EXE,109:ONEDRIVE.EXE,112:CHROME.EXE,114:ICLOUDSERVICES.EXE,116:ICLOUDDRIVE.EXE,118:OTHER,120:DROPBOX.EXE,145:SPOOLER_SERVICE,150:EXPLORER.EXE,155:DROPBOX.EXE,157:ONEDRIVE.EXE,158:CHROME.EXE,167:OTHER,173:ICLOUDDRIVE.EXE,175:ICLOUDSERVICES.EXE,186:DROPBOXUPDATE.EXE,187:GOOGLEUPDATE.EXE,188:GOOGLEUPDATE.EXE,225:GOOGLEUPDATE.EXE,246:OTHER,247:OTHER,255:OTHER,256:DROPBOX.EXE,257:OTHER,266:OTHER,267:OTHER,353:OTHER,354:DROPBOX.EXE,355:OTHER,356:OTHER,359:OTHER,360:OTHER,361:DROPBOX.EXE,362:OTHER,412:OTHER,415:OTHER,418:OTHER,430:OTHER,442:OTHER,443:DROPBOX.EXE,444:OTHER,445:DROPBOX.EXE,482:OTHER,483:OTHER,508:OTHER,509:DROPBOX.EXE,510:OTHER,594:ONEDRIVE.EXE,600:ONEDRIVE.EXE,622:OTHER,623:OTHER,656:OTHER,673:OTHER,681:OTHER,690:GOOGLEUPDATE.EXE,697:OTHER,698:DROPBOX.EXE,702:OTHER,703:DROPBOX.EXE,705:OTHER,737:OTHER,742:OTHER,757:OTHER,767:OTHER,769:DROPBOX.EXE,771:GOOGLEUPDATE.EXE,774:OTHER,788:OTHER,792:OTHER,793:DROPBOX.EXE\nSRUM_NET_ROWS=4\nSRUM_NET_GLOBAL_TIME_RANGE=2018-03-30T19:15:00Z..2018-05-13T10:06:59Z\nSRUM_NET_WINDOW_ROWS=2\nSRUM_NET_WINDOW_APP_CLASS_COUNTS=WINLOGON.EXE:1,SPOOLER_SERVICE:1\nSRUM_NET_WINDOW_TOTAL_SENT=0\nSRUM_NET_WINDOW_TOTAL_RECVD=0\nSRUM_NET_WINDOW_ROW=2018-05-13T10:06:59Z;APP_ID=7;APP_CLASS=WINLOGON.EXE;USER_ID=90;SENT=0;RECVD=0\nSRUM_NET_WINDOW_ROW=2018-05-13T10:06:59Z;APP_ID=145;APP_CLASS=SPOOLER_SERVICE;USER_ID=4;SENT=0;RECVD=0\nSRUM_NET_WINDOW_CHROME_EXE_ROWS=0\n[... omitted lines 24-39; full output hash below ...]",
+    "excerpt_sha256": "803d1d496c7ad6cfc86dfb77a6b1134f4d8a0ebab05f675cb747359c5b856153"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 29 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_SRUM_WINDOW_SUMMARY_V2=1",
+          "present": true
+        },
+        {
+          "token": "WINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z",
+          "present": true
+        },
+        {
+          "token": "SRUM_IDMAP_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "SRUM_NETWORK_TABLE_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "SRUM_CONNECTIVITY_TABLE_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "SRUM_IDMAP_ROWS=800",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_ROWS=4",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_GLOBAL_TIME_RANGE=2018-03-30T19:15:00Z..2018-05-13T10:06:59Z",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_ROWS=2",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_APP_CLASS_COUNTS=WINLOGON.EXE:1,SPOOLER_SERVICE:1",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_TOTAL_SENT=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_TOTAL_RECVD=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_ROW=2018-05-13T10:06:59Z;APP_ID=7;APP_CLASS=WINLOGON.EXE;USER_ID=90;SENT=0;RECVD=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_ROW=2018-05-13T10:06:59Z;APP_ID=145;APP_CLASS=SPOOLER_SERVICE;USER_ID=4;SENT=0;RECVD=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_CHROME_EXE_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_ONEDRIVE_EXE_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_DROPBOX_EXE_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_DROPBOXUPDATE_EXE_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_ICLOUDDRIVE_EXE_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_ICLOUDSERVICES_EXE_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_GOOGLEUPDATE_EXE_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_GOOGLEDRIVEFS_EXE_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_GOOGLEDRIVE_EXE_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_NET_WINDOW_EXPLORER_EXE_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_CONNECTIVITY_ROWS=8",
+          "present": true
+        },
+        {
+          "token": "SRUM_CONNECTIVITY_WINDOW_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "SRUM_CONNECTIVITY_WINDOW_APP_CLASS_COUNTS=NONE",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=srum_rows_are_aggregate_process_network_or_connectivity_telemetry_not_file_specific_transfer_receipts",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=zero_srum_bytes_in_window_means_exported_srum_network_table_records_zero_bytes_for_those_rows_not_no_network_activity_elsewhere",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T20:15:33.936Z",
+  "prev_receipt_sha256": "5c39e118f956c83d33b2c0d48ba0cf8688378514f5b696ae408bcc578c0f784c",
+  "receipt_sha256": "e33b0ddd3bbe0d052b752ab0628de84f442d631d31a8d497fdd386f43e65e01e"
+}

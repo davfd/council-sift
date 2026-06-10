@@ -1,0 +1,98 @@
+{
+  "finding_id": "F-analyst-SRL18-FILE-DISK-004",
+  "nodeId": "cb40a28e-5bb1-599c-a1ab-0a0df7b4a24b",
+  "case": "SRL18-FILE-DISK",
+  "claim": {
+    "observation": "Recursive fls (full paths, offset 0) shows a DELETED directory subtree under C:\\Windows\\Logs\\WindowsServerBackup\\7.15\\research\\Rare-Earth Elements\\ named 'M&A Targets' (inode 124754-144-1), containing subdirectories 'Orocobre' (124755) and 'Tronox' (124779) with PDF documents (e.g., TRONOX_2015.pdf, inode 124789). A deleted sibling file 'M&A Targets.zip' (inode 124753-128-1) sits in the same 'Rare-Earth Elements' directory. PDFs in the tree carry ':Zone.Identifier' alternate data streams (e.g., on 16Jan18_OREInvestorPresentation.pdf).",
+    "interpretation": "A collection of external research on rare-earth-element companies was assembled on this file server and then deleted. The directory name 'M&A Targets' and its contents (annual reports, investor presentations, technical reports for the named companies) indicate gathered merger-and-acquisition research. The ':Zone.Identifier' alternate data streams indicate the PDFs were downloaded from another security zone (typically the internet). The subtree sits under a path that mimics the Windows Server Backup directory rather than a normal user document area, and the deleted 'M&A Targets.zip' (related finding on inode 124753) is co-located with it. This is consistent with aggregation of sensitive business research into one tree that was then compressed and removed. It does not by itself establish who created it, nor that the data was transferred off the host.",
+    "confidence": "MEDIUM",
+    "content_sha256": "5a1f73724ba78871710e0e4fef6c23d28f3f6862082d00d2142f4647f56b411f"
+  },
+  "evidence_pointer": {
+    "artifact": "base-file-cdrive.E01 -- NTFS volume (offset 0), deleted subtree under Windows/Logs/WindowsServerBackup/7.15/research/Rare-Earth Elements/M&A Targets",
+    "locator": "MFT 124754 (M&A Targets dir), 124755 (Orocobre), 124779 (Tronox), 124789 (TRONOX_2015.pdf), 124753 (M&A Targets.zip)",
+    "tool": "fls (The Sleuth Kit)",
+    "command": "fls -r -p -o 0 IMG | grep -E 'research/Rare-Earth Elements/M&A Targets'",
+    "output_sha256": "7f0fcde5d810082671aab5054c33424ff8a3f3c3e824713e6fb09d2df479f7f3",
+    "rerun_status": "STORED_OUTPUT_ONLY",
+    "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here."
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 6 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "124754-144-1:",
+          "present": true
+        },
+        {
+          "token": "Windows/Logs/WindowsServerBackup/7.15/research/Rare-Earth Elements/M&A Targets",
+          "present": true
+        },
+        {
+          "token": "Windows/Logs/WindowsServerBackup/7.15/research/Rare-Earth Elements/M&A Targets/Orocobre",
+          "present": true
+        },
+        {
+          "token": "Windows/Logs/WindowsServerBackup/7.15/research/Rare-Earth Elements/M&A Targets/Tronox",
+          "present": true
+        },
+        {
+          "token": "Windows/Logs/WindowsServerBackup/7.15/research/Rare-Earth Elements/M&A Targets.zip",
+          "present": true
+        },
+        {
+          "token": "Windows/Logs/WindowsServerBackup/7.15/research/Rare-Earth Elements/M&A Targets/Orocobre/2018 Results/16Jan18_OREInvestorPresentation.pdf:Zone.Identifier",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:10:12.646Z",
+  "prev_receipt_sha256": "0931122c6e01fdf8ef15bedef7e38c8677a2a74b4ed24977b8cae7ee81ef0042",
+  "receipt_sha256": "44947807e9f003331fc99cac20f88f0c1ba8c42de189654870946a7e31e56b2a",
+  "rerun_status": "STORED_OUTPUT_ONLY",
+  "rerun_status_note": "Post-hoc Tier 2 audit label: this receipt has a placeholder/prose command, so its stored output/hash chain remains checkable, but independent --rerun requires the original concrete evidence path and is not claimed here.",
+  "receipt_hash_scope_note": "receipt_sha256 is the original Council receipt hash; rerun_status fields are Tier 2 audit metadata labels."
+}

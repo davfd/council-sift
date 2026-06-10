@@ -1,0 +1,97 @@
+{
+  "finding_id": "F-analyst-SRL18-DC-DISK-004",
+  "nodeId": "e6816a57-9f4b-514e-b2c9-10ecfc23a68d",
+  "case": "SRL18-DC-DISK",
+  "claim": {
+    "observation": "icat of inode 131829 — a ConsoleHost_history.txt file located within the C:\\Users\\rsydow-a profile (AppData\\Roaming\\Microsoft\\Windows\\PowerShell\\PSReadline) — recovers 291 lines of PowerShell command history. It contains: numerous 'Enter-PSSession' connections to named hosts (e.g. base-admin, base-hunt); loops over host-inventory files (srl-all.txt, srl-workstations.txt) running Invoke-Command against every host; 17 'wmic /node:<ip> shadowcopy call create volume=C:\\' commands targeting the workstation/server fleet; a 'Rename-Item ...Google\\Update-DISABLED ...Google\\Update' plus 'Start-Service gupdate'/'gupdatem' and execution of GoogleUpdate.exe pushed to all workstations; fleet-wide 'VMwareToolboxCmd.exe ... timesync disable'; repeated 'get-winevent -LogName Security -oldest -maxevents 1'; and 'find-module -name pagefilemodder*'.",
+    "interpretation": "The recorded commands constitute fleet-wide remote administration originating FROM this domain controller, using PowerShell remoting (Enter-PSSession/Invoke-Command) and WMIC against the full host inventory. The specific techniques the history records are: bulk Volume Shadow Copy creation across the host fleet (a known method for reading locked system files such as registry hives and ntds.dit), disabling of VMware guest time synchronization across hosts, re-enabling and starting a previously-DISABLED 'GoogleUpdate' service/binary on workstations, per-host enumeration of the oldest Security event, and a search for a 'pagefilemodder' module. These are the literal operations the file records. This artifact does not establish which principal ran them or for what purpose; it should be correlated with the local C:\\temp ntds.dit dump (finding-001) and with authentication/event-log evidence before any conclusion about actor or intent.",
+    "confidence": "MEDIUM",
+    "content_sha256": "70f4c6122b5a648b4bea43e3396aab050432ee229bb2cb2357fc2ec7802a63fd"
+  },
+  "evidence_pointer": {
+    "artifact": "C:\\Users\\rsydow-a\\AppData\\Roaming\\Microsoft\\Windows\\PowerShell\\PSReadline\\ConsoleHost_history.txt",
+    "locator": "inode 131829",
+    "tool": "icat (The Sleuth Kit)",
+    "command": "icat \"/mnt/evidence/Compromised APT Attack Scenarios/SRL 2018/base-dc-cdrive.E01\" 131829",
+    "output_sha256": "34f1d9865620e9e921bd989de88b87852698f0045498abf47ba647746d914f62"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 7 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "wmic /node:172.16.7.11 shadowcopy call create volume=C:\\",
+          "present": true
+        },
+        {
+          "token": "Rename-Item 'C:\\Program Files (x86)\\Google\\Update-DISABLED' 'C:\\Program Files (x86)\\Google\\Update'",
+          "present": true
+        },
+        {
+          "token": "timesync disable",
+          "present": true
+        },
+        {
+          "token": "find-module -name pagefilemodder*",
+          "present": true
+        },
+        {
+          "token": "Enter-PSSession base-admin",
+          "present": true
+        },
+        {
+          "token": "get-winevent -LogName Security -oldest -maxevents 1",
+          "present": true
+        },
+        {
+          "token": "Start-Service gupdate",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:03:39.163Z",
+  "prev_receipt_sha256": "55953c3e72b4fad8614ff185852bb1e6978db1f27d5ba1c3795a985d29b8d787",
+  "receipt_sha256": "4529a74a3cee8fd1b5050dc882c0008bef5a7c3126c87e681dd19b4a145a5fa5"
+}

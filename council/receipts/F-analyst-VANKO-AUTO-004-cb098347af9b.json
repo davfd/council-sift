@@ -1,0 +1,116 @@
+{
+  "finding_id": "F-analyst-VANKO-AUTO-004",
+  "nodeId": "4a8dffc0-a559-522a-bef4-954787974db4",
+  "case": "VANKO-AUTO",
+  "claim": {
+    "observation": "7z l of vanko-c-drive.CYLR.7z reports Type = 7z and lists a top-level folder 'vanko-c-drive.CYLR' containing a volume root 'vanko-c-drive.CYLR/G' under which Windows directory structures are preserved (e.g. ProgramData/Microsoft/Search and Users/<profile>/AppData paths). The archive summary line reports '6576 files, 1750 folders'.",
+    "interpretation": "The archive is a CYLR-style live-response triage collection (its top-level folder uses the '.CYLR' naming convention of the CYLR collection tool) gathered from a Windows volume that was referenced as drive letter G at collection time and labelled 'vanko-c-drive'. It preserves the original directory tree of selected forensic locations (search index, user AppData/browser profiles, etc.) and contains 6576 files across 1750 folders. Entry timestamps inside the archive are file metadata and do not by themselves establish when collection occurred or any user activity. This characterises the scope of the triage dataset only.",
+    "confidence": "HIGH",
+    "content_sha256": "f7c246fbc1a3fa4768fe31551ac66e327876b7fa2ef137f7535cbaaff36e0494"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case 2/extracted/vanko-c-drive.CYLR.7z",
+    "locator": "CYLR triage archive listing (7z l)",
+    "tool": "7z",
+    "command": "7z l \"/mnt/evidence/Standard Forensic Case 2/extracted/vanko-c-drive.CYLR.7z\"",
+    "output_sha256": "35b026d2da8ff27b097da0dfa200aaf6f8a0259d6d74b3d5c82d7e7edc9cead7"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-AUTO-8a8dfe9632ccb63a",
+    "execution_record_sha256": "8a8dfe9632ccb63a6759a5ef050a4df2ca45ead5c6812edf43ce891ce0433dab",
+    "evidence_excerpt_sha256": "b69e41e6d039471a9a6c46a06857705f6b08858af5ac1c97ec92a795cf5f36b2"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "35b026d2da8ff27b097da0dfa200aaf6f8a0259d6d74b3d5c82d7e7edc9cead7",
+    "total_chars": 1722788,
+    "excerpt_chars": 977,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "\n7-Zip 23.01 (x64) : Copyright (c) 1999-2023 Igor Pavlov : 2023-06-20\n 64-bit locale=C.UTF-8 Threads:4 OPEN_MAX:1024\n\nScanning the drive for archives:\n1 file, 549852502 bytes (525 MiB)\n\nListing archive: /mnt/evidence/Standard Forensic Case 2/extracted/vanko-c-drive.CYLR.7z\n\n--\nPath = /mnt/evidence/Standard Forensic Case 2/extracted/vanko-c-drive.CYLR.7z\nType = 7z\nPhysical Size = 549852502\nHeaders Size = 137021\nMethod = LZMA2:24 BCJ\nSolid = +\nBlocks = 2\n\n   Date      Time    Attr         Size   Compressed  Name\n------------------- ----- ------------ ------------  ------------------------\n2018-05-29 15:35:16 D....            0            0  vanko-c-drive.CYLR\n2018-05-29 02:31:19 D....            0            0  vanko-c-drive.CYLR/G\n2018-05-29 02:31:17 D....            0            0  vanko-c-drive.CYLR/G/ProgramData\n2018-05-29 02:31:17 D....            0            0  vanko-c-drive.CYLR/G/ProgramData/Microsoft\n[... omitted lines 24-8348; full output hash below ...]",
+    "excerpt_sha256": "b69e41e6d039471a9a6c46a06857705f6b08858af5ac1c97ec92a795cf5f36b2"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 6 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "Type = 7z",
+          "present": true
+        },
+        {
+          "token": "vanko-c-drive.CYLR",
+          "present": true
+        },
+        {
+          "token": "vanko-c-drive.CYLR/G",
+          "present": true
+        },
+        {
+          "token": "ProgramData",
+          "present": true
+        },
+        {
+          "token": "Users",
+          "present": true
+        },
+        {
+          "token": "6576 files, 1750 folders",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T16:40:58.568Z",
+  "prev_receipt_sha256": "06897047d366f9ddf3bb554fee8392a7a8b51c9e0fb248064f347a4abaef93f1",
+  "receipt_sha256": "cb098347af9b8b3b37ac7cf352778130ff060ab090f0f7109d881cdace4be2c6"
+}

@@ -1,0 +1,164 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-019",
+  "nodeId": "7592ed27-503c-5540-8df6-a94524e93aed",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted cross-surface target-window summary records registry ledger rows=480, EVTX rows=168, Prefetch file hits=61 with 82 slots, and Chrome History visit/download rows=0 across 2 History DBs. It also records LNK and JumpList parser CSV timestamp-field counts in the same window.",
+    "interpretation": "This is a bounded cross-surface timing/correlation summary for the target window. It supports temporal co-presence of registry, EVTX, and Prefetch witnesses, plus a scoped Chrome History boundary; it does not establish transfer direction or completed upload.",
+    "confidence": "HIGH",
+    "content_sha256": "5f5c2e8ad00158c2466f9046606d8758aff0fb45e84ce48d3213e304a0264ef4"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "registry-ledger-correlation:v2",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_reg_correlate_out/registry_ledger_correlation_summary.txt",
+    "output_sha256": "5373dcfa7f161d3dac292c50d78f6351dccd931e4e3a0d98303e708211b280d8"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-525982587b87a743",
+    "execution_record_sha256": "525982587b87a7434c4b5ec2ca503ccbf1e58236ca867e34f02363c9d090ec87",
+    "evidence_excerpt_sha256": "78ba225a6edb9c82ac3309dc6ee43755dc8d419bb22941daf98818ead76d44d0"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "5373dcfa7f161d3dac292c50d78f6351dccd931e4e3a0d98303e708211b280d8",
+    "total_chars": 5943,
+    "excerpt_chars": 1156,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_REGISTRY_LEDGER_CORRELATION_V2=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nREG_CSV_EXISTS=1\nREG_CSV_SIZE=783382\nREG_CSV_SHA256=165ab31d89be05ecfd5b9352b3987c1e4ab008c3ad9f6a0bebc630cfa12fbeca\nEVTX_CSV_EXISTS=1\nEVTX_CSV_SIZE=50575012\nEVTX_CSV_SHA256=a666272795ede464c014b955a033c4bf3c027e89a0656320505fb0bec02488e4\nLNK_CSV_EXISTS=1\nLNK_CSV_SIZE=132416\nLNK_CSV_SHA256=d9a52a4e5854fc0410aa85cda6bde51c6a659ec0b71e915f96f802f78cf5ee07\nJUMPLIST_AUTO_CSV_EXISTS=1\nJUMPLIST_AUTO_CSV_SIZE=333523\nJUMPLIST_AUTO_CSV_SHA256=ae4997e9232f5d445f6366354c2f4e8bbed3bdebc97b06f3dd34e81ef5c4a637\nJUMPLIST_CUSTOM_CSV_EXISTS=1\nJUMPLIST_CUSTOM_CSV_SIZE=38612\nJUMPLIST_CUSTOM_CSV_SHA256=090964def13f71bd41deb4db6d43e4c83eb09fccc61f30c1099f5d42889b60d2\nREG_TOTAL_ROWS_READ=1778\nREG_WINDOW_LEDGER_ROWS=480\nREG_WINDOW_LEDGER_TIME_RANGE=2018-05-13T10:12:23Z..2018-05-13T10:14:54Z\nREG_WINDOW_LEDGER_SHA256=fea7a79665728ac31fdd8da57ff1d559515a204c47f23856dcdbd7321cf64076\nREG_WINDOW_LEDGER_RAW_WINDOWS_PATH_MARKERS=0\nREG_WINDOW_LEDGER_RAW_USER_PATH_MARKERS=0\nREG_WINDOW_LEDGER_PROFILE_COUNTS=PROFILE_PC_USER:480\n[... omitted lines 24-102; full output hash below ...]",
+    "excerpt_sha256": "78ba225a6edb9c82ac3309dc6ee43755dc8d419bb22941daf98818ead76d44d0"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 18 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "REG_WINDOW_LEDGER_ROWS=480",
+          "present": true
+        },
+        {
+          "token": "EVTX_WINDOW_ROWS=168",
+          "present": true
+        },
+        {
+          "token": "EVTX_WINDOW_TIME_RANGE=2018-05-13T10:05:30Z..2018-05-13T10:15:20Z",
+          "present": true
+        },
+        {
+          "token": "EVTX_WINDOW_SOURCE_COUNTS=security.evtx:106,system.evtx:37,application.evtx:25",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_WINDOW_FILE_HITS=61",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_WINDOW_SLOT_HITS=82",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_WINDOW_TIME_RANGE=2018-05-13T10:05:31Z..2018-05-13T10:15:32Z",
+          "present": true
+        },
+        {
+          "token": "LNK_WINDOW_ROWS_ANY_TIMESTAMP=1",
+          "present": true
+        },
+        {
+          "token": "JUMPLIST_AUTO_WINDOW_ROWS_ANY_TIMESTAMP=144",
+          "present": true
+        },
+        {
+          "token": "JUMPLIST_CUSTOM_WINDOW_ROWS_ANY_TIMESTAMP=1",
+          "present": true
+        },
+        {
+          "token": "CHROME_HISTORY_DBS=2",
+          "present": true
+        },
+        {
+          "token": "CHROME_HISTORY_WINDOW_VISIT_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "CHROME_HISTORY_WINDOW_DOWNLOAD_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "CROSS_SURFACE_REGISTRY_AND_PREFETCH_WINDOW_PRESENT=1",
+          "present": true
+        },
+        {
+          "token": "CROSS_SURFACE_REGISTRY_AND_EVTX_WINDOW_PRESENT=1",
+          "present": true
+        },
+        {
+          "token": "CROSS_SURFACE_CHROME_HISTORY_WINDOW_VISIT_DOWNLOAD_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=lnk_jumplist_counts_are_parser_csv_timestamp_field_counts_not_file_open_or_transfer_proof",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=chrome_history_zero_rows_are_scoped_to_captured_history_databases_and_target_window_only",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T19:18:50.820Z",
+  "prev_receipt_sha256": "9ae23ef6795709de63c98f97538d49c040ed34e25fd0fb697033cab94399c875",
+  "receipt_sha256": "0d17c806955f73120efd189908e438830b80d1114297e9cf4c18dad60ad7eaf3"
+}

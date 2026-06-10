@@ -1,0 +1,295 @@
+#!/usr/bin/env python3
+"""Live authorization gate — the Council-SIFT identity kernel at the tool wrapper.
+
+`bin/sift` runs this on every command BEFORE execution. It is **default-deny**: a command is allowed only
+if EVERY binary in command position is on the kernel's read-only allowlist (`dfir_gateway.READ_TOOLS`), no
+destructive binary appears anywhere, and no dual-use / obfuscation / write-to-evidence pattern is present.
+Anything not explicitly allowed is refused — so evidence-mutating or unknown tools (shred, truncate, parted,
+blkdiscard, sgdisk, tune2fs, `cp`/`mv` over an image, `tee /dev/sda`, `find -delete`, `sed -i`, a
+base64-obfuscated `rm`, `python -c 'os.unlink(...)'`, …) are refused, not just a handful of denylisted names.
+
+  authorize.py --scan-command "<full shell command>"   # used by bin/sift; exit 1 = REFUSE
+  authorize.py --tool <tool> --authority read_only|high # single-tool kernel decision
+
+Defense-in-depth, not the only guarantee: evidence is ALSO mounted read-only (QEMU `virtfs readonly=on` +
+9p `ro`), so the OS itself refuses writes to evidence regardless of the command. This gate is the tool-layer
+boundary. A static command scanner cannot defeat arbitrary runtime-decoded payloads — the read-only mount is
+the backstop for that, which is why we refuse decode-and-run / sub-shell / command-substitution outright.
+"""
+import argparse
+import json
+import os
+import re
+import shlex
+import sys
+import time
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from dfir_gateway import build_gateway, ANALYST_RELATION, FORBIDDEN_TOOLS  # noqa: E402
+from kernel import Request  # noqa: E402
+
+_SEPS = {"|", "|&", "||", "&&", ";", "&", "\n"}  # shell separators (as standalone shlex tokens)
+# wrappers that precede the real binary (skip to the next word to find the command)
+_WRAPPERS = {"sudo", "time", "env", "nice", "ionice", "timeout", "command", "builtin", "exec",
+             "xargs", "then", "do", "else", "elif", "stdbuf", "setsid", "doas"}
+
+# Patterns an allowlisted-but-dual-use tool (or obfuscation) could still use to harm evidence → refuse.
+_DANGER = [
+    (re.compile(r"\$\(|`"), "command substitution (obfuscation)"),
+    (re.compile(r"\b(base64|xxd|uudecode|openssl)\b\s*(--decode|-d|-r|-D)\b"), "decode-and-run obfuscation"),
+    (re.compile(r"\beval\b"), "eval"),
+    (re.compile(r"(^|[|;&]\s*|sudo\s+)(bash|sh|zsh|dash|ksh|csh|tcsh)\b"), "sub-shell interpreter"),
+    (re.compile(r"\bsed\b[^|;&]*\s-[a-zA-Z]*i"), "sed in-place edit (-i)"),
+    (re.compile(r"\bfind\b[^|;&]*\s-(delete|exec|execdir|fprint|fprintf|fls|ok|okdir)\b"), "find delete/exec"),
+    (re.compile(r"\b(?:awk|gawk)\b[^|;&]*\s(?:-f\s*\S+|--file(?:=|\s+)\S+)"), "awk file-based script execution"),
+    (re.compile(r"\btar\b[^|;&]*--(?:to-command(?:=|\b)|checkpoint-action(?:=|\s+)\s*exec\b)"), "tar exec hook"),
+    (re.compile(r"\btar\b[^|;&]*--checkpoint-action\s*=\s*exec"), "tar checkpoint exec hook"),
+    (re.compile(r"\b(perl|ruby|node|php)\b\s+-[a-zA-Z]*[eiE]"), "interpreter inline-exec (-e/-i)"),
+    (re.compile(r"\b(os\.system|os\.unlink|os\.remove|os\.rmdir|os\.truncate|shutil\.rmtree|shutil\.move|subprocess|Popen|__import__)\b"), "destructive script call"),
+    (re.compile(r"\b(?:open|Path)\s*\([^)]*(?:/mnt/evidence|/evidence|/dev/)[^)]*\)[^|;&]*(?:\.write\b|\.unlink\b|\.write_text\b|\.write_bytes\b|\.rename\b|\.replace\b|\.mkdir\b|\.rmdir\b)", re.I), "script mutates protected evidence/device path"),
+    (re.compile(r">>?\s*/dev/"), "redirect to a device"),
+    (re.compile(r">>?\s*[^\s|;&]*\.(E01|e01|aff|aff4|s01|l01|001|img|dd|raw|mem|vmem|bin)\b"), "redirect over an image/dump"),
+    (re.compile(r">>?\s*[^\s|;&]*/(mnt/)?evidence\b"), "redirect into evidence"),
+    (re.compile(r"\bsystem\s*\("), "shell-out via system() (awk/perl/tcl)"),
+    (re.compile(r"\b(chmod|chown|chgrp|mkdir|rmdir|touch|fallocate)\b[^|;&]*\s/?(dev|mnt/evidence|evidence)\b"), "mutate device/evidence"),
+]
+
+
+# A tool's own write/extract flag whose VALUE is a path (starts with /). Used to refuse writes that
+# target evidence or a device via the tool's native flag (vol --output-dir /evidence, tar -C /evidence,
+# unzip -d /evidence, -o/evidence). Numeric values (fls -o 0) don't start with / so they never match.
+_WRITE_FLAG_NAMES = {
+    "--output-dir", "--out-dir", "--dump-dir", "--output", "--export-dir", "--save-dir",
+    "--directory", "--exdir", "--csv", "--json", "--html", "--xml", "--body", "--bodyf",
+    "-C", "-D", "-d", "-o", "-O",
+}
+_WRITE_FLAG = re.compile(
+    r"(?:--output-dir|--out-dir|--dump-dir|--output|--export-dir|--save-dir|--directory|--exdir"
+    r"|--csv|--json|--html|--xml|--body|--bodyf|-C|-D|-d|-o|-O)\s*=?\s*['\"]?(/\S+)")
+# An evidence/device path that is OUTPUT (a dir/device), not an INPUT file being read (archive/image ext).
+_EVID_DEV = re.compile(r"^/?(dev/|mnt/evidence|evidence)")
+_INPUT_EXT = re.compile(r"\.(zip|7z|gz|bz2|xz|tar|tgz|tbz|e01|aff4?|s01|l01|img|dd|raw|mem|vmem|001|bin)$", re.I)
+_SQLITE_MUTATION = re.compile(
+    r"(?:\b(insert|update|delete|drop|alter|create|replace|vacuum|attach|detach)\b"
+    r"|\bpragma\s+\w+\s*="
+    r"|(^|\s)\.(output|once|save|restore|read)\b)",
+    re.I,
+)
+_PROTECTED_PATH = re.compile(r"^/?(dev/|mnt/evidence|evidence)(/|$)")
+
+# T2-E: allow the one documented legit generated-finding helper, but do not let an analyst run an
+# arbitrary Python script by filename through the SIFT wrapper. Inline `-c` payloads are still governed
+# by the existing destructive-call patterns; `python3 -m ...` remains a module invocation, not script-file
+# execution. Keep this list tiny and explicit so false-deny decisions are visible in review.
+_PYTHON_SCRIPT_ALLOWLIST = {"/tmp/build_finding.py", "/tmp/build.py"}
+
+
+def _shell_tokens(cmd):
+    """Quote-aware shell tokenization that also separates control operators.
+
+    `shlex.split()` keeps `;` attached to a preceding token in commands like
+    `IMG=/evidence/case.e01; icat ...`, which can hide later command words or
+    falsely treat an image basename as a binary. `punctuation_chars=True` gives us
+    standalone `;`, `|`, `&&`, redirects, etc. without interpreting the command.
+    """
+    try:
+        lex = shlex.shlex(cmd, posix=True, punctuation_chars=True)
+        lex.whitespace_split = True
+        return list(lex)
+    except Exception:
+        try:
+            return shlex.split(cmd, posix=True)
+        except ValueError:
+            return cmd.split()
+
+
+def _assignment_values(toks):
+    vals = {}
+    for t in toks:
+        candidate = t.rstrip(';&')
+        m = re.match(r"^([A-Za-z_]\w*)=(.*)$", candidate)
+        if m:
+            vals[m.group(1)] = m.group(2).strip("'\"")
+    return vals
+
+
+def _resolve_shell_vars(token, assignments):
+    token = token.strip("'\"")
+    def repl(m):
+        return assignments.get(m.group(1) or m.group(2), m.group(0))
+    return re.sub(r"\$\{([A-Za-z_]\w*)\}|\$([A-Za-z_]\w*)", repl, token)
+
+
+def _protected_output_path(path):
+    return _EVID_DEV.match(path) and not _INPUT_EXT.search(path)
+
+
+def _python_script_violation(cmd):
+    toks = _shell_tokens(cmd)
+    for i, tok in enumerate(toks):
+        base = os.path.basename(tok) if "/" in tok else tok
+        if base not in {"python", "python3"}:
+            continue
+        # Walk to the first non-option argument. Options with their own values are not script files.
+        j = i + 1
+        while j < len(toks) and toks[j].startswith("-"):
+            if toks[j] in {"-c", "-m"}:
+                j = min(j + 2, len(toks))
+                break
+            j += 1
+        if j >= len(toks):
+            continue
+        script = toks[j]
+        if re.search(r"\.py(?:$|[?#])", script, re.I):
+            normalized = os.path.normpath(script)
+            if normalized not in _PYTHON_SCRIPT_ALLOWLIST:
+                return script
+    return None
+
+
+def _writes_into_evidence(cmd):
+    for m in _WRITE_FLAG.finditer(cmd):
+        val = m.group(1).strip("'\"")
+        if _protected_output_path(val):
+            return m.group(0)[:48]
+
+    toks = _shell_tokens(cmd)
+    assignments = _assignment_values(toks)
+    for i, tok in enumerate(toks):
+        flag, val = tok, None
+        if "=" in tok:
+            flag, val = tok.split("=", 1)
+        elif tok in _WRITE_FLAG_NAMES and i + 1 < len(toks):
+            val = toks[i + 1]
+        if flag not in _WRITE_FLAG_NAMES or val is None:
+            continue
+        resolved = _resolve_shell_vars(val, assignments)
+        if _protected_output_path(resolved):
+            return f"{flag} {resolved}"[:48]
+    return None
+
+
+def _sqlite_violation(cmd):
+    toks = _shell_tokens(cmd)
+    assignments = _assignment_values(toks)
+    for i, tok in enumerate(toks):
+        base = os.path.basename(tok) if "/" in tok else tok
+        if base.lower() != "sqlite3":
+            continue
+        segment = []
+        for t in toks[i + 1:]:
+            if t in _SEPS:
+                break
+            segment.append(t)
+        segment_text = " ".join(segment)
+        if _SQLITE_MUTATION.search(segment_text):
+            return "sqlite3 mutating statement"
+        resolved_segment = [_resolve_shell_vars(t, assignments) for t in segment]
+        has_protected_db = any(_PROTECTED_PATH.match(t.strip("'\"")) for t in resolved_segment)
+        has_readonly = any(t in {"-readonly", "--readonly"} for t in segment)
+        if has_protected_db and not has_readonly:
+            return "sqlite3 protected database without -readonly"
+    return None
+
+
+def _command_words(cmd):
+    """The set of binaries in COMMAND position. shlex tokenizes quote-aware (so a `|` inside a quoted
+    regex like grep -E "a|b" is one token, not a separator); we then walk tokens, treat standalone
+    separators as 'next token is a command', and skip wrappers (sudo/xargs/...) and leading flags."""
+    toks = _shell_tokens(cmd)
+    words = set()
+    expect = True
+    for t in toks:
+        if t in _SEPS:
+            expect = True
+            continue
+        if not expect:
+            continue
+        # Recognize shell assignment prefixes BEFORE basename normalization. Otherwise an assignment
+        # like IMG="/mnt/evidence/case.e01" is basenamed to "case.e01" and falsely treated as a
+        # command word. Strip common trailing separators because shlex keeps `VAR=...;` together.
+        assignment_candidate = t.rstrip(';&')
+        if re.match(r"^[A-Za-z_]\w*=", assignment_candidate):   # VAR=value assignment prefix → still expecting the command
+            continue
+        base = os.path.basename(t) if "/" in t else t
+        if base in _WRAPPERS:                    # sudo/xargs/time/... → the real command is a later token
+            continue
+        if base.startswith("-"):                 # a flag (e.g. sudo -S) → keep looking for the binary
+            continue
+        words.add(base)
+        expect = False
+    return words
+
+
+def _all_tokens(cmd, _depth=0):
+    toks = _shell_tokens(cmd)
+    out = set()
+    for t in toks:
+        if (" " in t or "\t" in t) and _depth < 4:   # recurse into quoted sub-commands
+            out |= _all_tokens(t, _depth + 1)
+            continue
+        out.add(os.path.basename(t) if "/" in t else t)
+    return out
+
+
+def scan(cmd, gw, iss, caller):
+    # 1) obfuscation / dual-use / write-to-evidence patterns
+    for rx, why in _DANGER:
+        if rx.search(cmd):
+            return False, {"refused": why}
+    py_script = _python_script_violation(cmd)
+    if py_script:
+        return False, {"refused": f"python script-file execution outside allowlist ({py_script})"}
+    # tool-native write/extract into evidence or a device (distinguishes an output dir from an input file)
+    w = _writes_into_evidence(cmd)
+    if w:
+        return False, {"refused": f"tool-native write into evidence/device ({w})"}
+    sqlite_problem = _sqlite_violation(cmd)
+    if sqlite_problem:
+        return False, {"refused": sqlite_problem}
+    # mount must be read-only
+    cmds = _command_words(cmd)
+    if "mount" in cmds and not re.search(r"\bro\b|--read-only|-[a-zA-Z]*r\b", cmd):
+        return False, {"refused": "mount without read-only"}
+    if "mount" in cmds and re.search(r"(^|[\s,])rw([\s,]|$)|--rw|-o[^|;&]*\brw\b", cmd):
+        return False, {"refused": "read-write mount"}
+    # 2) any destructive binary, anywhere (catches `xargs rm`, `find -exec dd`, etc.)
+    bad = sorted(_all_tokens(cmd) & set(FORBIDDEN_TOOLS))
+    if bad:
+        return False, {"refused_tool": bad[0], "reason": "forbidden/destructive tool"}
+    # 3) DEFAULT-DENY: every command-position binary must be on the kernel allowlist (READ_TOOLS)
+    for w in sorted(cmds):
+        cap = iss.issue(caller, "council-sift", w, int(time.time()) + 60)
+        d = gw.authorize(Request(caller, "council-sift", ANALYST_RELATION, w, "read_only", capability=cap))
+        if not d.allowed:
+            return False, {"refused_tool": w, "reason": d.reason}
+    return True, {"allowed": True, "command_words": sorted(cmds)}
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--caller", default="agent:analyst")
+    ap.add_argument("--tool")
+    ap.add_argument("--authority", default="read_only")
+    ap.add_argument("--scan-command")
+    a = ap.parse_args()
+
+    now = lambda: int(time.time())  # noqa: E731
+    gw, iss = build_gateway(now)
+
+    if a.scan_command is not None:
+        ok, info = scan(a.scan_command, gw, iss, a.caller)
+        print(json.dumps(info), file=sys.stderr)
+        sys.exit(0 if ok else 1)
+
+    if not a.tool:
+        print("usage: authorize.py --scan-command \"<cmd>\" | --tool <tool> [--authority read_only|high]", file=sys.stderr)
+        sys.exit(2)
+    cap = iss.issue(a.caller, "council-sift", a.tool, now() + 60)
+    d = gw.authorize(Request(a.caller, "council-sift", ANALYST_RELATION, a.tool, a.authority, capability=cap))
+    print(json.dumps({"tool": a.tool, "allowed": d.allowed, "reason": d.reason, "layer": d.layer}), file=sys.stderr)
+    sys.exit(0 if d.allowed else 1)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.log
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+.env
+.env.local
+_drafts/

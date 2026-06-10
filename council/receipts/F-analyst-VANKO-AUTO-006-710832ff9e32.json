@@ -1,0 +1,124 @@
+{
+  "finding_id": "F-analyst-VANKO-AUTO-006",
+  "nodeId": "ddda6012-d7e3-5eb6-b875-b91134d0e860",
+  "case": "VANKO-AUTO",
+  "claim": {
+    "observation": "fls of the Users directory (inode 81647) on the partition at offset 1411072 lists the following entries: All Users, Default, Default User, Default.migrated, defaultprinter, desktop.ini, PC User, and Public.",
+    "interpretation": "The Users directory listing contains standard system/template profiles (All Users, Default, Default User, Public), a 'Default.migrated' directory (a name typically produced when the default profile is migrated during an OS upgrade/reinstall), and two named profile directories 'PC User' and 'defaultprinter'. These entries reflect profile directories present in the filesystem listing; on their own they do not indicate account ownership, who logged in, login activity, or any user action. The 'Default.migrated' entry is consistent with the in-place upgrade also indicated by the Windows.old directory.",
+    "confidence": "MEDIUM",
+    "content_sha256": "2cfc9513f9471d2fb0b62f88f0f15e3ab9ed32dfd3e59087b58ad03dac5b4e15"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01",
+    "locator": "Users profile directory (fls inode 81647 @ offset 1411072)",
+    "tool": "fls",
+    "command": "fls -o 1411072 \"/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01\" 81647",
+    "output_sha256": "7d3931eace864299c8af6e293f4a9fa2c6bc6d26e8a114c08f1fb44438cd92ae"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-AUTO-b0652b6da7699df2",
+    "execution_record_sha256": "b0652b6da7699df247f9e493bf10295a1d0d24ff57422715375774ac1f1871fc",
+    "evidence_excerpt_sha256": "7d3931eace864299c8af6e293f4a9fa2c6bc6d26e8a114c08f1fb44438cd92ae"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "7d3931eace864299c8af6e293f4a9fa2c6bc6d26e8a114c08f1fb44438cd92ae",
+    "total_chars": 231,
+    "excerpt_chars": 231,
+    "max_chars": 4000,
+    "truncated": false,
+    "cited_tokens_found": {},
+    "excerpt": "d/d 261929-144-1:\tAll Users\nd/d 81648-144-5:\tDefault\nd/d 261926-144-1:\tDefault User\nd/d 264244-144-6:\tDefault.migrated\nd/d 27717-144-6:\tdefaultprinter\nr/r 102846-128-1:\tdesktop.ini\nd/d 263009-144-6:\tPC User\nd/d 81694-144-5:\tPublic\n",
+    "excerpt_sha256": "7d3931eace864299c8af6e293f4a9fa2c6bc6d26e8a114c08f1fb44438cd92ae"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 8 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "All Users",
+          "present": true
+        },
+        {
+          "token": "Default",
+          "present": true
+        },
+        {
+          "token": "Default User",
+          "present": true
+        },
+        {
+          "token": "Default.migrated",
+          "present": true
+        },
+        {
+          "token": "defaultprinter",
+          "present": true
+        },
+        {
+          "token": "desktop.ini",
+          "present": true
+        },
+        {
+          "token": "PC User",
+          "present": true
+        },
+        {
+          "token": "Public",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T16:42:15.546Z",
+  "prev_receipt_sha256": "cb098347af9b8b3b37ac7cf352778130ff060ab090f0f7109d881cdace4be2c6",
+  "receipt_sha256": "710832ff9e3274017b7191bf5910c8b4cb9418591acea96b1096ea1d2a4fd222"
+}

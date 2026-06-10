@@ -1,0 +1,77 @@
+{
+  "finding_id": "F-analyst-SRL2015-NFURY-003",
+  "nodeId": "52c3dfd5-9776-5907-81b0-76cf824f85f8",
+  "case": "SRL2015-NFURY",
+  "claim": {
+    "observation": "Volatility3 windows.netscan reports svchost.exe (PID 408) LISTENING on 0.0.0.0:3389 (TCPv4 and TCPv6), and f-response-ent (PID 328) with an ESTABLISHED TCP session 10.3.58.6:3260 -> 10.3.16.5:48769 plus LISTENING on 0.0.0.0:3260.",
+    "interpretation": "Remote Desktop (TCP 3389) was enabled and listening on nfury at capture time, providing a remote-access surface. The ESTABLISHED 3260 (iSCSI) session and 3260 listener belong to f-response-ent (PID 328, created 21:25:10, just before capture), i.e. the live remote forensic acquisition channel to the examiner host 10.3.16.5 - this is acquisition infrastructure, not attacker activity, and is recorded here to distinguish it from intrusion traffic.",
+    "confidence": "HIGH",
+    "content_sha256": "1fe7142f76fd16317f7da03e9067a2a371a71f18970546fc1dfe8c1808864487"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/nfury/win7-64-nfury-memory/win7-64-nfury-memory-raw.001",
+    "locator": "netscan offsets 0x7dbdd470 (3389 LISTEN, PID 408), 0x7f715cf0 (3260 ESTABLISHED, PID 328)",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -f /tmp/nfury/win7-64-nfury-memory/win7-64-nfury-memory-raw.001 windows.netscan",
+    "output_sha256": "01e869325f860643b8ba462cdd156dc2f1a85aff26d29c169e6061abe9623de2"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 2 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "3389\t0.0.0.0\t0\tLISTENING\t408\tsvchost.exe",
+          "present": true
+        },
+        {
+          "token": "10.3.58.6\t3260\t10.3.16.5\t48769\tESTABLISHED\t328\tf-response-ent",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:41:33.427Z",
+  "prev_receipt_sha256": "b99bc0e6863c29c46408994b9ddd82078ab54fa47a4d4e5fa883044fcfab2e5a",
+  "receipt_sha256": "aa84d701610278dcc501dff015981c59425ff414d5baf0788702d51f885e2df7"
+}

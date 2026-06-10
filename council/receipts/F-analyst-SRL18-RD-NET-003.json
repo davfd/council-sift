@@ -1,0 +1,101 @@
+{
+  "finding_id": "F-analyst-SRL18-RD-NET-003",
+  "nodeId": "c8a750d3-8b49-5e6c-97f8-9eb9eda4da81",
+  "case": "SRL18-RD-NET",
+  "claim": {
+    "observation": "windows.netscan shows PID 22456 'subject_srv.ex' LISTENING on 0.0.0.0:3262 (TCPv4 offset 0xbbe3f620, plus the matching TCPv6 ::3262), and an ESTABLISHED TCPv4 session 172.16.6.15:3262 with foreign address 172.16.5.50:43036 (offset 0xbbf88a30) owned by the same PID 22456.",
+    "interpretation": "A process named subject_srv.exe is bound to an uncommon TCP port (3262) and has a live inbound connection from another internal host, 172.16.5.50. The remote side's high ephemeral source port (43036) terminating on local port 3262 is consistent with 172.16.5.50 acting as the CLIENT of a custom service running on this host -- an internal peer that reached this listener over the network. A custom listening service of this kind can serve as a remote-access channel, and it is the named subject of this case, so it warrants follow-up. This netscan output alone evidences only the live socket and its single internal peer; it does not by itself characterise the traffic carried over the session as malicious.",
+    "confidence": "MEDIUM",
+    "content_sha256": "ef05aa9067c638c26ecf6826ef984b6ae42396ef53bc9a637c2382ae75a1f83e"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/rd05/base-rd-05-memory.img",
+    "locator": "netscan offsets 0xbbe3f620 (LISTENING 3262) and 0xbbf88a30 (ESTABLISHED 172.16.6.15:3262<-172.16.5.50:43036); PID 22456",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -f /tmp/rd05/base-rd-05-memory.img windows.netscan",
+    "output_sha256": "974fc6d7847b1a77af92f7e3d405623c5c8adcc3dbb4f7de28b1ca721f0e5c67"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 8 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "subject_srv.ex",
+          "present": true
+        },
+        {
+          "token": "3262",
+          "present": true
+        },
+        {
+          "token": "172.16.6.15",
+          "present": true
+        },
+        {
+          "token": "172.16.5.50",
+          "present": true
+        },
+        {
+          "token": "43036",
+          "present": true
+        },
+        {
+          "token": "ESTABLISHED",
+          "present": true
+        },
+        {
+          "token": "LISTENING",
+          "present": true
+        },
+        {
+          "token": "22456",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:27:13.409Z",
+  "prev_receipt_sha256": "920601971fc74e4243978f271ab32a148fdfed89368ffa9ac88da9f28836143a",
+  "receipt_sha256": "6bce5dd2eb5b66912b30c5f713d8f4e622445188810a82240770371fa050d3b7"
+}

@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 600" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 z" fill="#444"/>
+    </marker>
+    <marker id="arrR" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 z" fill="#b23b3b"/>
+    </marker>
+    <marker id="arrG" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 z" fill="#2f7d32"/>
+    </marker>
+    <style>
+      .box{fill:#f3f5fb;stroke:#5b6bb0;stroke-width:1.5;rx:8;}
+      .vm{fill:#eef7ee;stroke:#3f8b43;stroke-width:1.5;}
+      .kern{fill:#fdf0ef;stroke:#b23b3b;stroke-width:1.5;}
+      .db{fill:#eef;stroke:#4452a0;stroke-width:1.5;}
+      .council{fill:#fff7e6;stroke:#b7791f;stroke-width:1.5;}
+      .seat{fill:#fffdf5;stroke:#b7791f;stroke-width:1;}
+      .rcpt{fill:#eef7f0;stroke:#2f7d32;stroke-width:1.5;}
+      .lbl{fill:#222;} .t{fill:#222;text-anchor:middle;} .ti{fill:#555;font-size:11px;text-anchor:middle;}
+      .edge{stroke:#444;stroke-width:1.5;fill:none;} .erej{stroke:#b23b3b;stroke-width:2;fill:none;}
+      .eok{stroke:#2f7d32;stroke-width:2;fill:none;} .elbl{fill:#444;font-size:11px;}
+      .hdr{font-weight:bold;}
+    </style>
+  </defs>
+
+  <text x="530" y="28" class="t hdr" font-size="18">Council-SIFT — secure the reasoning before the decision</text>
+
+  <!-- SIFT VM lane -->
+  <rect x="20" y="60" width="500" height="120" rx="10" class="vm" opacity="0.5"/>
+  <text x="34" y="80" class="lbl hdr" fill="#3f8b43">SANS SIFT Workstation (VM)</text>
+  <rect x="34" y="95" width="120" height="64" rx="8" class="vm"/>
+  <text x="94" y="122" class="t">Evidence</text><text x="94" y="140" class="ti">disk · memory · logs</text>
+  <rect x="190" y="95" width="150" height="64" rx="8" class="vm"/>
+  <text x="265" y="122" class="t">SIFT tools</text><text x="265" y="140" class="ti">vol3·plaso·TSK·yara</text>
+  <rect x="376" y="95" width="128" height="64" rx="8" class="box"/>
+  <text x="440" y="122" class="t">Analyst</text><text x="440" y="140" class="ti">Claude Code</text>
+
+  <!-- Identity kernel -->
+  <rect x="376" y="210" width="220" height="70" rx="8" class="kern"/>
+  <text x="486" y="234" class="t" fill="#b23b3b">Identity Kernel (guardrail)</text>
+  <text x="486" y="252" class="ti">HMAC caps · forbidden-tool &amp; injection refusal</text>
+  <text x="486" y="267" class="ti">analyst can't self-approve · hash-chained audit</text>
+
+  <!-- bridge -->
+  <rect x="650" y="95" width="120" height="64" rx="8" class="box"/>
+  <text x="710" y="122" class="t">csift bridge</text><text x="710" y="140" class="ti">record·trace·refute</text>
+
+  <!-- claw-memory -->
+  <rect x="636" y="210" width="220" height="86" rx="8" class="db"/>
+  <text x="746" y="233" class="t hdr">claw-memory MCP server</text>
+  <text x="746" y="252" class="ti">10 tools · Neo4j :7690</text>
+  <text x="746" y="268" class="ti">MemoryClaim · ToolExecution</text>
+  <text x="746" y="285" class="ti">ConflictRecord · Receipt · content_sha256</text>
+
+  <!-- Council -->
+  <rect x="636" y="330" width="380" height="120" rx="10" class="council"/>
+  <text x="650" y="350" class="lbl hdr" fill="#b7791f">Council (seats try to REFUTE)</text>
+  <rect x="650" y="360" width="120" height="36" rx="6" class="seat"/><text x="710" y="383" class="t">Citation</text>
+  <rect x="780" y="360" width="120" height="36" rx="6" class="seat"/><text x="840" y="383" class="t">Tool-semantics</text>
+  <rect x="650" y="404" width="120" height="36" rx="6" class="seat"/><text x="710" y="427" class="t">Contradiction</text>
+  <rect x="780" y="404" width="120" height="36" rx="6" class="seat"/><text x="840" y="427" class="t">Synthesis</text>
+  <rect x="912" y="382" width="92" height="40" rx="6" class="seat"/><text x="958" y="400" class="ti">+Inference</text><text x="958" y="414" class="ti">(next)</text>
+
+  <!-- Receipt + Human -->
+  <rect x="636" y="500" width="170" height="56" rx="8" class="rcpt"/>
+  <text x="721" y="523" class="t" fill="#2f7d32">Council Receipt</text><text x="721" y="540" class="ti">hash-chained</text>
+  <rect x="846" y="500" width="170" height="56" rx="8" class="box"/>
+  <text x="931" y="523" class="t">Human examiner</text><text x="931" y="540" class="ti">Valhuntir-compatible HMAC</text>
+
+  <!-- edges -->
+  <path class="edge" d="M154,127 L188,127" marker-end="url(#arr)"/>
+  <path class="edge" d="M340,127 L374,127" marker-end="url(#arr)"/>
+  <path class="edge" d="M440,159 L440,208" marker-end="url(#arr)"/>
+  <text x="448" y="190" class="elbl">every tool call / write</text>
+  <path class="edge" d="M504,127 L648,127" marker-end="url(#arr)"/>
+  <path class="edge" d="M710,159 L710,208" marker-end="url(#arr)"/>
+  <text x="718" y="190" class="elbl">finding + provenance</text>
+  <path class="edge" d="M856,253 L900,253 L900,300 L840,300 L840,328" marker-end="url(#arr)"/>
+  <text x="864" y="248" class="elbl">review</text>
+
+  <!-- refute loop back to analyst -->
+  <path class="erej" d="M650,372 C500,372 470,150 440,95" marker-end="url(#arrR)" stroke-dasharray="5,4"/>
+  <text x="486" y="120" class="elbl" fill="#b23b3b">REFUTE → self-correct (no human)</text>
+
+  <!-- verified down to receipt, then human -->
+  <path class="eok" d="M721,450 L721,498" marker-end="url(#arrG)"/>
+  <text x="729" y="478" class="elbl" fill="#2f7d32">VERIFIED</text>
+  <path class="eok" d="M806,528 L844,528" marker-end="url(#arrG)"/>
+  <text x="690" y="575" class="ti">Only COUNCIL_VERIFIED findings reach the human. HMAC secures *who* approved; the Receipt secures *why* the claim deserved approval.</text>
+</svg>

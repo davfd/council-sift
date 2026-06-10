@@ -1,0 +1,160 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-020",
+  "nodeId": "47596eec-db1a-58f6-b1cc-f704e4c715e5",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted minute timeline packet records 11 one-minute rows for 2018-05-13T10:05:00Z..10:15:59Z. Totals are registry=480, EVTX=168, Prefetch distinct files=61 with 82 slots, Chrome visits/downloads=0, LNK timestamp-field rows=1, JumpList Automatic timestamp-field rows=144, and JumpList Custom timestamp-field rows=1. Peak minutes are EVTX/Prefetch at 10:05Z, RecentDocs at 10:12Z, and UserAssist at 10:14Z.",
+    "interpretation": "This is a count-based minute timeline packet for the target window. It refines temporal ordering across artifact surfaces but does not establish human identity, file-open/copy, transfer direction, or completed upload.",
+    "confidence": "HIGH",
+    "content_sha256": "4247dd8e186964d035e12ba824138bb3372460fb7cf95ff7bc34f527185e2045"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "minute-timeline:v2",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_minute_timeline_out/minute_timeline_summary.txt",
+    "output_sha256": "fadbd723c7b90c7b1448044dc7cb65c66707ab7c0471558d5c9b63837e105614"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-526e1707c9c26ca9",
+    "execution_record_sha256": "526e1707c9c26ca901b1f7a8b76fc2c0695990d7ff636591dbb8e1692452ecd3",
+    "evidence_excerpt_sha256": "6a4b0ca3141b824ff73b85f68888ca7bb446eddcbc6e7179b4f00269a676ab7f"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "fadbd723c7b90c7b1448044dc7cb65c66707ab7c0471558d5c9b63837e105614",
+    "total_chars": 3272,
+    "excerpt_chars": 2531,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_MINUTE_TIMELINE_PACKET_V2=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nMINUTE_ROWS=11\nMINUTE_TIMELINE_CSV_SHA256=2c476687d8fbc14a064b21b1570cd063be6dc37cf536dba28bb08371b60dc301\nMINUTE_TIMELINE_REGISTRY_TOTAL_ROWS=480\nMINUTE_TIMELINE_EVTX_TOTAL_ROWS=168\nMINUTE_TIMELINE_PREFETCH_FILE_MINUTE_HITS_SUM=78\nMINUTE_TIMELINE_PREFETCH_DISTINCT_FILE_HITS=61\nMINUTE_TIMELINE_PREFETCH_SLOT_HITS_SUM=82\nMINUTE_TIMELINE_LNK_ROWS_ANY_TS_SUM=1\nMINUTE_TIMELINE_JUMPLIST_AUTO_ROWS_ANY_TS_SUM=144\nMINUTE_TIMELINE_JUMPLIST_CUSTOM_ROWS_ANY_TS_SUM=1\nMINUTE_TIMELINE_CHROME_VISIT_DOWNLOAD_SUM=0\nPEAK_REGISTRY_MINUTE=2018-05-13T10:12Z;ROWS=295;RECENTDOCS=295;USERASSIST=0\nPEAK_PREFETCH_MINUTE=2018-05-13T10:05Z;SLOTS=26;FILES=24;KEY_EXES=CHROME.EXE:4;DROPBOXUPDATE.EXE:2;EXPLORER.EXE:1;ONEDRIVE.EXE:1;GOOGLEUPDATE.EXE:1\nPEAK_EVTX_MINUTE=2018-05-13T10:05Z;ROWS=111;SEC4624=5;SEC4672=3;SEC4648=2;SEC4634=2\nMINUTE=2018-05-13T10:05Z;REG_RECENTDOCS=0;REG_USERASSIST=0;EVTX=111;PF_SLOTS=26;PF_FILES=24;LNK=0;JLAUTO=0;JLCUSTOM=0;CHROME_VISITS=0;CHROME_DOWNLOADS=0;REG_NEEDLES=;PF_KEY_EXES=CHROME.EXE:4;DROPBOXUPDATE.EXE:2;EXPLORER.EXE:1;ONEDRIVE.EXE:1;GOOGLEUPDATE.EXE:1\nMINUTE=2018-05-13T10:06Z;REG_RECENTDOCS=0;REG_USERASSIST=0;EVTX=6;PF_SLOTS=16;PF_FILES=16;LNK=0;JLAUTO=0;JLCUSTOM=0;CHROME_VISITS=0;CHROME_DOWNLOADS=0;REG_NEEDLES=;PF_KEY_EXES=CHROME.EXE:2\nMINUTE=2018-05-13T10:07Z;REG_RECENTDOCS=0;REG_USERASSIST=0;EVTX=9;PF_SLOTS=7;PF_FILES=7;LNK=0;JLAUTO=0;JLCUSTOM=0;CHROME_VISITS=0;CHROME_DOWNLOADS=0;REG_NEEDLES=;PF_KEY_EXES=GOOGLEUPDATE.EXE:1\nMINUTE=2018-05-13T10:08Z;REG_RECENTDOCS=0;REG_USERASSIST=0;EVTX=6;PF_SLOTS=4;PF_FILES=4;LNK=0;JLAUTO=0;JLCUSTOM=0;CHROME_VISITS=0;CHROME_DOWNLOADS=0;REG_NEEDLES=;PF_KEY_EXES=\nMINUTE=2018-05-13T10:09Z;REG_RECENTDOCS=0;REG_USERASSIST=0;EVTX=23;PF_SLOTS=11;PF_FILES=11;LNK=0;JLAUTO=0;JLCUSTOM=0;CHROME_VISITS=0;CHROME_DOWNLOADS=0;REG_NEEDLES=;PF_KEY_EXES=GOOGLEUPDATE.EXE:1\nMINUTE=2018-05-13T10:10Z;REG_RECENTDOCS=0;REG_USERASSIST=0;EVTX=9;PF_SLOTS=2;PF_FILES=2;LNK=0;JLAUTO=0;JLCUSTOM=0;CHROME_VISITS=0;CHROME_DOWNLOADS=0;REG_NEEDLES=;PF_KEY_EXES=\nMINUTE=2018-05-13T10:11Z;REG_RECENTDOCS=0;REG_USERASSIST=0;EVTX=0;PF_SLOTS=0;PF_FILES=0;LNK=0;JLAUTO=0;JLCUSTOM=0;CHROME_VISITS=0;CHROME_DOWNLOADS=0;REG_NEEDLES=;PF_KEY_EXES=\nMINUTE=2018-05-13T10:12Z;REG_RECENTDOCS=295;REG_USERASSIST=0;EVTX=3;PF_SLOTS=12;PF_FILES=11;LNK=1;JLAUTO=144;JLCUSTOM=1;CHROME_VISITS=0;CHROME_DOWNLOADS=0;REG_NEEDLES=7Z:2;DRIVE:2;ONEDRIVE:1;PF_KEY_EXES=CHROME.EXE:1\n[... omitted lines 24-29; full output hash below ...]",
+    "excerpt_sha256": "6a4b0ca3141b824ff73b85f68888ca7bb446eddcbc6e7179b4f00269a676ab7f"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 17 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_MINUTE_TIMELINE_PACKET_V2=1",
+          "present": true
+        },
+        {
+          "token": "WINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z",
+          "present": true
+        },
+        {
+          "token": "MINUTE_ROWS=11",
+          "present": true
+        },
+        {
+          "token": "MINUTE_TIMELINE_REGISTRY_TOTAL_ROWS=480",
+          "present": true
+        },
+        {
+          "token": "MINUTE_TIMELINE_EVTX_TOTAL_ROWS=168",
+          "present": true
+        },
+        {
+          "token": "MINUTE_TIMELINE_PREFETCH_DISTINCT_FILE_HITS=61",
+          "present": true
+        },
+        {
+          "token": "MINUTE_TIMELINE_PREFETCH_SLOT_HITS_SUM=82",
+          "present": true
+        },
+        {
+          "token": "MINUTE_TIMELINE_LNK_ROWS_ANY_TS_SUM=1",
+          "present": true
+        },
+        {
+          "token": "MINUTE_TIMELINE_JUMPLIST_AUTO_ROWS_ANY_TS_SUM=144",
+          "present": true
+        },
+        {
+          "token": "MINUTE_TIMELINE_JUMPLIST_CUSTOM_ROWS_ANY_TS_SUM=1",
+          "present": true
+        },
+        {
+          "token": "MINUTE_TIMELINE_CHROME_VISIT_DOWNLOAD_SUM=0",
+          "present": true
+        },
+        {
+          "token": "PEAK_REGISTRY_MINUTE=2018-05-13T10:12Z;ROWS=295;RECENTDOCS=295;USERASSIST=0",
+          "present": true
+        },
+        {
+          "token": "PEAK_PREFETCH_MINUTE=2018-05-13T10:05Z;SLOTS=26;FILES=24;KEY_EXES=CHROME.EXE:4;DROPBOXUPDATE.EXE:2;EXPLORER.EXE:1;ONEDRIVE.EXE:1;GOOGLEUPDATE.EXE:1",
+          "present": true
+        },
+        {
+          "token": "PEAK_EVTX_MINUTE=2018-05-13T10:05Z;ROWS=111;SEC4624=5;SEC4672=3;SEC4648=2;SEC4634=2",
+          "present": true
+        },
+        {
+          "token": "MINUTE=2018-05-13T10:14Z;REG_RECENTDOCS=0;REG_USERASSIST=185;EVTX=0;PF_SLOTS=0;PF_FILES=0;LNK=0;JLAUTO=0;JLCUSTOM=0;CHROME_VISITS=0;CHROME_DOWNLOADS=0;REG_NEEDLES=GOOGLE:8;CHROME:7;DROPBOX:5;DRIVE:3;7Z:3;WINWORD:2;CMD:1;POWERSHELL:1;PF_KEY_EXES=",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=minute_packet_is_count_timeline_not_human_identity_or_transfer_completion",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=lnk_jumplist_values_are_timestamp_field_counts_not_file_open_or_copy_proof",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T19:23:06.119Z",
+  "prev_receipt_sha256": "0d17c806955f73120efd189908e438830b80d1114297e9cf4c18dad60ad7eaf3",
+  "receipt_sha256": "9ad33dd375cb637d3739fdd4402b572f0cea36d6f5c8f8255c9fbfd506fbf6a9"
+}

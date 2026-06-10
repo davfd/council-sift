@@ -1,0 +1,89 @@
+{
+  "finding_id": "F-analyst-SRL2015-NFURY-007",
+  "nodeId": "ab581fbf-49bb-580e-8d6f-5491913c0d09",
+  "case": "SRL2015-NFURY",
+  "claim": {
+    "observation": "ASCII strings from the recycled binary svchost.exe (NTFS inode 92255, istat Name 'svchost.exe') include the registry path System\\CurrentControlSet\\Services\\netman\\domain, the value names home and pause, a hardcoded URL http://192.168.1.5/ads/, the string 'The URI must begin with \"https://\" || \"http://\".', and the PDB path d:\\work\\hg\\httppump\\winclient\\objfre_wxp_x86\\i386\\winclient.pdb.",
+    "interpretation": "This binary is the implant body. Its embedded references to System\\CurrentControlSet\\Services\\netman\\domain with home/pause exactly match the winclient.reg C2 configuration (F-...-006), showing the binary reads its C2 URL and beacon interval from that key; http://192.168.1.5/ads/ is the hardcoded default C2/URI. Its PDB path lies under a 'httppump\\winclient' project, the same 'httppump' codebase as the PDB in a.exe (F-...-004, c:\\code\\httppump\\inner\\...\\i.pdb) - linking the two artifacts to one HTTP-RAT toolset. The file is named svchost.exe but resides outside System32 (in a Recycle Bin), i.e. it masquerades as the legitimate Windows service host.",
+    "confidence": "HIGH",
+    "content_sha256": "2e8780522416fb09d036e6cbf4da5387935451ddab71983d59d87b8dafa529ea"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/nfury/win7-64-nfury-c-drive/win7-64-nfury-c-drive.E01",
+    "locator": "NTFS inode 92255; $Recycle.Bin/S-1-5-...-1673/$R6SODDB/svchost.exe",
+    "tool": "sleuthkit icat + strings",
+    "command": "icat /tmp/nfury/win7-64-nfury-c-drive/win7-64-nfury-c-drive.E01 92255 | strings",
+    "output_sha256": "2a59a2143a42855c3ec79e7eadb8c814568df3c54556c1c3581ba872ccabad0e"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 5 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "System\\CurrentControlSet\\Services\\netman\\domain",
+          "present": true
+        },
+        {
+          "token": "http://192.168.1.5/ads/",
+          "present": true
+        },
+        {
+          "token": "d:\\work\\hg\\httppump\\winclient\\objfre_wxp_x86\\i386\\winclient.pdb",
+          "present": true
+        },
+        {
+          "token": "home",
+          "present": true
+        },
+        {
+          "token": "pause",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:53:16.896Z",
+  "prev_receipt_sha256": "48493870fb824564228f3139a5b1bc52fc7cf571b486a6fe45e1d4533b39327c",
+  "receipt_sha256": "1763f46c129892322077da95cc9277ed7d08a144195327e5095f836bbbf1869b"
+}

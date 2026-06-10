@@ -1,0 +1,120 @@
+{
+  "finding_id": "F-analyst-VANKO-AUTO-002",
+  "nodeId": "e34752e7-d818-51ef-9a70-fdf22cf1a3b5",
+  "case": "VANKO-AUTO",
+  "claim": {
+    "observation": "mmls of surface_physical.E01 reports a GUID Partition Table (EFI), units in 512-byte sectors, with slots including: a Basic data partition (start 0000002048), an EFI system partition (start 0000739328), a Microsoft reserved partition (start 0001148928), a large Basic data partition slot 003 spanning start 0001411072 to end 0232294399 (length 0230883328 sectors), and a further Basic data partition (start 0233216000).",
+    "interpretation": "The disk uses a GPT layout consistent with a UEFI Windows installation: a small basic-data/recovery partition, an EFI system partition, a Microsoft reserved partition, a large (~0230883328 512-byte sectors, ~110 GiB) basic data partition, and an additional basic data partition. By size, the slot-003 partition starting at sector 1411072 is the primary data partition and the most likely operating-system volume; its filesystem type and contents are not established by mmls alone.",
+    "confidence": "HIGH",
+    "content_sha256": "49d1dd8f25a29e88324413eb66f9a5f22a4d97543918d68d12badc76f26500ae"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01",
+    "locator": "GPT partition table (mmls)",
+    "tool": "mmls",
+    "command": "mmls \"/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01\"",
+    "output_sha256": "9f55f4dff2d8f8c7c2af396ca0bb840db2d15ae8ff5613009647ade3a81c47f4"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-AUTO-c376dd2664ff25dc",
+    "execution_record_sha256": "c376dd2664ff25dc1369da54f28ba20aa95f97cf80a338dfa9dadeb970d3b806",
+    "evidence_excerpt_sha256": "9f55f4dff2d8f8c7c2af396ca0bb840db2d15ae8ff5613009647ade3a81c47f4"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "9f55f4dff2d8f8c7c2af396ca0bb840db2d15ae8ff5613009647ade3a81c47f4",
+    "total_chars": 925,
+    "excerpt_chars": 925,
+    "max_chars": 4000,
+    "truncated": false,
+    "cited_tokens_found": {},
+    "excerpt": "GUID Partition Table (EFI)\nOffset Sector: 0\nUnits are in 512-byte sectors\n\n      Slot      Start        End          Length       Description\n000:  Meta      0000000000   0000000000   0000000001   Safety Table\n001:  -------   0000000000   0000002047   0000002048   Unallocated\n002:  Meta      0000000001   0000000001   0000000001   GPT Header\n003:  Meta      0000000002   0000000033   0000000032   Partition Table\n004:  000       0000002048   0000739327   0000737280   Basic data partition\n005:  001       0000739328   0001148927   0000409600   EFI system partition\n006:  002       0001148928   0001411071   0000262144   Microsoft reserved partition\n007:  003       0001411072   0232294399   0230883328   Basic data partition\n008:  004       0232294400   0233215999   0000921600   \n009:  005       0233216000   0244275199   0011059200   Basic data partition\n010:  -------   0244275200   0244277247   0000002048   Unallocated\n",
+    "excerpt_sha256": "9f55f4dff2d8f8c7c2af396ca0bb840db2d15ae8ff5613009647ade3a81c47f4"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 7 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "GUID Partition Table (EFI)",
+          "present": true
+        },
+        {
+          "token": "EFI system partition",
+          "present": true
+        },
+        {
+          "token": "Microsoft reserved partition",
+          "present": true
+        },
+        {
+          "token": "Basic data partition",
+          "present": true
+        },
+        {
+          "token": "0001411072",
+          "present": true
+        },
+        {
+          "token": "0232294399",
+          "present": true
+        },
+        {
+          "token": "0230883328",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T16:39:57.147Z",
+  "prev_receipt_sha256": "c08029c65be6d22bd53d54d2730449632292766ea72a4637b9ec8dd1ab507a42",
+  "receipt_sha256": "92cb15e3d8552f53d2e61383b62d9276698898f97a39a3318f3ac159d19f3929"
+}

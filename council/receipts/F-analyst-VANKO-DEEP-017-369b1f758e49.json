@@ -1,0 +1,136 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-017",
+  "nodeId": "65f25235-0225-5264-bd61-2bd182a15b04",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted registry-ledger correlation summary records a redacted ledger of 480 target-window registry rows for 2018-05-13T10:12:23Z..10:14:54Z. The ledger is PROFILE_PC_USER=480, NtUser=480, RecentDocs=295, UserAssist=185; ledger SHA256 is fea7a79665728ac31fdd8da57ff1d559515a204c47f23856dcdbd7321cf64076, and raw Windows/user path marker counts are zero.",
+    "interpretation": "This establishes a redacted PC User registry LastWrite/value-hit ledger for the target window; it does not expose raw paths or identify a human operator.",
+    "confidence": "HIGH",
+    "content_sha256": "753d2eecb38156b6d3be83c58e45f92dc79d45bfd11410e658573a4db8e96778"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "registry-ledger-correlation:v2",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_reg_correlate_out/registry_ledger_correlation_summary.txt",
+    "output_sha256": "5373dcfa7f161d3dac292c50d78f6351dccd931e4e3a0d98303e708211b280d8"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-525982587b87a743",
+    "execution_record_sha256": "525982587b87a7434c4b5ec2ca503ccbf1e58236ca867e34f02363c9d090ec87",
+    "evidence_excerpt_sha256": "78ba225a6edb9c82ac3309dc6ee43755dc8d419bb22941daf98818ead76d44d0"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "5373dcfa7f161d3dac292c50d78f6351dccd931e4e3a0d98303e708211b280d8",
+    "total_chars": 5943,
+    "excerpt_chars": 1156,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_REGISTRY_LEDGER_CORRELATION_V2=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nREG_CSV_EXISTS=1\nREG_CSV_SIZE=783382\nREG_CSV_SHA256=165ab31d89be05ecfd5b9352b3987c1e4ab008c3ad9f6a0bebc630cfa12fbeca\nEVTX_CSV_EXISTS=1\nEVTX_CSV_SIZE=50575012\nEVTX_CSV_SHA256=a666272795ede464c014b955a033c4bf3c027e89a0656320505fb0bec02488e4\nLNK_CSV_EXISTS=1\nLNK_CSV_SIZE=132416\nLNK_CSV_SHA256=d9a52a4e5854fc0410aa85cda6bde51c6a659ec0b71e915f96f802f78cf5ee07\nJUMPLIST_AUTO_CSV_EXISTS=1\nJUMPLIST_AUTO_CSV_SIZE=333523\nJUMPLIST_AUTO_CSV_SHA256=ae4997e9232f5d445f6366354c2f4e8bbed3bdebc97b06f3dd34e81ef5c4a637\nJUMPLIST_CUSTOM_CSV_EXISTS=1\nJUMPLIST_CUSTOM_CSV_SIZE=38612\nJUMPLIST_CUSTOM_CSV_SHA256=090964def13f71bd41deb4db6d43e4c83eb09fccc61f30c1099f5d42889b60d2\nREG_TOTAL_ROWS_READ=1778\nREG_WINDOW_LEDGER_ROWS=480\nREG_WINDOW_LEDGER_TIME_RANGE=2018-05-13T10:12:23Z..2018-05-13T10:14:54Z\nREG_WINDOW_LEDGER_SHA256=fea7a79665728ac31fdd8da57ff1d559515a204c47f23856dcdbd7321cf64076\nREG_WINDOW_LEDGER_RAW_WINDOWS_PATH_MARKERS=0\nREG_WINDOW_LEDGER_RAW_USER_PATH_MARKERS=0\nREG_WINDOW_LEDGER_PROFILE_COUNTS=PROFILE_PC_USER:480\n[... omitted lines 24-102; full output hash below ...]",
+    "excerpt_sha256": "78ba225a6edb9c82ac3309dc6ee43755dc8d419bb22941daf98818ead76d44d0"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 11 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_REGISTRY_LEDGER_CORRELATION_V2=1",
+          "present": true
+        },
+        {
+          "token": "WINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z",
+          "present": true
+        },
+        {
+          "token": "REG_WINDOW_LEDGER_ROWS=480",
+          "present": true
+        },
+        {
+          "token": "REG_WINDOW_LEDGER_TIME_RANGE=2018-05-13T10:12:23Z..2018-05-13T10:14:54Z",
+          "present": true
+        },
+        {
+          "token": "REG_WINDOW_LEDGER_SHA256=fea7a79665728ac31fdd8da57ff1d559515a204c47f23856dcdbd7321cf64076",
+          "present": true
+        },
+        {
+          "token": "REG_WINDOW_LEDGER_RAW_WINDOWS_PATH_MARKERS=0",
+          "present": true
+        },
+        {
+          "token": "REG_WINDOW_LEDGER_RAW_USER_PATH_MARKERS=0",
+          "present": true
+        },
+        {
+          "token": "REG_WINDOW_LEDGER_PROFILE_COUNTS=PROFILE_PC_USER:480",
+          "present": true
+        },
+        {
+          "token": "REG_WINDOW_LEDGER_HIVE_COUNTS=NtUser:480",
+          "present": true
+        },
+        {
+          "token": "REG_WINDOW_LEDGER_DESCRIPTION_COUNTS=RecentDocs:295,UserAssist:185",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=redacted_ledger_hashes_values_and_profiles_without_raw_paths_or_human_identity",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T19:18:49.370Z",
+  "prev_receipt_sha256": "18227e4a048505d3f70e677341d67e89381071f5b53a2345604e1c147c862f1e",
+  "receipt_sha256": "369b1f758e490ee20e14af27c90d8338599b3a4969e3cc4534b6da76480b701a"
+}

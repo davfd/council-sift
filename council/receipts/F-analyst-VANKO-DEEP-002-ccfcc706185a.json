@@ -1,0 +1,148 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-002",
+  "nodeId": "1b625ca1-2d86-5533-87e3-86a2578d3897",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted CYLR Prefetch parse records 238 parsed Windows 10/v30 Prefetch files, zero parse errors, total run-count sum 3212, and last-run range 2016-04-08T23:53:48Z..2018-05-13T10:15:32Z. Selected program witnesses include Chrome files=6/run_count_total=98, OneDrive files=1/run_count_total=20, Dropbox files=2/run_count_total=3, PowerShell files=1/run_count_total=2, WhatsApp files=1/run_count_total=16, uTorrent files=1/run_count_total=12, and GoogleDriveFS/GoogleDrive files=0.",
+    "interpretation": "Prefetch is a stronger program-execution witness than AppCompat/ShimCache for the named executables in the CYLR snapshot, but it still does not prove the human operator, intent, transfer direction, browser upload, or completed cloud sync. GoogleDriveFS absence is scoped to these captured Prefetch files only.",
+    "confidence": "HIGH",
+    "content_sha256": "831a1e5e2f407652fcf3d2f4dafc3ce25a1d381e240beb15d509d93b772bfc5c"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "deep:v1",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_deep_out/safe_summary.txt",
+    "output_sha256": "cdf056257199874e9483d6f6593ae3916175b07a89e2c5ff689cb721c44ac298"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-5cafa8f1313fa10c",
+    "execution_record_sha256": "5cafa8f1313fa10c68a8aecf323e6b8f6c83cde8ede9e18e64e75ad4dd90319e",
+    "evidence_excerpt_sha256": "5e59c1717e07b60c12751c8f5a70888c718e90932f5e6c810f27d22f2b3fc1ad"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "cdf056257199874e9483d6f6593ae3916175b07a89e2c5ff689cb721c44ac298",
+    "total_chars": 10502,
+    "excerpt_chars": 2364,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_DEEP_SAFE_SUMMARY_V1=1\nSOURCE_SCOPE=CYLR_EXTRACTED_COPY_PLUS_PRIOR_PARSER_OUTPUTS\nCYLR_BASE_EXISTS=True\nEVTX_CSV_EXISTS=True\nEVTX_CSV_SHA256=a666272795ede464c014b955a033c4bf3c027e89a0656320505fb0bec02488e4\nEVTX_SELECTED_EVENT_COUNTS=4624:6564,4672:6415,4648:200,4634:177,4688:150,7045:57,4625:36,4647:14\nEVTX_EVENT_1102_TIME_RANGE=..\nEVTX_EVENT_4624_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:08:55Z\nEVTX_EVENT_4625_TIME_RANGE=2016-03-15T10:44:40Z..2018-05-12T22:55:01Z\nEVTX_EVENT_4634_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:05:36Z\nEVTX_EVENT_4647_TIME_RANGE=2016-06-29T20:11:04Z..2018-05-12T22:56:59Z\nEVTX_EVENT_4648_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:05:36Z\nEVTX_EVENT_4672_TIME_RANGE=2016-06-27T18:40:35Z..2018-05-13T10:08:55Z\nEVTX_EVENT_4688_TIME_RANGE=2016-06-28T23:17:36Z..2018-05-12T22:55:00Z\nEVTX_EVENT_7045_TIME_RANGE=2016-03-15T10:44:13Z..2017-03-21T12:50:34Z\nEVTX_SELECTED_EVENT_SOURCE_COUNTS=4624@security.evtx:6564,4672@security.evtx:6415,4648@security.evtx:200,4634@security.evtx:177,4688@security.evtx:150,7045@system.evtx:57,4625@application.evtx:36,4647@security.evtx:14\nEVTX_SECURITY_SELECTED_COUNTS=4624:6564,4672:6415,4648:200,4634:177,4688:150,4647:14\nEVTX_NONSECURITY_SELECTED_COUNTS=7045:57,4625:36\nEVTX_TOP_SELECTED_HOUR_BUCKETS=4624@2016-06-30T14Z:58,4648@2016-06-29T19Z:52,4672@2016-06-30T14Z:46,4624@2016-06-30T15Z:43,7045@2016-03-15T10Z:35,4672@2016-06-30T15Z:35,4624@2016-09-30T11Z:32,4624@2016-06-28T23Z:31,4688@2016-06-30T14Z:30,4624@2016-07-02T01Z:29,4624@2016-08-08T18Z:29,4672@2016-06-28T23Z:27,4624@2016-07-01T22Z:26,4672@2016-09-30T11Z:26,4624@2018-05-12T22Z:26,4624@2016-06-30T16Z:25,4672@2016-07-02T01Z:25,4624@2016-06-29T20Z:24,4672@2016-08-08T18Z:23,4672@2016-07-01T22Z:22,4648@2016-06-29T20Z:21,4688@2016-06-30T15Z:20,4624@2016-10-30T23Z:20,4672@2018-05-12T22Z:20,4672@2016-06-29T20Z:19,4672@2016-06-30T16Z:19,4624@2017-05-20T20Z:19,4624@2016-11-04T13Z:18,4624@2016-07-02T22Z:17,4624@2016-08-08T16Z:17\nSECURITY_4624_LOGON_TYPE_COUNTS=5:6254,7:104,11:102,2:58,3:31,0:15\nSECURITY_4625_LOGON_TYPE_COUNTS=\nSECURITY_4624_AUTH_PACKAGE_COUNTS=Negotiate:6519,NTLM:30,-:15\nSECURITY_4624_TARGET_DOMAIN_HASH12_COUNTS=207ef664c0d4:6299,bab9490cc11d:206,830b7dec09e4:58,9700626a5562:1\nSECURITY_4624_IP_CLASS_COUNTS=NO_IP:6448,LOOPBACK:102,PRIVATE_IP:14\n[... omitted lines 24-96; full output hash below ...]",
+    "excerpt_sha256": "5e59c1717e07b60c12751c8f5a70888c718e90932f5e6c810f27d22f2b3fc1ad"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 14 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "PREFETCH_FILE_COUNT=238",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_PARSED_COUNT=238",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_PARSE_ERROR_COUNT=0",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_VERSION_COUNTS=30:238",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_RUN_COUNT_TOTAL=3212",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_LAST_RUN_RANGE=2016-04-08T23:53:48Z..2018-05-13T10:15:32Z",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_INTERESTING_CHROME.EXE=files:6,run_count_total:98,last_run_max:2018-05-13T10:12:07Z",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_INTERESTING_ONEDRIVE.EXE=files:1,run_count_total:20,last_run_max:2018-05-13T10:05:52Z",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_INTERESTING_DROPBOX.EXE=files:2,run_count_total:3,last_run_max:2017-07-01T20:42:33Z",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_INTERESTING_POWERSHELL.EXE=files:1,run_count_total:2,last_run_max:2017-07-01T20:42:23Z",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_INTERESTING_WHATSAPP.EXE=files:1,run_count_total:16,last_run_max:2016-07-01T22:05:33Z",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_INTERESTING_UTORRENT.EXE=files:1,run_count_total:12,last_run_max:2016-07-07T01:33:42Z",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_INTERESTING_GOOGLEDRIVEFS.EXE=files:0,run_count_total:0,last_run_max:",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_INTERESTING_GOOGLEDRIVE.EXE=files:0,run_count_total:0,last_run_max:",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T17:56:30.629Z",
+  "prev_receipt_sha256": "7a0046507ca40929f06f1595de8be651e29720c865b724d6b39702fee59343b0",
+  "receipt_sha256": "ccfcc706185aa343cff1625b0099e360c21472c7a7ae842353995af654a33f03"
+}

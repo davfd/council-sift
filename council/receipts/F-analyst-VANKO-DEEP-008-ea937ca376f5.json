@@ -1,0 +1,152 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-008",
+  "nodeId": "b7a150e0-5d2c-5cff-8fd3-b050316e064e",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted Prefetch semantic-diff summary covers the six selected allocated EWF Prefetch files that were previously byte-different from CYLR same-name files. For all six pairs, icat succeeded, both EWF-extracted and CYLR files parsed with pyscca, executable name and Prefetch format version match, but run_count, latest run time, and last-run list all differ.",
+    "interpretation": "For these six selected Prefetch names, the EWF-vs-CYLR byte differences are not merely opaque hash churn: they correspond to parsed Prefetch run-count and last-run-slot differences. Treat the EWF and CYLR Prefetch records as separate snapshots for these names. This remains program-execution artifact timing only; it does not prove human operator identity, intent, transfer direction, browser upload, completed upload/download, or cloud-sync completion.",
+    "confidence": "HIGH",
+    "content_sha256": "89dc7797cfd59b933d0f1b0c1f6520e8a21764590c156913b369c5058ae5a9b9"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "prefetch-semantic-diff:v1",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_prefetch_semantic_out/prefetch_semantic_diff_summary.txt",
+    "output_sha256": "9fa03aec41a3e3bcaa268bf3d020a4fb44d7e598aa177cbe838eae853e10fc15"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-3beeaeab7ae4cdac",
+    "execution_record_sha256": "3beeaeab7ae4cdacf0c1118286e73e66b6ac2e6a7b98a096b36fff9097c94d2b",
+    "evidence_excerpt_sha256": "3e3fa25d27f2582ec01abc5f698ca776dac52f267fabba8f4f8a3856b9bdeaf3"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "9fa03aec41a3e3bcaa268bf3d020a4fb44d7e598aa177cbe838eae853e10fc15",
+    "total_chars": 7248,
+    "excerpt_chars": 3996,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_PREFETCH_SEMANTIC_DIFF_V1=1\nEWF_IMAGE_EXISTS=1\nEWF_NTFS_OFFSET=1411072\nCYLR_PREFETCH_DIR_EXISTS=1\nPYSCCA_AVAILABLE=1\nTARGET_COUNT=7\nTARGET_SCOPE=six_F007_byte_different_selected_allocated_prefetch_pairs_plus_one_same_name_missing_allocated_prefetch\nPREFETCH_SEM_DROPBOXUPDATE.EXE-E72FEFE1.pf=inode:3100-128-4,prior_class:byte_different,cylr_exists:1,byte_equal:0,ewf_size:8992,cylr_size:10416,ewf_sha256:bddc515b3829b2362af0d27b277d6ab71f8b3c6ba7cd40042212df1acb0d8902,cylr_sha256:78e63c6001db0863506fa978f3c5e42065013102fe5626a10297483ec6ae0c1d,ewf_parse_ok:1,cylr_parse_ok:1,ewf_exe:DROPBOXUPDATE.EXE,cylr_exe:DROPBOXUPDATE.EXE,exe_equal:True,ewf_version:30,cylr_version:30,version_equal:True,ewf_run_count:8,cylr_run_count:62,run_count_equal:False,ewf_latest:2016-11-04T17:41:13Z,cylr_latest:2018-05-13T10:15:19Z,latest_equal:False,ewf_last_runs:2016-11-04T17:41:13Z|2016-11-04T17:41:00Z|2016-11-04T16:41:24Z|2016-11-04T16:41:00Z|2016-11-04T15:41:35Z|2016-11-04T15:41:00Z|2016-11-04T14:41:06Z|2016-11-04T14:41:00Z,cylr_last_runs:2018-05-13T10:15:19Z|2018-05-13T10:15:19Z|2018-05-13T10:05:35Z|2018-05-13T10:05:32Z|2018-03-30T21:14:06Z|2018-03-30T21:14:06Z|2018-03-30T20:52:01Z|2018-03-30T20:14:05Z,times_list_equal:False,semantic_fields_equal:0\nPREFETCH_SEM_CHROME.EXE-CCF9F3F5.pf=inode:2686-128-4,prior_class:byte_different,cylr_exists:1,byte_equal:0,ewf_size:7597,cylr_size:9111,ewf_sha256:a51f05dc7f7de8a3c9e0791ec1c1a2e0060ea33e1eaf9cc97b23b3325105176d,cylr_sha256:36f45e52a9673024f6403a7128e886f28a5aa7424310e527cd6a9b8bd17ab060,ewf_parse_ok:1,cylr_parse_ok:1,ewf_exe:CHROME.EXE,cylr_exe:CHROME.EXE,exe_equal:True,ewf_version:30,cylr_version:30,version_equal:True,ewf_run_count:2,cylr_run_count:69,run_count_equal:False,ewf_latest:2016-11-04T14:45:55Z,cylr_latest:2018-05-13T10:12:07Z,latest_equal:False,ewf_last_runs:2016-11-04T14:45:55Z|2016-11-04T14:39:42Z,cylr_last_runs:2018-05-13T10:12:07Z|2018-05-13T10:06:01Z|2018-05-12T22:55:32Z|2018-03-30T21:26:24Z|2018-03-30T21:21:24Z|2018-03-30T21:16:25Z|2018-03-30T21:11:24Z|2018-03-30T21:06:24Z,times_list_equal:False,semantic_fields_equal:0\nPREFETCH_SEM_IEXPLORE.EXE-7A9337F2.pf=inode:10271-128-4,prior_class:byte_different,cylr_exists:1,byte_equal:0,ewf_size:28316,cylr_size:29073,ewf_sha256:1a799ce9c6b7baf803d0f164480cfa323e95f271d72bcbddc1b18685d67cd734,cylr_sha256:4a6158a9d43ec9993f93d961524cb62d997958407647603d687d2630c74371fe,ewf_parse_ok:1,cylr_parse_ok:1,ewf_exe:IEXPLORE.EXE,cylr_exe:IEXPLORE.EXE,exe_equal:True,ewf_version:30,cylr_version:30,version_equal:True,ewf_run_count:43,cylr_run_count:44,run_count_equal:False,ewf_latest:2016-08-08T17:56:59Z,cylr_latest:2017-03-20T21:38:08Z,latest_equal:False,ewf_last_runs:2016-08-08T17:56:59Z|2016-07-07T01:39:32Z|2016-07-01T22:55:17Z|2016-07-01T22:18:26Z|2016-07-01T22:12:57Z|2016-07-01T22:10:08Z|2016-06-30T15:37:38Z|2016-06-30T15:34:52Z,cylr_last_runs:2017-03-20T21:38:08Z|2016-08-08T17:56:59Z|2016-07-07T01:39:32Z|2016-07-01T22:55:17Z|2016-07-01T22:18:26Z|2016-07-01T22:12:57Z|2016-07-01T22:10:08Z|2016-06-30T15:37:38Z,times_list_equal:False,semantic_fields_equal:0\nPREFETCH_SEM_IEXPLORE.EXE-F4FB5D2F.pf=inode:10277-128-4,prior_class:byte_different,cylr_exists:1,byte_equal:0,ewf_size:66952,cylr_size:73375,ewf_sha256:d119a49acfba4e4d6dc1759224d041c019ec5e252f6883d6df63580ae514ce90,cylr_sha256:6ac5a4f559c8afdf93472fadc0c3ebb0b2e906e842f3168999b094c8fa4e2bc8,ewf_parse_ok:1,cylr_parse_ok:1,ewf_exe:IEXPLORE.EXE,cylr_exe:IEXPLORE.EXE,exe_equal:True,ewf_version:30,cylr_version:30,version_equal:True,ewf_run_count:67,cylr_run_count:68,run_count_equal:False,ewf_latest:2016-08-08T17:56:59Z,cylr_latest:2017-03-20T21:38:09Z,latest_equal:False,ewf_last_runs:2016-08-08T17:56:59Z|2016-07-07T01:39:32Z|2016-07-01T22:55:17Z|2016-07-01T22:18:26Z|2016-07-01T22:12:58Z|2016-07-01T22:10:08Z|2016-06-30T16:22:28Z|2016-06-30T15:37:38Z,cylr_last_runs:2017-03-20T21:38:09Z|2016-08-08T17:56:59Z|2016-07-07T01:39:32Z|2016-07-01T22:55:17Z|2016-07-01T22:18:26Z|201\n[... excerpt truncated ...]",
+    "excerpt_sha256": "3e3fa25d27f2582ec01abc5f698ca776dac52f267fabba8f4f8a3856b9bdeaf3"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 15 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "TARGET_SCOPE=six_F007_byte_different_selected_allocated_prefetch_pairs_plus_one_same_name_missing_allocated_prefetch",
+          "present": true
+        },
+        {
+          "token": "CYLR_EXISTING_PAIR_COUNT=6",
+          "present": true
+        },
+        {
+          "token": "BYTE_DIFFER_PAIR_COUNT=6",
+          "present": true
+        },
+        {
+          "token": "EWF_PARSE_OK_COUNT=7",
+          "present": true
+        },
+        {
+          "token": "CYLR_PARSE_OK_COUNT=6",
+          "present": true
+        },
+        {
+          "token": "PAIRED_PARSE_OK_COUNT=6",
+          "present": true
+        },
+        {
+          "token": "PAIRED_SEMANTIC_FIELDS_EQUAL_COUNT=0",
+          "present": true
+        },
+        {
+          "token": "PAIRED_SEMANTIC_FIELDS_DIFFER_COUNT=6",
+          "present": true
+        },
+        {
+          "token": "RUN_COUNT_DIFFER_COUNT=6",
+          "present": true
+        },
+        {
+          "token": "LATEST_RUN_DIFFER_COUNT=6",
+          "present": true
+        },
+        {
+          "token": "LAST_RUN_LIST_DIFFER_COUNT=6",
+          "present": true
+        },
+        {
+          "token": "EXE_NAME_DIFFER_COUNT=0",
+          "present": true
+        },
+        {
+          "token": "FORMAT_VERSION_DIFFER_COUNT=0",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_SEM_CHROME.EXE-CCF9F3F5.pf=inode:2686-128-4,prior_class:byte_different,cylr_exists:1,byte_equal:0",
+          "present": true
+        },
+        {
+          "token": "PREFETCH_SEM_ONEDRIVE.EXE-CA84A5C1.pf=inode:10575-128-4,prior_class:byte_different,cylr_exists:1,byte_equal:0",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T18:38:42.363Z",
+  "prev_receipt_sha256": "c249f51661615fd57e8559449f7ef83b82f91bb491c66bd28c8b9d8f11f7c4c1",
+  "receipt_sha256": "ea937ca376f53b8a24b55d5629d124004462a7fbede5ace5bcbff4b24e88ed6a"
+}

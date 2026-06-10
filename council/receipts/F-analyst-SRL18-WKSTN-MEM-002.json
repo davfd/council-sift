@@ -1,0 +1,93 @@
+{
+  "finding_id": "F-analyst-SRL18-WKSTN-MEM-002",
+  "nodeId": "ae74a6ee-d6b5-5a22-910d-32805aff99d8",
+  "case": "SRL18-WKSTN-MEM",
+  "claim": {
+    "observation": "Volatility3 windows.psscan output lists a process named subject_srv.ex with PID 12528 and PPID 740, Wow64 = True, CreateTime 2018-09-06 19:37:05.000000 UTC and ExitTime N/A. The same psscan output lists PID 740 as services.exe.",
+    "interpretation": "subject_srv.ex (PID 12528) was launched by parent PID 740, which the same output identifies as services.exe (the Windows Service Control Manager) — i.e. subject_srv.ex is running as a Windows service. It is a 32-bit process (Wow64 = True) with a non-standard name not matching any known Windows/OEM binary, created 2018-09-06 19:37:05 UTC and still running at acquisition (ExitTime N/A). A newly created, oddly-named service binary is a common persistence mechanism. This is the same PID 12528 that owns the TCP 3262 listener verified in F-analyst-SRL18-WKSTN-MEM-001.",
+    "confidence": "MEDIUM",
+    "content_sha256": "17bb6dd2d003fd022d85eb070f4b90e4faf4d3db7cf99b4c262519031549a925"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/wkstn01/base-wkstn-01-memory.img",
+    "locator": "psscan PID 12528 (subject_srv.ex), PPID 740 (services.exe), Offset(V) 0x8702b02795c0",
+    "tool": "volatility3 windows.psscan",
+    "command": "vol -q -f /tmp/wkstn01/base-wkstn-01-memory.img windows.psscan",
+    "output_sha256": "ccc300ded144b5e2989e9de9c8e007289af7906d7ec5c1b0c26f122fe95d4c52"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 6 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "12528",
+          "present": true
+        },
+        {
+          "token": "740",
+          "present": true
+        },
+        {
+          "token": "subject_srv.ex",
+          "present": true
+        },
+        {
+          "token": "services.exe",
+          "present": true
+        },
+        {
+          "token": "True",
+          "present": true
+        },
+        {
+          "token": "2018-09-06 19:37:05.000000 UTC",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:20:29.621Z",
+  "prev_receipt_sha256": "f25fe083954a3d2ed264c6b599dd610f4f3407c3530729423077c9061553c566",
+  "receipt_sha256": "8955c9bf834478e4ff52f915bc02a431a29588ed76659531eb689961a864ef88"
+}

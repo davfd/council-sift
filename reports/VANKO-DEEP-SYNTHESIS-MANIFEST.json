@@ -1,0 +1,242 @@
+{
+  "case": "VANKO-DEEP",
+  "file_count": 47,
+  "files": [
+    {
+      "path": "council/executions/TE-VANKO-DEEP-00a42d1966512a0b-00a42d196651.json",
+      "sha256": "61c18a15006c0ad854930118367724470b42f2253b662734d247873b1a736d87",
+      "size": 16582
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-01097382f470f489-01097382f470.json",
+      "sha256": "7b7803cce785138d830f30cc68ce578c83d1449a016d060a02b7c31484d8131d",
+      "size": 3460
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-153f5d05500576a3-153f5d055005.json",
+      "sha256": "f1f850265b4ba21f186c2c43ba6b468012e86f62d3d5cbfb57395ff0395740ee",
+      "size": 5511
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-3beeaeab7ae4cdac-3beeaeab7ae4.json",
+      "sha256": "fc80aecbddf182ff00ef924d895010bf5e0de4a74c51cfa728c6a5c1e5dc51ce",
+      "size": 12383
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-525982587b87a743-525982587b87.json",
+      "sha256": "5ed6f68cb8d2baa263a9ce8e50dfb3bbebb5999d2d31e89e428c1d383ca5bd72",
+      "size": 8325
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-526e1707c9c26ca9-526e1707c9c2.json",
+      "sha256": "03675a07d603d98f0b2b22a278bf5cace93dea21bc71378a1e940052cc888f5b",
+      "size": 6934
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-5cafa8f1313fa10c-5cafa8f1313f.json",
+      "sha256": "966a29163a8f899cfa82eb74a78a3bcaccdea8f0178696e8f15383704825d998",
+      "size": 14032
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-7cfb7178f97254c5-7cfb7178f972.json",
+      "sha256": "b21ffb6d6c2b00ae4c13abdebb6786cf2ebc2b05783ed89d999fac9b4fae8536",
+      "size": 12383
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-7f020c3350ac46c3-7f020c3350ac.json",
+      "sha256": "b03b62dd2bf0c244dd18c45c462b716d0285497c3f82f65c788287171c0f2329",
+      "size": 12383
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-8f564d91f8220c41-8f564d91f822.json",
+      "sha256": "1409e2340f58ad43dda2e408f7bf0af4bf356abe48cec761e19ed1a0af24443e",
+      "size": 10911
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-9fd051dcdc90e06c-9fd051dcdc90.json",
+      "sha256": "ff9af9ece71a7ad46b9f5944a2232dbf1ca09b29805070b8963572eef25c9742",
+      "size": 8104
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-e3405584d29f7af0-e3405584d29f.json",
+      "sha256": "ca90d12d1bf044975ded46bc8c1e602547868033c27b5197b82c204e7c90bcae",
+      "size": 46647
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-e805bc895325376e-e805bc895325.json",
+      "sha256": "b58b9433a826473db18c0057e75af7ad4fa83e4a867e5b22339b7f4c2e146412",
+      "size": 6211
+    },
+    {
+      "path": "council/executions/TE-VANKO-DEEP-f122aee22052dd6a-f122aee22052.json",
+      "sha256": "314707393c25b311be634b0aad93c148591d795d81762e66e95f3b6ade8a0201",
+      "size": 4197
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-001-7a0046507ca4.json",
+      "sha256": "8688898810eeb95ebf42cc7ec5585e867c69a80ecabef407c018ed1751490f8e",
+      "size": 39450
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-002-ccfcc706185a.json",
+      "sha256": "91d0b6d6b895fd073e26e2773eb245f03348bb241858e37232caaf9fac4d0cd3",
+      "size": 8289
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-003-7abbc6745d88.json",
+      "sha256": "312eef19fc6090891a6a5ddc024f627c0e174fe458c8e87ff2623116d3064a08",
+      "size": 7445
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-004-811db90cb7c1.json",
+      "sha256": "2448ea63d441bc4c1f1eecce8cf2d2b574e0328b6228dff41fbad69915f40910",
+      "size": 7083
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-005-ee53b1bec4c0.json",
+      "sha256": "c8ee4052b678e50726a4d3197a0416052bd5868d378fd1c068a7690b72af0e17",
+      "size": 6549
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-006-36bf34e5ea8b.json",
+      "sha256": "9e6b4160ddc30bc36f3da7ed190c4d219b0b29c6ada92a620c446f5150c2aadc",
+      "size": 9690
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-007-c249f5166161.json",
+      "sha256": "94f45572ecbd9782c9c4b8d59b60ee51fd1904e10db3fc9029ee7cbd5ca731e0",
+      "size": 9305
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-008-ea937ca376f5.json",
+      "sha256": "882a97addb2fb6d00ccbfc4052f15bda51c83d7c4b99205f8313a42ae9962fd8",
+      "size": 9779
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-011-b58c10b86921.json",
+      "sha256": "6ea91c46cc5c430d653e1bfd3799a07c87cd1aeedc55e368894ae2aa03c6c92b",
+      "size": 8721
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-012-0dd25af1b6e6.json",
+      "sha256": "c069d3d60a225dc5bc0d27d73f6b75f55ccb5a5f83f309b3ca0eddfe44d001c8",
+      "size": 6973
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-013-4ac00159a1e8.json",
+      "sha256": "ad43e8a9f41a3094c2d9903ba5b761a33b9110d437e8af99f70e01bcf98c4cae",
+      "size": 6002
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-014-2f3f64f78ae3.json",
+      "sha256": "7f4980e005c73f525f1ac55c5f3ea031aa59dfe4a42296e6eb23a486ea437236",
+      "size": 6544
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-015-c576ad9143b6.json",
+      "sha256": "efdcc2412c08b8d4d30e743ce1ce46a7a7855c60dd7136210e92bca0143ff046",
+      "size": 6159
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-016-18227e4a0485.json",
+      "sha256": "a1556187da9f4308f3d5404119d1ec8a7dd93aa952c03a4a8400d4ad4c7c7a03",
+      "size": 7876
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-017-369b1f758e49.json",
+      "sha256": "806a7037a12d3ae287b5a41b339592112bb53e5bfe6bdee078f9430f9d94a19c",
+      "size": 6341
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-018-9ae23ef67957.json",
+      "sha256": "66f9f1ff96f18fbbba6639913777b95a2db4f57eff6f801bddac1c9305f2beb9",
+      "size": 7119
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-019-0d17c806955f.json",
+      "sha256": "cb16c07e3627e99a48317770acc12a08bca8196cbe5c0727aa01b34cc233b5d3",
+      "size": 7135
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-020-9ad33dd375cb.json",
+      "sha256": "76a3170b4e828a550ffb12c7cefed74c6410c41fafbeccff7d647140dff622d6",
+      "size": 8783
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-021-bf6e3f66aa07.json",
+      "sha256": "ef2f138673ff704eec5900a357cc11e7a8d979a487c64f6a5616849ed7dbffa6",
+      "size": 8007
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-022-c0fd252f2f23.json",
+      "sha256": "d7fb83a8e49e697ccb05944b573b9143f75d8088fbd9fdbbdd7b5ec6d57d1536",
+      "size": 8777
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-023-5c39e118f956.json",
+      "sha256": "e3fcfdffea40302e086c94dd995e55311f4b23847bb4f74c108ce75136e4a994",
+      "size": 6800
+    },
+    {
+      "path": "council/receipts/F-analyst-VANKO-DEEP-024-e33b0ddd3bbe.json",
+      "sha256": "aa90d4dcf35af7992eb4c6489e43f179e7f05dab70f69f14bda4a4b35af09454",
+      "size": 9551
+    },
+    {
+      "path": "execution-logs/VANKO-DEEP.jsonl",
+      "sha256": "8df7756e0fb86155bcc55df2ca5f9935767b769fd7f113bd16334eec1ab2b59c",
+      "size": 62941
+    },
+    {
+      "path": "execution-logs/VANKO-DEEP.md",
+      "sha256": "2c8fec86a58c89b329f25d40172523abc892184a057ecfba0f6dd5ad120f913a",
+      "size": 44766
+    },
+    {
+      "path": "reports/VANKO-DEEP-CLOUD-RECEIPT-HUNT-OPERATOR-UPDATE.md",
+      "sha256": "a2ec00520b4b27d771efbe0afcfb811175399c3a4c6048324d7626931aae9124",
+      "size": 5982
+    },
+    {
+      "path": "reports/VANKO-DEEP-CONTINUE-OPERATOR-UPDATE.md",
+      "sha256": "7d02be8abaccb194ce6e0bcca964083354ecd5069d367d2d7b237b0f093df304",
+      "size": 5537
+    },
+    {
+      "path": "reports/VANKO-DEEP-MFT-USN-REGISTRY-OPERATOR-UPDATE.md",
+      "sha256": "e23761b4c2b3e802e3ec371e0389f1c599ecb6ce3563553e3620ee452b5b8807",
+      "size": 7294
+    },
+    {
+      "path": "reports/VANKO-DEEP-MINUTE-TIMELINE-OPERATOR-UPDATE.md",
+      "sha256": "6c1a34e04f5297aa467a38355ec143d7bac82d4b694a7fdac88d86fda7513f5d",
+      "size": 4352
+    },
+    {
+      "path": "reports/VANKO-DEEP-OPERATOR-UPDATE.md",
+      "sha256": "b50acf27901ce45bf1d65c05a691639b6c1814672eeb8775e3e90f38b37d02f2",
+      "size": 6845
+    },
+    {
+      "path": "reports/VANKO-DEEP-PREFETCH-DRIFT-OPERATOR-UPDATE.md",
+      "sha256": "78e6086d84b95e6358cfb9ab010b12c11a31393ffa537965c02626ef650dd12f",
+      "size": 7869
+    },
+    {
+      "path": "reports/VANKO-DEEP-REGISTRY-CORRELATION-OPERATOR-UPDATE.md",
+      "sha256": "f4c28c0ba89b64263bd0086f5ad803c459bc625c3a7ab6c24579971741c9d12f",
+      "size": 6486
+    },
+    {
+      "path": "reports/VANKO-DEEP-SRUM-WINDOW-OPERATOR-UPDATE.md",
+      "sha256": "8c548f2ef43208ae896130bec6d893f6c976e1ad7834947a551d38806ab89bd5",
+      "size": 3948
+    },
+    {
+      "path": "reports/VANKO-DEEP.md",
+      "sha256": "0ccdcf61f57ffd60c282d2f3aa6057b0a2d63fb85537bd761ca86180b3d3abd2",
+      "size": 59418
+    }
+  ],
+  "generated_by": "vanko_deep_synthesis_packet_v1"
+}

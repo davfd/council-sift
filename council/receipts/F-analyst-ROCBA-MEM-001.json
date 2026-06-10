@@ -1,0 +1,97 @@
+{
+  "finding_id": "F-analyst-ROCBA-MEM-001",
+  "nodeId": "a92aaded-7f11-509b-a809-12c17b38e058",
+  "case": "ROCBA-MEM",
+  "claim": {
+    "observation": "vol3 windows.info on /tmp/rocbamem/Rocba-Memory.raw reports Is64Bit True, NtMajorVersion 10, NtMinorVersion 0, Major/Minor 15.19041, NtProductType NtProductWinNt, NtSystemRoot C:\\WINDOWS, and SystemTime 2020-11-16 02:32:38+00:00.",
+    "interpretation": "The memory image is from a 64-bit Microsoft Windows 10 workstation (kernel build 19041, i.e. version 2004/20H1), and the system clock at acquisition read 2020-11-16 02:32:38 UTC. This establishes the host OS and acquisition time baseline for all subsequent volatility analysis of this image.",
+    "confidence": "HIGH",
+    "content_sha256": "873435429026a0b244498b39d94c002df1d0e95e366bd9b946618a51cd8d0529"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/rocbamem/Rocba-Memory.raw",
+    "locator": "windows.info kernel structures; build 15.19041",
+    "tool": "volatility3 windows.info",
+    "command": "vol -f /tmp/rocbamem/Rocba-Memory.raw windows.info",
+    "output_sha256": "aa0e99d61146dc83e2e62a1dd6393b0e755c76e5453ed43967b2abf111c2bdce"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 7 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "Is64Bit\tTrue",
+          "present": true
+        },
+        {
+          "token": "NtMajorVersion\t10",
+          "present": true
+        },
+        {
+          "token": "NtMinorVersion\t0",
+          "present": true
+        },
+        {
+          "token": "Major/Minor\t15.19041",
+          "present": true
+        },
+        {
+          "token": "NtProductType\tNtProductWinNt",
+          "present": true
+        },
+        {
+          "token": "NtSystemRoot\tC:\\WINDOWS",
+          "present": true
+        },
+        {
+          "token": "SystemTime\t2020-11-16 02:32:38+00:00",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:32:17.035Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "e85d2b806bf5922f7ceada0b92572e3163860b0f02da6cd24ccaca494d0a3517"
+}

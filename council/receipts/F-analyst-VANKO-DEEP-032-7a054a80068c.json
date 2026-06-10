@@ -1,0 +1,220 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-032",
+  "nodeId": "bdb71e05-9536-53dc-a058-7489648f5ba0",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted malware/automation triage summary scans 60371 parsed EVTX rows and 168 target-window EVTX rows plus captured filenames. The bounded EVTX scan reports zero Defender-like, PowerShell-like, and selected offensive-term rows globally and in the target window. Captured filenames include dual-use names globally; selected offensive filename terms are none and only one dual-use filename hit has target-window mtime. Raw paths and user values are not emitted.",
+    "interpretation": "This finding is limited to the cited counts returned by the bounded EVTX and filename scan for the selected evidence set and target window.",
+    "confidence": "MEDIUM",
+    "content_sha256": "fad9bce4c6302722999d76ef74d712ffd47277fea2d54d8f44698aeaaf1a7db0"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "malware-automation-triage:v2-corrected",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_malware_triage_out/malware_triage_summary.txt",
+    "output_sha256": "d7e25e7261352db725b2b20d507cdafe99170721b5ad0b9fa8deca0bfc25d2e7"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-55a877871741836f",
+    "execution_record_sha256": "55a877871741836f37abefd77937e83aebbdbfa23a17d107eca9cf418b6a1a51",
+    "evidence_excerpt_sha256": "04d2cb472e11a4b2bf7ca37f86964248b767501c65ac0c9a4f48191d0fdcf730"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "d7e25e7261352db725b2b20d507cdafe99170721b5ad0b9fa8deca0bfc25d2e7",
+    "total_chars": 2060,
+    "excerpt_chars": 1184,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_MALWARE_AUTOMATION_TRIAGE_V2=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nEVTX_CSV_EXISTS=1\nEVTX_CSV_SHA256=a666272795ede464c014b955a033c4bf3c027e89a0656320505fb0bec02488e4\nEVTX_TOTAL_ROWS_SCANNED=60371\nEVTX_WINDOW_ROWS=168\nEVTX_PROVIDER_CLASS_COUNTS=OTHER_PROVIDER:33479,SECURITY_AUDITING_PROVIDER:26037,SERVICE_CONTROL_MANAGER:855\nEVTX_SOURCE_CLASS_COUNTS=SECURITY.EVTX:26052,APPLICATION.EVTX:20077,SYSTEM.EVTX:14230,OALERTS.EVTX:12\nEVTX_WINDOW_PROVIDER_CLASS_COUNTS=SECURITY_AUDITING_PROVIDER:106,OTHER_PROVIDER:62\nEVTX_WINDOW_SOURCE_CLASS_COUNTS=SECURITY.EVTX:106,SYSTEM.EVTX:37,APPLICATION.EVTX:25\nDEFENDERLIKE_EVTX_GLOBAL_ROWS=0\nDEFENDERLIKE_EVTX_WINDOW_ROWS=0\nDEFENDERLIKE_EVTX_TERM_COUNTS=NONE\nDEFENDERLIKE_EVTX_WINDOW_TERM_COUNTS=NONE\nPOWERSHELLLIKE_EVTX_GLOBAL_ROWS=0\nPOWERSHELLLIKE_EVTX_WINDOW_ROWS=0\nPOWERSHELLLIKE_EVTX_TERM_COUNTS=NONE\nPOWERSHELLLIKE_EVTX_WINDOW_TERM_COUNTS=NONE\nOFFENSIVE_TERM_EVTX_GLOBAL_ROWS=0\nOFFENSIVE_TERM_EVTX_WINDOW_ROWS=0\nOFFENSIVE_TERM_EVTX_COUNTS=NONE\nOFFENSIVE_TERM_EVTX_WINDOW_COUNTS=NONE\nSELECTED_TERM_GLOBAL_EVENTID_COUNTS=NONE\nSELECTED_TERM_WINDOW_EVENTID_COUNTS=NONE\n[... omitted lines 24-41; full output hash below ...]",
+    "excerpt_sha256": "04d2cb472e11a4b2bf7ca37f86964248b767501c65ac0c9a4f48191d0fdcf730"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 32 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_MALWARE_AUTOMATION_TRIAGE_V2=1",
+          "present": true
+        },
+        {
+          "token": "WINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z",
+          "present": true
+        },
+        {
+          "token": "EVTX_CSV_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "EVTX_TOTAL_ROWS_SCANNED=60371",
+          "present": true
+        },
+        {
+          "token": "EVTX_WINDOW_ROWS=168",
+          "present": true
+        },
+        {
+          "token": "EVTX_WINDOW_PROVIDER_CLASS_COUNTS=SECURITY_AUDITING_PROVIDER:106,OTHER_PROVIDER:62",
+          "present": true
+        },
+        {
+          "token": "EVTX_WINDOW_SOURCE_CLASS_COUNTS=SECURITY.EVTX:106,SYSTEM.EVTX:37,APPLICATION.EVTX:25",
+          "present": true
+        },
+        {
+          "token": "DEFENDERLIKE_EVTX_GLOBAL_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "DEFENDERLIKE_EVTX_WINDOW_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "DEFENDERLIKE_EVTX_TERM_COUNTS=NONE",
+          "present": true
+        },
+        {
+          "token": "POWERSHELLLIKE_EVTX_GLOBAL_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "POWERSHELLLIKE_EVTX_WINDOW_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "POWERSHELLLIKE_EVTX_TERM_COUNTS=NONE",
+          "present": true
+        },
+        {
+          "token": "OFFENSIVE_TERM_EVTX_GLOBAL_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "OFFENSIVE_TERM_EVTX_WINDOW_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "OFFENSIVE_TERM_EVTX_COUNTS=NONE",
+          "present": true
+        },
+        {
+          "token": "SELECTED_TERM_WINDOW_EVENTID_COUNTS=NONE",
+          "present": true
+        },
+        {
+          "token": "ROOT_FILE_COUNTS=CYLR_EXTRACT:6574,DERIVED_VANKO_NEXT:41",
+          "present": true
+        },
+        {
+          "token": "ROOT_EVTX_FILE_COUNTS=CYLR_EXTRACT:4",
+          "present": true
+        },
+        {
+          "token": "ROOT_POWERSHELL_NAMED_EVTX_FILE_COUNTS=NONE",
+          "present": true
+        },
+        {
+          "token": "ROOT_DEFENDER_NAMED_EVTX_FILE_COUNTS=NONE",
+          "present": true
+        },
+        {
+          "token": "FILENAME_OFFENSIVE_TERM_FILE_COUNTS_BY_ROOT=NONE",
+          "present": true
+        },
+        {
+          "token": "FILENAME_DUAL_USE_TERM_FILE_COUNTS_BY_ROOT=CYLR_EXTRACT:38",
+          "present": true
+        },
+        {
+          "token": "FILENAME_DUAL_USE_TERM_COUNTS=RUNDLL32:32,CSCRIPT:2,REGSVR32:2,POWERSHELL:1,SCHTASKS:1",
+          "present": true
+        },
+        {
+          "token": "FILENAME_OFFENSIVE_TERM_TARGET_MTIME_FILE_COUNTS_BY_ROOT=NONE",
+          "present": true
+        },
+        {
+          "token": "FILENAME_DUAL_USE_TERM_TARGET_MTIME_FILE_COUNTS_BY_ROOT=CYLR_EXTRACT:1",
+          "present": true
+        },
+        {
+          "token": "FILENAME_DUAL_USE_TERM_TARGET_MTIME_COUNTS=RUNDLL32:1",
+          "present": true
+        },
+        {
+          "token": "RAW_PATHS_EMITTED=0",
+          "present": true
+        },
+        {
+          "token": "RAW_USER_VALUES_EMITTED=0",
+          "present": true
+        },
+        {
+          "token": "LIMITATION=bounded_evtx_and_filename_scan_only",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=zero_window_hits_in_these_bounded_witnesses_is_not_a_clean_host_or_no_malware_proof",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=dual_use_filename_hits_are_triage_context_not_malware_or_human_attribution",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T21:04:02.027Z",
+  "prev_receipt_sha256": "9405dfcc8c2e916b5532dd1d503562b06edff31ec2b2af2eb88692095e41c6d6",
+  "receipt_sha256": "7a054a80068c87f5b7ad3fc92324bd1f48559cbea59b0d5145f0415881424e9d"
+}

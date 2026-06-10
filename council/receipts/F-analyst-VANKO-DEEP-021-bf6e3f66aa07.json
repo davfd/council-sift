@@ -1,0 +1,172 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-021",
+  "nodeId": "72e9d623-3f51-5990-9d74-72007585f0d5",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted cloud receipt hunt summary records a redacted cloud-name artifact inventory of 97 rows. In the PC User profile, named browser/provider surfaces include Chrome Drive IndexedDB=11, Chrome Docs IndexedDB=8, Chrome Drive localstorage=2, Chrome Dropbox localstorage=2, Recent LNK cloud-name rows=3, and an iCloud-named OST row=1. Selected PC User desktop-client data directories for Google Drive/DriveFS, Dropbox, OneDrive, and iCloud/Apple are recorded absent.",
+    "interpretation": "This is local artifact availability context for the captured PC User profile. The inventory does not itself establish use, transfer direction, upload completion, or human identity.",
+    "confidence": "HIGH",
+    "content_sha256": "bc74528f899b4da768c62d0dfab0b57650771649c8f41b09d7297911373329db"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "cloud-receipt-hunt:v3",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_cloud_receipt_out/cloud_receipt_hunt_summary.txt",
+    "output_sha256": "20748cb16c6bc22d38e82c722f24451d18efd5ce612e62e39fb39f9d104923ff"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-9fd051dcdc90e06c",
+    "execution_record_sha256": "9fd051dcdc90e06ca79b5ba2c7ed2aca3f6920e16f20e0ad6aaf2a22bf562950",
+    "evidence_excerpt_sha256": "ea5550e0e5b490a29b562be6a0de1242d0985889f3e5c20973c451108adfe7b7"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "20748cb16c6bc22d38e82c722f24451d18efd5ce612e62e39fb39f9d104923ff",
+    "total_chars": 5152,
+    "excerpt_chars": 1759,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_CLOUD_RECEIPT_HUNT_V3=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nCLOUD_INVENTORY_ROWS=97\nCLOUD_INVENTORY_CSV_SHA256=0bffe3740014a0ec0a774182f76078f511945a9e7961764a509213c319c3959c\nCLOUD_FILENAME_NEEDLE_COUNTS=GOOGLE:40,SYNC:15,DRIVE:13,DROPBOX:11,ONEDRIVE:7,CLOUD:5,ICLOUD:4\nCLOUD_FILENAME_NEEDLE_GOOGLE_COUNT=40\nCLOUD_FILENAME_NEEDLE_SYNC_COUNT=15\nCLOUD_FILENAME_NEEDLE_DRIVE_COUNT=13\nCLOUD_FILENAME_NEEDLE_DROPBOX_COUNT=11\nCLOUD_FILENAME_NEEDLE_ONEDRIVE_COUNT=7\nCLOUD_FILENAME_NEEDLE_CLOUD_COUNT=5\nCLOUD_FILENAME_NEEDLE_ICLOUD_COUNT=4\nCLOUD_ARTIFACT_CLASS_COUNTS=CHROME_LOCALSTORAGE_GOOGLE_OTHER:22,CHROME_OTHER:19,PREFETCH_CLOUD_RELATED:13,CHROME_INDEXEDDB_DRIVE_GOOGLE:11,OTHER_CLOUD_NAME:8,CHROME_INDEXEDDB_DOCS_GOOGLE:8,RECENT_LNK_CLOUD_NAME:3,PREFETCH_OTHER:3,CHROME_INDEXEDDB_GOOGLE_OTHER:2,CHROME_LOCALSTORAGE_DRIVE_GOOGLE:2,CHROME_LOCALSTORAGE_DROPBOX:2,DROPBOX_PATH:2,OUTLOOK_OST_ICLOUD_ACCOUNT_NAME:1,RECENT_LNK_OTHER:1\nCLOUD_ARTIFACT_CLASS_CHROME_INDEXEDDB_DRIVE_GOOGLE_COUNT=11\nCLOUD_ARTIFACT_CLASS_CHROME_INDEXEDDB_DOCS_GOOGLE_COUNT=8\nCLOUD_ARTIFACT_CLASS_CHROME_LOCALSTORAGE_DRIVE_GOOGLE_COUNT=2\nCLOUD_ARTIFACT_CLASS_CHROME_LOCALSTORAGE_DROPBOX_COUNT=2\nCLOUD_ARTIFACT_CLASS_PREFETCH_CLOUD_RELATED_COUNT=13\nCLOUD_ARTIFACT_CLASS_RECENT_LNK_CLOUD_NAME_COUNT=3\nCLOUD_ARTIFACT_CLASS_OUTLOOK_OST_ICLOUD_ACCOUNT_NAME_COUNT=1\nCLOUD_ARTIFACT_PROFILE_COUNTS=PROFILE_PC_USER:70,SYSTEM_WINDOWS:20,PROFILE_DEFAULTPRINTER:7\nCLOUD_ARTIFACT_CLASS_MTIME_WINDOW_COUNTS=PREFETCH_CLOUD_RELATED:6,PREFETCH_OTHER:2,DROPBOX_PATH:1,OTHER_CLOUD_NAME:1\nCLOUD_ARTIFACT_CLASS_MTIME_WINDOW_CHROME_INDEXEDDB_DRIVE_GOOGLE_COUNT=0\nCLOUD_ARTIFACT_CLASS_MTIME_WINDOW_CHROME_INDEXEDDB_DOCS_GOOGLE_COUNT=0\n[... omitted lines 24-87; full output hash below ...]",
+    "excerpt_sha256": "ea5550e0e5b490a29b562be6a0de1242d0985889f3e5c20973c451108adfe7b7"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 20 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_CLOUD_RECEIPT_HUNT_V3=1",
+          "present": true
+        },
+        {
+          "token": "CLOUD_INVENTORY_ROWS=97",
+          "present": true
+        },
+        {
+          "token": "CLOUD_INVENTORY_CSV_SHA256=0bffe3740014a0ec0a774182f76078f511945a9e7961764a509213c319c3959c",
+          "present": true
+        },
+        {
+          "token": "CLOUD_ARTIFACT_CLASS_CHROME_INDEXEDDB_DRIVE_GOOGLE_COUNT=11",
+          "present": true
+        },
+        {
+          "token": "CLOUD_ARTIFACT_CLASS_CHROME_INDEXEDDB_DOCS_GOOGLE_COUNT=8",
+          "present": true
+        },
+        {
+          "token": "CLOUD_ARTIFACT_CLASS_CHROME_LOCALSTORAGE_DRIVE_GOOGLE_COUNT=2",
+          "present": true
+        },
+        {
+          "token": "CLOUD_ARTIFACT_CLASS_CHROME_LOCALSTORAGE_DROPBOX_COUNT=2",
+          "present": true
+        },
+        {
+          "token": "CLOUD_ARTIFACT_CLASS_RECENT_LNK_CLOUD_NAME_COUNT=3",
+          "present": true
+        },
+        {
+          "token": "CLOUD_ARTIFACT_CLASS_OUTLOOK_OST_ICLOUD_ACCOUNT_NAME_COUNT=1",
+          "present": true
+        },
+        {
+          "token": "PCUSER_GOOGLE_DRIVE_DIR_EXISTS=0",
+          "present": true
+        },
+        {
+          "token": "PCUSER_GOOGLE_DRIVEFS_DIR_EXISTS=0",
+          "present": true
+        },
+        {
+          "token": "PCUSER_DROPBOX_ROAMING_DIR_EXISTS=0",
+          "present": true
+        },
+        {
+          "token": "PCUSER_DROPBOX_LOCAL_DIR_EXISTS=0",
+          "present": true
+        },
+        {
+          "token": "PCUSER_DROPBOX_HOME_DIR_EXISTS=0",
+          "present": true
+        },
+        {
+          "token": "PCUSER_ONEDRIVE_HOME_DIR_EXISTS=0",
+          "present": true
+        },
+        {
+          "token": "PCUSER_ONEDRIVE_LOCAL_DIR_EXISTS=0",
+          "present": true
+        },
+        {
+          "token": "PCUSER_ICLOUDDRIVE_HOME_DIR_EXISTS=0",
+          "present": true
+        },
+        {
+          "token": "PCUSER_APPLE_COMPUTER_ROAMING_DIR_EXISTS=0",
+          "present": true
+        },
+        {
+          "token": "PCUSER_APPLE_LOCAL_DIR_EXISTS=0",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=filename_directory_inventory_is_availability_context_not_activity_or_transfer_proof",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T20:11:18.770Z",
+  "prev_receipt_sha256": "9ad33dd375cb637d3739fdd4402b572f0cea36d6f5c8f8255c9fbfd506fbf6a9",
+  "receipt_sha256": "bf6e3f66aa07b58a07b206a3cec60415ca352f356c4e9b9dfc400c356763b3c0"
+}

@@ -1,0 +1,121 @@
+{
+  "finding_id": "F-analyst-SRL18-WKSTN-MEM-004",
+  "nodeId": "0664d132-d1e3-5da3-b537-68e1534a93c6",
+  "case": "SRL18-WKSTN-MEM",
+  "claim": {
+    "observation": "Volatility3 windows.netscan output shows multiple TCPv4 rows whose local address is 172.16.7.11 connecting outbound to several distinct internal hosts/ports: an ESTABLISHED session 172.16.7.11:56150 -> 172.16.5.21:5985, plus CLOSED rows to 172.16.5.21:5985, 172.16.4.10:8080 (repeated), 172.16.4.4:135, 172.16.5.20:443, and 172.16.5.25:5682. All of these rows show PID and Owner as '-'.",
+    "interpretation": "The workstation (local IP 172.16.7.11) initiated outbound TCP connections to multiple distinct internal hosts and service ports, including an ESTABLISHED connection to 172.16.5.21 on port 5985 (WS-Management / WinRM, used for remote command execution) and repeated connections to 172.16.4.10 on 8080, plus 172.16.4.4:135 (RPC/DCOM), 172.16.5.20:443 and 172.16.5.25:5682. The fan-out to several internal hosts and the use of remote-management port 5985 are consistent with internal reconnaissance and lateral movement originating from this workstation. Because every one of these connection records shows Owner '-', netscan does not attribute them to a specific process; the responsible process cannot be established from this output alone.",
+    "confidence": "MEDIUM",
+    "content_sha256": "227b3732f45b9d72966f9686639ea0dbd70bb7488716eb04f534c80059944777"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/wkstn01/base-wkstn-01-memory.img",
+    "locator": "netscan rows for LocalAddr 172.16.7.11 -> 172.16.5.21:5985 (ESTABLISHED, offset 0x8702b198f870) and CLOSED rows to 172.16.4.10:8080, 172.16.4.4:135, 172.16.5.20:443, 172.16.5.25:5682",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -q -f /tmp/wkstn01/base-wkstn-01-memory.img windows.netscan",
+    "output_sha256": "69f815cd9ccbfdde0ead853ba902189d79e488882b50806c8197c02f18cdbdeb"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 13 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "172.16.7.11",
+          "present": true
+        },
+        {
+          "token": "172.16.5.21",
+          "present": true
+        },
+        {
+          "token": "5985",
+          "present": true
+        },
+        {
+          "token": "ESTABLISHED",
+          "present": true
+        },
+        {
+          "token": "172.16.4.10",
+          "present": true
+        },
+        {
+          "token": "8080",
+          "present": true
+        },
+        {
+          "token": "172.16.4.4",
+          "present": true
+        },
+        {
+          "token": "135",
+          "present": true
+        },
+        {
+          "token": "172.16.5.20",
+          "present": true
+        },
+        {
+          "token": "443",
+          "present": true
+        },
+        {
+          "token": "172.16.5.25",
+          "present": true
+        },
+        {
+          "token": "5682",
+          "present": true
+        },
+        {
+          "token": "CLOSED",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:22:29.116Z",
+  "prev_receipt_sha256": "43e124b9d74bee4ff2fdce9a0d42e7a20fdfa31d40fb07b6be9432ec8232a735",
+  "receipt_sha256": "bbcc90a155e1ef14546be9ddd9fe5bed753867700c0dff2a3a169c8f912001e7"
+}

@@ -1,0 +1,128 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-015",
+  "nodeId": "e8ce0051-43a6-5999-a659-24a0e6245f9b",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted RECmd UserActivity summary records 1,778 rows from the selected registry batch output, with NtUser=1,463 and UsrClass=315 rows across PROFILE_PC_USER=1,398 and PROFILE_DEFAULTPRINTER=380. The output hash is 165ab31d89be05ecfd5b9352b3987c1e4ab008c3ad9f6a0bebc630cfa12fbeca.",
+    "interpretation": "This establishes the parsed registry-useractivity surface and its profile/hive coverage for the follow-on target-window registry timing check.",
+    "confidence": "HIGH",
+    "content_sha256": "f36c9a94be65b5cc76b130a3ff85611fe7a1bc1c1a80c4a7d9d5d0234acf99ea"
+  },
+  "evidence_pointer": {
+    "artifact": "safe-summary",
+    "locator": "registry-useractivity:v3",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_reg_out/recmd_useractivity_summary_v3.txt",
+    "output_sha256": "2d4950872132839d46bfcc5b4cecbf979514b5077af41d8ef14b81f53cf8c0e2"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-153f5d05500576a3",
+    "execution_record_sha256": "153f5d05500576a3df6703c8f210718b01244636f00ca747bad68500605d31ef",
+    "evidence_excerpt_sha256": "99041b3227f45dcc743168e82fd522b2e113033c5ad1606845dc8d6537ba4037"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "2d4950872132839d46bfcc5b4cecbf979514b5077af41d8ef14b81f53cf8c0e2",
+    "total_chars": 2887,
+    "excerpt_chars": 1460,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_RECMD_USERACTIVITY_SUMMARY_V3=1\nWINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nRECMD_CSV_EXISTS=1\nRECMD_CSV_SIZE=783382\nRECMD_CSV_SHA256=165ab31d89be05ecfd5b9352b3987c1e4ab008c3ad9f6a0bebc630cfa12fbeca\nREG_TOTAL_ROWS=1778\nREG_DELETED_ROWS=0\nREG_LASTWRITE_GLOBAL_RANGE=2016-03-15T10:48:41Z..2018-05-13T10:14:54Z\nREG_HIVE_TYPE_COUNTS=NtUser:1463,UsrClass:315\nREG_PROFILE_COUNTS=PROFILE_PC_USER:1398,PROFILE_DEFAULTPRINTER:380\nREG_DESCRIPTION_TOP=Explorer FileExts:478,RecentDocs:438,UserAssist:267,Modern App FileAssociations:144,ComDlg32 OpenSavePidlMRU:91,Modern App URLAssociations:83,Edge TypedURLs:30,Edge TypedURLsTime:29,Edge TypedURLsVisitCount:29,Group PolicyGroupMembership:29,Office MRU:28,Explorer Taskband:21,IE DOMStorage:16,ComDlg32 CIDSizeMRU:15,ComDlg32 LastVisitedPidlMRU:15,Explorer TypedPaths:12,Recent File List:12,IE TypedURLs:10,IE TypedURLsTime:9,Environment:5,7-Zip:5,Applets Recent File List:4,Explorer StreamMRU:3,Network:2,Explorer Map Network Drive MRU:2,ComDlg32 FirstFolder:1\nREG_ALL_NEEDLE_CHROME_ROWS=17\nREG_ALL_NEEDLE_ONEDRIVE_ROWS=5\nREG_ALL_NEEDLE_DROPBOX_ROWS=7\nREG_ALL_NEEDLE_GOOGLE_ROWS=26\nREG_ALL_NEEDLE_DRIVE_ROWS=29\nREG_ALL_NEEDLE_CMD_ROWS=5\nREG_ALL_NEEDLE_POWERSHELL_ROWS=8\nREG_ALL_NEEDLE_IEXPLORE_ROWS=15\nREG_ALL_NEEDLE_WINWORD_ROWS=3\nREG_ALL_NEEDLE_UTORRENT_ROWS=7\nREG_ALL_NEEDLE_WHATSAPP_ROWS=4\nREG_ALL_NEEDLE_FIREFOX_ROWS=3\nREG_ALL_NEEDLE_7Z_ROWS=12\n[... omitted lines 24-62; full output hash below ...]",
+    "excerpt_sha256": "99041b3227f45dcc743168e82fd522b2e113033c5ad1606845dc8d6537ba4037"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 9 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_RECMD_USERACTIVITY_SUMMARY_V3=1",
+          "present": true
+        },
+        {
+          "token": "RECMD_CSV_EXISTS=1",
+          "present": true
+        },
+        {
+          "token": "RECMD_CSV_SIZE=783382",
+          "present": true
+        },
+        {
+          "token": "RECMD_CSV_SHA256=165ab31d89be05ecfd5b9352b3987c1e4ab008c3ad9f6a0bebc630cfa12fbeca",
+          "present": true
+        },
+        {
+          "token": "REG_TOTAL_ROWS=1778",
+          "present": true
+        },
+        {
+          "token": "REG_DELETED_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "REG_HIVE_TYPE_COUNTS=NtUser:1463,UsrClass:315",
+          "present": true
+        },
+        {
+          "token": "REG_PROFILE_COUNTS=PROFILE_PC_USER:1398,PROFILE_DEFAULTPRINTER:380",
+          "present": true
+        },
+        {
+          "token": "REG_LASTWRITE_GLOBAL_RANGE=2016-03-15T10:48:41Z..2018-05-13T10:14:54Z",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T19:01:03.421Z",
+  "prev_receipt_sha256": "2f3f64f78ae3d0bbe587e87cb34369caf597f2ad943fb1d8b9ef8ad7316a95f7",
+  "receipt_sha256": "c576ad9143b61d2774e17fe637eba26bffad7490bc0c57d1e32d209d3be4dfc5"
+}

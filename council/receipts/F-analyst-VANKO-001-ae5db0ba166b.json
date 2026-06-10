@@ -1,0 +1,104 @@
+{
+  "finding_id": "F-analyst-VANKO-001",
+  "nodeId": "71b531cd-24f0-59a0-9b68-873ab10d6a5b",
+  "case": "VANKO",
+  "claim": {
+    "observation": "The 7z listing tail for the CYLR archive ends with a summary line reporting uncompressed bytes, compressed bytes, and entry counts.",
+    "interpretation": "The triage archive is readable through the SIFT wrapper and contains a substantial triage surface. This supports availability of local triage artifacts for investigation only; it is not evidence of user wrongdoing or file transfer by itself.",
+    "confidence": "HIGH",
+    "content_sha256": "68abeb866464ecb8a32c6de3d41f310881dabdb505406bcad768c70d3328b9c6"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case 2/extracted/vanko-c-drive.CYLR.7z",
+    "locator": "7z:l:tail-summary",
+    "tool": "7z",
+    "command": "7z l '/mnt/evidence/Standard Forensic Case 2/extracted/vanko-c-drive.CYLR.7z' | tail -n 20",
+    "output_sha256": "a43df73314735fb68d1ec3dfe9c3aeaaac08c9fb945976955c05887769ebed28"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-17e651e674122834",
+    "execution_record_sha256": "17e651e6741228346d05921dac6a1d9d312be2e69caa7a6aac0537144bae774a",
+    "evidence_excerpt_sha256": "a43df73314735fb68d1ec3dfe9c3aeaaac08c9fb945976955c05887769ebed28"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "a43df73314735fb68d1ec3dfe9c3aeaaac08c9fb945976955c05887769ebed28",
+    "total_chars": 2646,
+    "excerpt_chars": 2646,
+    "max_chars": 4000,
+    "truncated": false,
+    "cited_tokens_found": {},
+    "excerpt": "2016-06-09 18:16:54 .....     13415936               vanko-c-drive.CYLR/G/Users/PC User/AppData/Local/WhatsApp/app-0.2.936/node.dll\n2016-06-09 18:16:54 .....      1942800               vanko-c-drive.CYLR/G/Users/PC User/AppData/Local/WhatsApp/app-0.2.936/squirrel.exe\n2016-06-09 18:16:54 .....       356528               vanko-c-drive.CYLR/G/Users/PC User/AppData/Local/WhatsApp/app-0.2.936/vccorlib120.dll\n2016-06-09 18:16:54 .....     79310608               vanko-c-drive.CYLR/G/Users/PC User/AppData/Local/WhatsApp/app-0.2.936/WhatsApp.exe\n2016-06-09 18:16:54 .....       107368               vanko-c-drive.CYLR/G/Users/PC User/AppData/Local/WhatsApp/app-0.2.936/xinput1_3.dll\n2016-07-01 22:06:26 .....      1942800               vanko-c-drive.CYLR/G/Users/PC User/AppData/Local/WhatsApp/Update.exe\n2015-08-21 23:27:02 .....      1699936               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/updates/3.4.4_40911.exe\n2015-11-07 14:23:42 .....      1822048               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/updates/3.4.5_41202.exe\n2015-11-19 01:25:06 .....       336896               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/updates/3.4.5_41202/utorrentie.exe\n2016-03-01 17:42:06 .....      2065944               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/updates/3.4.5_41712.exe\n2016-03-03 01:47:22 .....       335872               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/updates/3.4.5_41712/utorrentie.exe\n2016-03-12 22:31:12 .....      2094080               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/updates/3.4.5_41865.exe\n2016-03-13 00:03:36 .....       335872               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/updates/3.4.5_41865/utorrentie.exe\n2016-04-14 10:53:56 .....      1959424               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/updates/3.4.6_42094.exe\n2016-04-14 14:40:30 .....       340480               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/updates/3.4.6_42094/utorrentie.exe\n2016-06-17 02:25:02 .....      2133504               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/updates/3.4.7_42330.exe\n2016-06-17 02:53:56 .....       387072               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/updates/3.4.7_42330/utorrentie.exe\n2016-06-17 02:25:02 .....      2133504               vanko-c-drive.CYLR/G/Users/PC User/AppData/Roaming/uTorrent/uTorrent.exe\n------------------- ----- ------------ ------------  ------------------------\n2018-05-29 15:35:16         1882720537    549715481  6576 files, 1750 folders\n",
+    "excerpt_sha256": "a43df73314735fb68d1ec3dfe9c3aeaaac08c9fb945976955c05887769ebed28"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 3 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "1882720537",
+          "present": true
+        },
+        {
+          "token": "549715481",
+          "present": true
+        },
+        {
+          "token": "6576 files, 1750 folders",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T16:33:17.344Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "ae5db0ba166b72a8a9a4cb954ac48028bff8f02dd895a21a6d53adc542e91d34"
+}

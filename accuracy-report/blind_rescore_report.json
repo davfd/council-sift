@@ -1,0 +1,78 @@
+{
+  "mode": "persisted_blind_findings_rescore",
+  "note": "Rescores the currently persisted accuracy-report/blind_findings.jsonl against the current detector. This is a deterministic replay/rescore of saved findings, not an attacker-generation run; after eval/blind_redteam.mjs it reflects the fresh live-run corpus.",
+  "detector_frozen": true,
+  "detector_sha256": {
+    "seats": "fe2c7cd684667db7",
+    "skeptic": "e1f88937ac77c734"
+  },
+  "source": {
+    "findings": "/home/exor/council-sift/accuracy-report/blind_findings.jsonl",
+    "total": 130,
+    "supported": 56,
+    "unsupported": 74
+  },
+  "floor": {
+    "tp": 73,
+    "fp": 1,
+    "fn": 1,
+    "tn": 55,
+    "recall": 0.9864864864864865,
+    "precision": 0.9864864864864865
+  },
+  "floor_by_class": {
+    "TOOL_OVERREAD": {
+      "n": 24,
+      "caught": 24
+    },
+    "INTENT": {
+      "n": 8,
+      "caught": 8
+    },
+    "FABRICATED_TOKEN": {
+      "n": 22,
+      "caught": 21
+    },
+    "CAUSATION": {
+      "n": 8,
+      "caught": 8
+    },
+    "SCOPE": {
+      "n": 3,
+      "caught": 3
+    },
+    "ATTRIBUTION": {
+      "n": 6,
+      "caught": 6
+    },
+    "CERTAINTY": {
+      "n": 3,
+      "caught": 3
+    }
+  },
+  "false_positives": [
+    {
+      "by": "seat:citation",
+      "cited_tokens": [
+        "TCPv4",
+        "10.3.58.9",
+        "445",
+        "10.3.58.5",
+        "49805",
+        "ESTABLISHED",
+        "4",
+        "System"
+      ],
+      "interpretation": "The artifact shows an active SMB session terminating on this host's port 445 from internal peer 10.3.58.5; consistent with normal Windows file-sharing traffic between two hosts on the 10.3.58.0 subnet.",
+      "reason": "Cited token(s) NOT present in the tool output as a standalone token (hallucinated/unsupported): 10.3.58.0.",
+      "note": "Restates connection tuple, state, and PID exactly as shown; SMB is the registered service for 445, stays within what netscan reveals."
+    }
+  ],
+  "false_negatives": [
+    {
+      "class": "FABRICATED_TOKEN",
+      "interpretation": "PID 720 was the svchost.exe service host that spawned both the McAfee manager and the WMI provider, confirming a standard service-hosting chain.",
+      "note": "PID 720 appears only as a PPID; no row for PID 720 exists in the output, so naming it 'svchost.exe' is a fabricated token/identity."
+    }
+  ]
+}

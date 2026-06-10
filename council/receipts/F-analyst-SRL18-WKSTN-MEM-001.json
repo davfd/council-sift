@@ -1,0 +1,93 @@
+{
+  "finding_id": "F-analyst-SRL18-WKSTN-MEM-001",
+  "nodeId": "ef608734-fdaa-5862-a695-7cfe51f8db4e",
+  "case": "SRL18-WKSTN-MEM",
+  "claim": {
+    "observation": "Volatility3 windows.netscan output contains a TCPv4 row in LISTENING state bound to local address 0.0.0.0 port 3262 with PID 12528 and Owner subject_srv.ex, Created 2018-09-06 19:37:07.000000 UTC (with a matching TCPv6 :: 3262 LISTENING row for the same PID).",
+    "interpretation": "The process subject_srv.ex (PID 12528) is bound as a server socket on TCP port 3262 across all interfaces (0.0.0.0 and ::). Port 3262 is a non-standard high port not associated with any legitimate built-in Windows service, and the process name does not match any known Windows/OEM binary. This is consistent with an attacker-installed network listener / backdoor awaiting inbound connections.",
+    "confidence": "HIGH",
+    "content_sha256": "62ee2b9b32cdaccc37f46f635b4030b0ab85480a9b9fc10fdc2ca7e902143d0d"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/wkstn01/base-wkstn-01-memory.img",
+    "locator": "netscan offset 0x8702b043d6a0; PID 12528; TCP 0.0.0.0:3262 LISTENING",
+    "tool": "volatility3 windows.netscan",
+    "command": "vol -q -f /tmp/wkstn01/base-wkstn-01-memory.img windows.netscan",
+    "output_sha256": "a1ac809a90dc618823d0707e49b98af4f8e0f7bf66e155a89ae0bc6c4944400f"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 6 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "3262",
+          "present": true
+        },
+        {
+          "token": "LISTENING",
+          "present": true
+        },
+        {
+          "token": "12528",
+          "present": true
+        },
+        {
+          "token": "subject_srv.ex",
+          "present": true
+        },
+        {
+          "token": "0.0.0.0",
+          "present": true
+        },
+        {
+          "token": "2018-09-06 19:37:07.000000 UTC",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:19:48.349Z",
+  "prev_receipt_sha256": "GENESIS",
+  "receipt_sha256": "f25fe083954a3d2ed264c6b599dd610f4f3407c3530729423077c9061553c566"
+}

@@ -1,0 +1,136 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-026",
+  "nodeId": "bec23c93-add0-53e9-8e79-466dbc8f1501",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted corrected synthesis summary identifies packet path reports/VANKO-DEEP-SYNTHESIS-PACKET.md with SHA256 0cd6ecbabb6fb1f6a19557ccc615f9790cf70af703c9e43f62db626c383b8bf5, manifest path reports/VANKO-DEEP-SYNTHESIS-MANIFEST.json with SHA256 881056b3e090aa2d720ebbe6c7b460ca9273a30652821fb8a304a788dc5ddafc, manifest file count 47, current report SHA256 0ccdcf61f57ffd60c282d2f3aa6057b0a2d63fb85537bd761ca86180b3d3abd2, and report summary counts 22 verified / 24 drafted / 2 disputed.",
+    "interpretation": "This corrected finding is a synthesis/control packet pointer and hash manifest only. It adds no new disk-image forensic claim.",
+    "confidence": "HIGH",
+    "content_sha256": "5dc6679b4062dbbd13940a0750d5c7920308ee88521a8a3ddd7a2efd36b9b55f"
+  },
+  "evidence_pointer": {
+    "artifact": "synthesis-summary",
+    "locator": "synthesis-packet:v2-corrected",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_synthesis_out/synthesis_summary.txt",
+    "output_sha256": "6481d5640467fb5daa298c36323f6dc6a14974a2ef27956242fb4a0674ff1aa1"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-7a459de7628569a3",
+    "execution_record_sha256": "7a459de7628569a3112c749b2b0dd8495e60e09fd87a7c598d71c8dbb13603b7",
+    "evidence_excerpt_sha256": "6481d5640467fb5daa298c36323f6dc6a14974a2ef27956242fb4a0674ff1aa1"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "6481d5640467fb5daa298c36323f6dc6a14974a2ef27956242fb4a0674ff1aa1",
+    "total_chars": 1010,
+    "excerpt_chars": 1010,
+    "max_chars": 4000,
+    "truncated": false,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_DEEP_SYNTHESIS_PACKET_V1=1\nSYNTHESIS_PACKET_PATH=reports/VANKO-DEEP-SYNTHESIS-PACKET.md\nSYNTHESIS_PACKET_SHA256=0cd6ecbabb6fb1f6a19557ccc615f9790cf70af703c9e43f62db626c383b8bf5\nSYNTHESIS_MANIFEST_PATH=reports/VANKO-DEEP-SYNTHESIS-MANIFEST.json\nSYNTHESIS_MANIFEST_SHA256=881056b3e090aa2d720ebbe6c7b460ca9273a30652821fb8a304a788dc5ddafc\nSYNTHESIS_MANIFEST_FILE_COUNT=47\nSYNTHESIS_CURRENT_REPORT_SHA256=0ccdcf61f57ffd60c282d2f3aa6057b0a2d63fb85537bd761ca86180b3d3abd2\nSYNTHESIS_REPORT_VERIFIED_FINDING_LINES=22\nSYNTHESIS_REPORT_DRAFTED_FINDING_LINES=24\nSYNTHESIS_REPORT_DISPUTED_FINDING_LINES=2\nACCOUNT_PROFILE_TIMING_CLUSTER_SUPPORTED=1\nPREFETCH_EVTX_REGISTRY_RECENTDOCS_USERASSIST_TIMELINE_SUPPORTED=1\nLOCAL_CLOUD_BROWSER_RESIDUE_SUPPORTED=1\nLOCAL_COMPLETED_UPLOAD_RECEIPT_FOUND=0\nLOCAL_SRUM_CLOUD_BROWSER_WINDOW_CORROBORATION_FOUND=0\nHUMAN_OPERATOR_PROVEN=0\nTRANSFER_DIRECTION_PROVEN=0\nSERVER_SIDE_AUDIT_ACCESS_LOCAL=0\nCLAIM_BOUNDARY=synthesis_summary_is_control_packet_not_new_disk_image_artifact_claim\n",
+    "excerpt_sha256": "6481d5640467fb5daa298c36323f6dc6a14974a2ef27956242fb4a0674ff1aa1"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 11 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_DEEP_SYNTHESIS_PACKET_V1=1",
+          "present": true
+        },
+        {
+          "token": "SYNTHESIS_PACKET_PATH=reports/VANKO-DEEP-SYNTHESIS-PACKET.md",
+          "present": true
+        },
+        {
+          "token": "SYNTHESIS_PACKET_SHA256=0cd6ecbabb6fb1f6a19557ccc615f9790cf70af703c9e43f62db626c383b8bf5",
+          "present": true
+        },
+        {
+          "token": "SYNTHESIS_MANIFEST_PATH=reports/VANKO-DEEP-SYNTHESIS-MANIFEST.json",
+          "present": true
+        },
+        {
+          "token": "SYNTHESIS_MANIFEST_SHA256=881056b3e090aa2d720ebbe6c7b460ca9273a30652821fb8a304a788dc5ddafc",
+          "present": true
+        },
+        {
+          "token": "SYNTHESIS_MANIFEST_FILE_COUNT=47",
+          "present": true
+        },
+        {
+          "token": "SYNTHESIS_CURRENT_REPORT_SHA256=0ccdcf61f57ffd60c282d2f3aa6057b0a2d63fb85537bd761ca86180b3d3abd2",
+          "present": true
+        },
+        {
+          "token": "SYNTHESIS_REPORT_VERIFIED_FINDING_LINES=22",
+          "present": true
+        },
+        {
+          "token": "SYNTHESIS_REPORT_DRAFTED_FINDING_LINES=24",
+          "present": true
+        },
+        {
+          "token": "SYNTHESIS_REPORT_DISPUTED_FINDING_LINES=2",
+          "present": true
+        },
+        {
+          "token": "CLAIM_BOUNDARY=synthesis_summary_is_control_packet_not_new_disk_image_artifact_claim",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T20:20:00.644Z",
+  "prev_receipt_sha256": "e33b0ddd3bbe0d052b752ab0628de84f442d631d31a8d497fdd386f43e65e01e",
+  "receipt_sha256": "5fdfe5e1ac5ecbb8bfea3115e3828dd56a6774b2402fba0f0f1127fad4d9cab3"
+}

@@ -1,0 +1,108 @@
+{
+  "finding_id": "F-analyst-VANKO-002",
+  "nodeId": "a91a4465-4ac7-5f2c-abbd-ff290265535c",
+  "case": "VANKO",
+  "claim": {
+    "observation": "The mmls partition table reports a GPT layout and a large Basic data partition with start sector 1411072 and length 230883328 sectors.",
+    "interpretation": "The split EWF disk image is readable through SIFT/TSK, and sector offset 1411072 is the primary Windows filesystem lead for deeper read-only file-system analysis.",
+    "confidence": "HIGH",
+    "content_sha256": "a1f5bfb06d0363f1df238ffda48774394755416cfda0e880b32e14782068a1d6"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01",
+    "locator": "mmls:partition-table",
+    "tool": "mmls",
+    "command": "mmls '/mnt/evidence/Standard Forensic Case 2/extracted/surface_physical.E01'",
+    "output_sha256": "9f55f4dff2d8f8c7c2af396ca0bb840db2d15ae8ff5613009647ade3a81c47f4"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-ffe060c7b6386c2e",
+    "execution_record_sha256": "ffe060c7b6386c2e8b192ab3fbf451a8d30cccf9343ad85ab295428afb031f9b",
+    "evidence_excerpt_sha256": "9f55f4dff2d8f8c7c2af396ca0bb840db2d15ae8ff5613009647ade3a81c47f4"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "9f55f4dff2d8f8c7c2af396ca0bb840db2d15ae8ff5613009647ade3a81c47f4",
+    "total_chars": 925,
+    "excerpt_chars": 925,
+    "max_chars": 4000,
+    "truncated": false,
+    "cited_tokens_found": {},
+    "excerpt": "GUID Partition Table (EFI)\nOffset Sector: 0\nUnits are in 512-byte sectors\n\n      Slot      Start        End          Length       Description\n000:  Meta      0000000000   0000000000   0000000001   Safety Table\n001:  -------   0000000000   0000002047   0000002048   Unallocated\n002:  Meta      0000000001   0000000001   0000000001   GPT Header\n003:  Meta      0000000002   0000000033   0000000032   Partition Table\n004:  000       0000002048   0000739327   0000737280   Basic data partition\n005:  001       0000739328   0001148927   0000409600   EFI system partition\n006:  002       0001148928   0001411071   0000262144   Microsoft reserved partition\n007:  003       0001411072   0232294399   0230883328   Basic data partition\n008:  004       0232294400   0233215999   0000921600   \n009:  005       0233216000   0244275199   0011059200   Basic data partition\n010:  -------   0244275200   0244277247   0000002048   Unallocated\n",
+    "excerpt_sha256": "9f55f4dff2d8f8c7c2af396ca0bb840db2d15ae8ff5613009647ade3a81c47f4"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 4 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "GUID Partition Table (EFI)",
+          "present": true
+        },
+        {
+          "token": "0001411072",
+          "present": true
+        },
+        {
+          "token": "0230883328",
+          "present": true
+        },
+        {
+          "token": "Basic data partition",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T16:33:50.432Z",
+  "prev_receipt_sha256": "ae5db0ba166b72a8a9a4cb954ac48028bff8f02dd895a21a6d53adc542e91d34",
+  "receipt_sha256": "6fbcf0294e56f157b7bc9f79605d5c6c8d9d96f87c2ddb6744286114902b14dd"
+}

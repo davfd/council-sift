@@ -1,0 +1,73 @@
+{
+  "finding_id": "F-analyst-SRL2015-NFURY-008",
+  "nodeId": "d868add7-f945-51f8-ac27-498f6318b7bf",
+  "case": "SRL2015-NFURY",
+  "claim": {
+    "observation": "The Windows Recycle Bin $I metadata file $I6SODDB (NTFS inode 91913) records the original path of the deleted item as C:\\Windows\\System32\\dllhost.",
+    "interpretation": "The deleted folder $R6SODDB - which contains the implant svchost.exe (F-...-007) and its C2 config winclient.reg (F-...-006) - originally resided at C:\\Windows\\System32\\dllhost. A folder named 'dllhost' placed directly in System32 masquerades as Windows component naming, and System32 is a privileged location requiring administrative rights to write. The whole malware folder was subsequently deleted into the Recycle Bin of the SID ending -1673. This identifies the implant's staging directory and shows an attempt to remove it (anti-forensics), with the contents nonetheless recoverable.",
+    "confidence": "HIGH",
+    "content_sha256": "42ba25c095090888151fe8a1549c1afa9e5932821f93fc3c3b2369a6b746b7f0"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/nfury/win7-64-nfury-c-drive/win7-64-nfury-c-drive.E01",
+    "locator": "NTFS inode 91913; $Recycle.Bin/S-1-5-...-1673/$I6SODDB",
+    "tool": "sleuthkit icat + strings -el",
+    "command": "icat /tmp/nfury/win7-64-nfury-c-drive/win7-64-nfury-c-drive.E01 91913 | strings -el",
+    "output_sha256": "a074a85b3b63ae7b5d3b0ffb66be2501e9497074277c2aafdc191c8ed3e8772d"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 1 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "C:\\Windows\\System32\\dllhost",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:53:17.249Z",
+  "prev_receipt_sha256": "1763f46c129892322077da95cc9277ed7d08a144195327e5095f836bbbf1869b",
+  "receipt_sha256": "66866b32a586fb068bd93727a21eef3d723761c98a8b2cd4bc2d40d2de7e8f42"
+}

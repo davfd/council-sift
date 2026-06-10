@@ -1,0 +1,172 @@
+{
+  "finding_id": "F-analyst-VANKO-DEEP-038",
+  "nodeId": "2e1f2cb0-32b5-5791-99a1-e6ac17b674ea",
+  "case": "VANKO-DEEP",
+  "claim": {
+    "observation": "Trusted final synthesis control summary identifies a pre-control evidence-state packet, including report and manifest hashes, current report/log hashes, evidence-finding counts, receipt count, latest evidence finding, corrected draft IDs, packet scope, stop condition, and redaction posture.",
+    "interpretation": "This corrected finding is a packaging/control pointer only; it adds no new disk-image forensic claim.",
+    "confidence": "HIGH",
+    "content_sha256": "8c38a214e0ba77a3118fbb2501cfe30ba0a72564b1042489d0714708483b61f0"
+  },
+  "evidence_pointer": {
+    "artifact": "final-synthesis-control-summary",
+    "locator": "final-synthesis-control:v2",
+    "tool": "python3",
+    "command": "python3 -c \"import base64; print(base64.b64decode('VkFOS09fRklOQUxfU1lOVEhFU0lTX0NPTlRST0xfVjI9MQpDQVNFX0lEPVZBTktPLURFRVAKRklOQUxfU1lOVEhFU0lTX1JFUE9SVF9QQVRIPXJlcG9ydHMvVkFOS08tREVFUC1GSU5BTC1DQVNFLVNZTlRIRVNJUy5tZApGSU5BTF9TWU5USEVTSVNfUkVQT1JUX1NIQTI1Nj01NWYxYWIwNzU1NGJmODFhNzJiYzFjZjA3N2FiNDAyMjRhNGRkZTNhMGQ0NjQzOGY1NDY2ZTAwMWQxYzdmN2M1CkZJTkFMX1NZTlRIRVNJU19NQU5JRkVTVF9QQVRIPXJlcG9ydHMvVkFOS08tREVFUC1GSU5BTC1DQVNFLVNZTlRIRVNJUy1NQU5JRkVTVC5qc29uCkZJTkFMX1NZTlRIRVNJU19NQU5JRkVTVF9TSEEyNTY9MDVjYjZlMzk3OTRlYTI2ZDQ4YmVhYTFiYWRjMmZiYzhiOWE2NzFlNDFiZjE3ZWMwZGYzYzY2NjE4MGY5ZDQxYQpDVVJSRU5UX01BSU5fUkVQT1JUX1BBVEg9cmVwb3J0cy9WQU5LTy1ERUVQLm1kCkNVUlJFTlRfTUFJTl9SRVBPUlRfU0hBMjU2PTU4MGVjMDg3YzY0NjlmZGU2Njk1NTM2NzZiMjY3ZmMwM2NhYjc3ODI1YjdmN2Y5ZDliYzNhYTZkNzQ0MTNhYWQKQ1VSUkVOVF9FWEVDVVRJT05fTE9HX01EX1NIQTI1Nj1mMTZhMGU2ZjNmMWM3N2U3NTNhNmM0NWY0NmZjNDc0MzMyM2QxNTM5MzM5YzI4MTExYjMxN2QwMjg2ZWYwZmQ2CkNVUlJFTlRfRVhFQ1VUSU9OX0xPR19KU09OTF9TSEEyNTY9OGJkMjFhYzFiY2ZiNzVmNjhjM2I1N2EwYzBjODYwNTUzYjUwODlhYzAyZGU1ZGNiZjU3MTM2ODkwZGVmZGU5MwpQUkVfQ09OVFJPTF9WRVJJRklFRF9GSU5ESU5HX0NPVU5UPTMxClBSRV9DT05UUk9MX0RSQUZURURfRklORElOR19DT1VOVD0zNgpQUkVfQ09OVFJPTF9TRUxGX0NPUlJFQ1RFRF9EUkFGVF9DT1VOVD01ClBSRV9DT05UUk9MX1ZFUklGSUVEX1JFQ0VJUFRfRklMRV9DT1VOVD0zMQpQUkVfQ09OVFJPTF9MQVRFU1RfRVZJREVOQ0VfRklORElORz1GLWFuYWx5c3QtVkFOS08tREVFUC0wMzYKUFJFX0NPTlRST0xfQ09SUkVDVEVEX0JPVU5DRV9JRFM9Ri1hbmFseXN0LVZBTktPLURFRVAtMDA5LEYtYW5hbHlzdC1WQU5LTy1ERUVQLTAxMCxGLWFuYWx5c3QtVkFOS08tREVFUC0wMjUsRi1hbmFseXN0LVZBTktPLURFRVAtMDI3LEYtYW5hbHlzdC1WQU5LTy1ERUVQLTAzMQpUQVJHRVRfV0lORE9XX1VUQz0yMDE4LTA1LTEzVDEwOjA1OjAwWi4uMjAxOC0wNS0xM1QxMDoxNTo1OVoKUEFDS0VUX1NDT1BFPWNvbnRyb2xfcGFja2V0X2FuZF9vcGVyYXRvcl9zeW50aGVzaXNfbm9fbmV3X2Rpc2tfaW1hZ2VfY2xhaW0KU1RPUF9DT05ESVRJT049bm9fbW9yZV9yYW5kb21fbG9jYWxfbmVnYXRpdmVfYm91bmRhcnlfc2NhbnNfd2l0aG91dF9uZXdfcG9zaXRpdmVfbGVhZF9zcGVjaWZpY190aGVvcnlfdGVzdF9zZXR0bGluZ19yZWNlaXB0X3NlcnZlcl9hdWRpdF9vcl9kZW1vX25lZWQKUkVEQUNUSU9OX1BPU1RVUkU9aGFzaGVzX2NvdW50c19pZHNfY2xhc3NfbGFiZWxzX25vX3Jhd19wYXRoc19vcl9jcmVkZW50aWFscwo=').decode('utf-8'), end='')\"",
+    "output_sha256": "153ea8f9664f21d246c2f9fb5fc23f4ddc95ac303f5ebdb49788d2ce0f6fa241"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-DEEP-38e0c3273939c131",
+    "execution_record_sha256": "38e0c3273939c1317f84b4f487c044c1545a0035bfb827f85f16d35afe6519c7",
+    "evidence_excerpt_sha256": "153ea8f9664f21d246c2f9fb5fc23f4ddc95ac303f5ebdb49788d2ce0f6fa241"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "153ea8f9664f21d246c2f9fb5fc23f4ddc95ac303f5ebdb49788d2ce0f6fa241",
+    "total_chars": 1478,
+    "excerpt_chars": 1478,
+    "max_chars": 4000,
+    "truncated": false,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_FINAL_SYNTHESIS_CONTROL_V2=1\nCASE_ID=VANKO-DEEP\nFINAL_SYNTHESIS_REPORT_PATH=reports/VANKO-DEEP-FINAL-CASE-SYNTHESIS.md\nFINAL_SYNTHESIS_REPORT_SHA256=55f1ab07554bf81a72bc1cf077ab40224a4dde3a0d46438f5466e001d1c7f7c5\nFINAL_SYNTHESIS_MANIFEST_PATH=reports/VANKO-DEEP-FINAL-CASE-SYNTHESIS-MANIFEST.json\nFINAL_SYNTHESIS_MANIFEST_SHA256=05cb6e39794ea26d48beaa1badc2fbc8b9a671e41bf17ec0df3c666180f9d41a\nCURRENT_MAIN_REPORT_PATH=reports/VANKO-DEEP.md\nCURRENT_MAIN_REPORT_SHA256=580ec087c6469fde669553676b267fc03cab77825b7f7f9d9bc3aa6d74413aad\nCURRENT_EXECUTION_LOG_MD_SHA256=f16a0e6f3f1c77e753a6c45f46fc4743323d1539339c28111b317d0286ef0fd6\nCURRENT_EXECUTION_LOG_JSONL_SHA256=8bd21ac1bcfb75f68c3b57a0c0c860553b5089ac02de5dcbf57136890defde93\nPRE_CONTROL_VERIFIED_FINDING_COUNT=31\nPRE_CONTROL_DRAFTED_FINDING_COUNT=36\nPRE_CONTROL_SELF_CORRECTED_DRAFT_COUNT=5\nPRE_CONTROL_VERIFIED_RECEIPT_FILE_COUNT=31\nPRE_CONTROL_LATEST_EVIDENCE_FINDING=F-analyst-VANKO-DEEP-036\nPRE_CONTROL_CORRECTED_BOUNCE_IDS=F-analyst-VANKO-DEEP-009,F-analyst-VANKO-DEEP-010,F-analyst-VANKO-DEEP-025,F-analyst-VANKO-DEEP-027,F-analyst-VANKO-DEEP-031\nTARGET_WINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z\nPACKET_SCOPE=control_packet_and_operator_synthesis_no_new_disk_image_claim\nSTOP_CONDITION=no_more_random_local_negative_boundary_scans_without_new_positive_lead_specific_theory_test_settling_receipt_server_audit_or_demo_need\nREDACTION_POSTURE=hashes_counts_ids_class_labels_no_raw_paths_or_credentials\n",
+    "excerpt_sha256": "153ea8f9664f21d246c2f9fb5fc23f4ddc95ac303f5ebdb49788d2ce0f6fa241"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 20 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_FINAL_SYNTHESIS_CONTROL_V2=1",
+          "present": true
+        },
+        {
+          "token": "CASE_ID=VANKO-DEEP",
+          "present": true
+        },
+        {
+          "token": "FINAL_SYNTHESIS_REPORT_PATH=reports/VANKO-DEEP-FINAL-CASE-SYNTHESIS.md",
+          "present": true
+        },
+        {
+          "token": "FINAL_SYNTHESIS_REPORT_SHA256=55f1ab07554bf81a72bc1cf077ab40224a4dde3a0d46438f5466e001d1c7f7c5",
+          "present": true
+        },
+        {
+          "token": "FINAL_SYNTHESIS_MANIFEST_PATH=reports/VANKO-DEEP-FINAL-CASE-SYNTHESIS-MANIFEST.json",
+          "present": true
+        },
+        {
+          "token": "FINAL_SYNTHESIS_MANIFEST_SHA256=05cb6e39794ea26d48beaa1badc2fbc8b9a671e41bf17ec0df3c666180f9d41a",
+          "present": true
+        },
+        {
+          "token": "CURRENT_MAIN_REPORT_PATH=reports/VANKO-DEEP.md",
+          "present": true
+        },
+        {
+          "token": "CURRENT_MAIN_REPORT_SHA256=580ec087c6469fde669553676b267fc03cab77825b7f7f9d9bc3aa6d74413aad",
+          "present": true
+        },
+        {
+          "token": "CURRENT_EXECUTION_LOG_MD_SHA256=f16a0e6f3f1c77e753a6c45f46fc4743323d1539339c28111b317d0286ef0fd6",
+          "present": true
+        },
+        {
+          "token": "CURRENT_EXECUTION_LOG_JSONL_SHA256=8bd21ac1bcfb75f68c3b57a0c0c860553b5089ac02de5dcbf57136890defde93",
+          "present": true
+        },
+        {
+          "token": "PRE_CONTROL_VERIFIED_FINDING_COUNT=31",
+          "present": true
+        },
+        {
+          "token": "PRE_CONTROL_DRAFTED_FINDING_COUNT=36",
+          "present": true
+        },
+        {
+          "token": "PRE_CONTROL_SELF_CORRECTED_DRAFT_COUNT=5",
+          "present": true
+        },
+        {
+          "token": "PRE_CONTROL_VERIFIED_RECEIPT_FILE_COUNT=31",
+          "present": true
+        },
+        {
+          "token": "PRE_CONTROL_LATEST_EVIDENCE_FINDING=F-analyst-VANKO-DEEP-036",
+          "present": true
+        },
+        {
+          "token": "PRE_CONTROL_CORRECTED_BOUNCE_IDS=F-analyst-VANKO-DEEP-009,F-analyst-VANKO-DEEP-010,F-analyst-VANKO-DEEP-025,F-analyst-VANKO-DEEP-027,F-analyst-VANKO-DEEP-031",
+          "present": true
+        },
+        {
+          "token": "TARGET_WINDOW_UTC=2018-05-13T10:05:00Z..2018-05-13T10:15:59Z",
+          "present": true
+        },
+        {
+          "token": "PACKET_SCOPE=control_packet_and_operator_synthesis_no_new_disk_image_claim",
+          "present": true
+        },
+        {
+          "token": "STOP_CONDITION=no_more_random_local_negative_boundary_scans_without_new_positive_lead_specific_theory_test_settling_receipt_server_audit_or_demo_need",
+          "present": true
+        },
+        {
+          "token": "REDACTION_POSTURE=hashes_counts_ids_class_labels_no_raw_paths_or_credentials",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T23:31:48.519Z",
+  "prev_receipt_sha256": "b5da1f04b29ac878c008f7fb8139fa8ecd710ba4cd3c0373e36ab7aa3bc9ebbe",
+  "receipt_sha256": "805d99a59daad10ef404470f42cbbeb114159af47ca07f9bc1f99f88c64cc9f7"
+}

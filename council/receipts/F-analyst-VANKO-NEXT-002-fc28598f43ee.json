@@ -1,0 +1,128 @@
+{
+  "finding_id": "F-analyst-VANKO-NEXT-002",
+  "nodeId": "0801e6a0-bbdc-5f4c-99a1-fab34b1c2043",
+  "case": "VANKO-NEXT",
+  "claim": {
+    "observation": "The safe summary records two parsed Chrome History databases with 19 total URL rows, 11 visits, 5 download rows, and zero rows for selected cloud/service URL needles including Google Drive/Docs/Mail/Accounts, Dropbox, OneDrive, MEGA, WeTransfer, and GitHub.",
+    "interpretation": "This is a browser-history boundary for the captured Chrome profiles and selected URL needles. It weakens a browser-UI cloud-drive theory in these DBs, but does not rule out DriveFS/sync clients, other browsers, deleted history, other URLs, or server-side activity.",
+    "confidence": "MEDIUM",
+    "content_sha256": "72a93f4467971e4243a3483c00037b4ff0fb97d6f136d20b34483d699d38eb57"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/vanko_next_out/safe_summary.txt",
+    "locator": "safe-summary:v1",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_next_out/safe_summary.txt",
+    "output_sha256": "79edde49bc2383189b9b9755ed8c86d2e0b6182aec508f401ee3620b90bc9547"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-NEXT-5315e5be823952e0",
+    "execution_record_sha256": "5315e5be823952e0ba05cd758796a278898f916344e2aaa4d9f70315541b0766",
+    "evidence_excerpt_sha256": "cccfe59b5771f2ae2f896e80fdcc687c300e682c098f5aaf7ef02dedcf7911a5"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "79edde49bc2383189b9b9755ed8c86d2e0b6182aec508f401ee3620b90bc9547",
+    "total_chars": 5183,
+    "excerpt_chars": 821,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_NEXT_SAFE_SUMMARY_V1=1\nBASE_EXISTS=1\nEVTX_ROW_COUNT=60371\nEVTX_TIME_MIN=2016-03-15 10:43:29.8240062\nEVTX_TIME_MAX=2018-05-13 10:15:20.2394104\nEVTX_LOG_SECURITY_EVTX_ROWS=26052\nEVTX_LOG_APPLICATION_EVTX_ROWS=20077\nEVTX_LOG_OALERTS_EVTX_ROWS=12\nEVTX_LOG_SYSTEM_EVTX_ROWS=14230\nEVTX_EVENT_4624_COUNT=6564\nEVTX_EVENT_4625_COUNT=36\nEVTX_EVENT_4634_COUNT=177\nEVTX_EVENT_4647_COUNT=14\nEVTX_EVENT_4648_COUNT=200\nEVTX_EVENT_4672_COUNT=6415\nEVTX_EVENT_4688_COUNT=150\nEVTX_EVENT_4720_COUNT=0\nEVTX_EVENT_4726_COUNT=0\nEVTX_EVENT_4732_COUNT=0\nEVTX_EVENT_7045_COUNT=57\nEVTX_EVENT_7036_COUNT=0\nEVTX_EVENT_1102_COUNT=0\nEVTX_TOP_EVENT_IDS=0:12084,4624:6564,4672:6415,4799:3337,4798:3267,16:2641,5058:2497,5061:2490,1001:1515,51:1060,1004:1000,10010:956\nCHROME_HISTORY_DB_COUNT=2\n[... omitted lines 24-123; full output hash below ...]",
+    "excerpt_sha256": "cccfe59b5771f2ae2f896e80fdcc687c300e682c098f5aaf7ef02dedcf7911a5"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 9 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "CHROME_HISTORY_DB_COUNT=2",
+          "present": true
+        },
+        {
+          "token": "CHROME_TOTAL_URLS=19",
+          "present": true
+        },
+        {
+          "token": "CHROME_TOTAL_VISITS=11",
+          "present": true
+        },
+        {
+          "token": "CHROME_TOTAL_DOWNLOAD_ROWS=5",
+          "present": true
+        },
+        {
+          "token": "CHROME_PROFILE_2767aeb46c3c_DRIVE_GOOGLE_URL_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "CHROME_PROFILE_fc6972593413_DRIVE_GOOGLE_URL_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "CHROME_PROFILE_2767aeb46c3c_ONEDRIVE_URL_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "CHROME_PROFILE_fc6972593413_ONEDRIVE_URL_ROWS=0",
+          "present": true
+        },
+        {
+          "token": "CHROME_PROFILE_2767aeb46c3c_WHATSAPP_URL_ROWS=1",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T17:03:03.914Z",
+  "prev_receipt_sha256": "ee795940b5b3826dd67e4d6439c560f745dd1fc57181fec0e553b63c87ea248d",
+  "receipt_sha256": "fc28598f43ee36cb9c09e649d8ecb9f80e6408df396eb45a3477178aba0404b9"
+}

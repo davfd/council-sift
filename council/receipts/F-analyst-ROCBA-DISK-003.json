@@ -1,0 +1,85 @@
+{
+  "finding_id": "F-analyst-ROCBA-DISK-003",
+  "nodeId": "ae064112-76e5-5e40-9112-c49e4f364493",
+  "case": "ROCBA-DISK",
+  "claim": {
+    "observation": "fls of the volume root lists modern-Windows directories: 'Users', 'OneDriveTemp', 'Windows10Upgrade', 'Windows.old', and '$Recycle.Bin'. None of these are present on a Windows XP installation.",
+    "interpretation": "The installed operating system on this volume is Windows 10 (the 'Users', 'OneDriveTemp', 'Windows10Upgrade' and 'Windows.old' layout is a Windows 10 profile/upgrade structure, not Windows XP). The 'Version: Windows XP' string reported by fsstat in F-analyst-ROCBA-DISK-001 is the NTFS on-disk format version (NTFS 3.1, first shipped with XP) and not the OS edition; that earlier finding's OS wording should be read with this correction.",
+    "confidence": "HIGH",
+    "content_sha256": "0bb22a6515a640c08d1dfc1e050055213929af4a2e113841b41449d7f660bc54"
+  },
+  "evidence_pointer": {
+    "artifact": "/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01",
+    "locator": "volume root directory listing",
+    "tool": "fls",
+    "command": "fls \"/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01\"",
+    "output_sha256": "48bfc135a06a7877f4027980b321087e02235dff72f38b96a9e871650b31df88"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 4 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "Users",
+          "present": true
+        },
+        {
+          "token": "OneDriveTemp",
+          "present": true
+        },
+        {
+          "token": "Windows10Upgrade",
+          "present": true
+        },
+        {
+          "token": "Windows.old",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-04T03:10:06.427Z",
+  "prev_receipt_sha256": "15174bfb5ab7918f40f032e6d8b8fdb44394f07a58d15ce4be4919606b6fddfb",
+  "receipt_sha256": "9653b18d5168e0d952f8d623f0d74cf2060cebd9c778f87a4679e4fb4c7b8468"
+}

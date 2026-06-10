@@ -1,0 +1,68 @@
+node_modules/
+dist/
+*.log
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+.venv/
+
+# raw evidence is NEVER committed (images, E01, memory dumps)
+evidence/
+
+# derived tool output from the official organizer evidence — NOT redistributed.
+# regenerate locally from the SIFT VM with scripts/pull_corpus_from_sift.sh
+eval/corpus/
+
+# NOTE: council/receipts/*.json ARE committed (canonical proof deliverables) — not ignored, so a
+# clean orphan snapshot (PUBLISH.md Option B, git add -A) includes them without a force-add.
+
+# Trusted execution captures can contain full official evidence stdout. They are local audit artifacts,
+# not redistributable public corpus. Commit code/tests/docs, not captured stdout records.
+council/executions/*.json
+!council/executions/README.md
+
+*.bak
+*.tmp
+.DS_Store
+
+# full unredacted autonomous transcripts (local audit only)
+*.raw.jsonl
+
+# Local publication/audit scaffolding for preparing the Devpost snapshot.
+# Keep these out of the public reports index; they are operator process notes,
+# not case reports or judge-facing evidence.
+reports/FIND-EVIL-PUBLIC-*.md
+reports/FIND-EVIL-CLEAN-REPO-AUDIT.md
+
+# Local/manual ROCBA casebuilding artifacts from exploratory SIFT digs.
+# Public submission artifacts are the tracked demo reports, receipts, and execution logs;
+# do not accidentally add operator scratch reports, one-off scripts, or Discord/Council drafts.
+# The packaging plan is an operator handoff with local paths/status, not a Devpost artifact.
+_drafts/
+docs/DEVPOST_PACKAGING_PLAN.md
+reports/ROCBA-CASEBUILDING-UPDATE*.md
+reports/ROCBA-ROUND*.*
+reports/ROCBA-R[0-9]*.*
+reports/ROCBA-*RAW*.txt
+reports/ROCBA-*RUN.log
+reports/ROCBA-*COUNCIL*.json
+reports/ROCBA-*CORRECTION*.json
+reports/ROCBA-COUNCIL-ROUND*.*
+reports/ROCBA-CASEBUILD*.json
+reports/ROCBA-ACTIVITIES*.json
+reports/ROCBA-ATTRIBUTION*.json
+reports/ROCBA-DEEP*.*
+reports/ROCBA-DIRT*.*
+reports/ROCBA-MORE*.*
+reports/ROCBA-NEXT*.*
+reports/ROCBA-USN*.*
+reports/ROCBA-ZTOOLS*.*
+reports/ROCBA-SRUM*.*
+reports/ROCBA-GOOGLE-AUDIT-AVAILABILITY.txt
+reports/ROCBA-CONTENT-ENTRY-PARSE-RAW.txt
+reports/tags/
+scripts/rocba_*.py
+council/receipts/F-analyst-ROCBA-DISK-*.json
+council/receipts/F-analyst-ROCBA-MEM-*.json

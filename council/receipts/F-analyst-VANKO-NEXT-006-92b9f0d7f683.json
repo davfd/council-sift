@@ -1,0 +1,128 @@
+{
+  "finding_id": "F-analyst-VANKO-NEXT-006",
+  "nodeId": "9e0cbe9d-6528-513c-8c48-9d3080fa12ce",
+  "case": "VANKO-NEXT",
+  "claim": {
+    "observation": "Targeted recursive fls output from the EWF image at partition offset 1411072 contains Chrome History, Amcache, SRUDB, and EVTX target paths that correspond to the CYLR parser surfaces.",
+    "interpretation": "The EWF image corroborates the targeted CYLR parser surfaces at filesystem-path level. This supports further disk-backed follow-up on these artifacts, but path presence alone does not prove parser row meaning, byte equality, user action, or transfer.",
+    "confidence": "HIGH",
+    "content_sha256": "fd039225aef30595b8caf04d758256c432f8a59c29f0ed6b307fc83695778141"
+  },
+  "evidence_pointer": {
+    "artifact": "/tmp/vanko_next_out/ewf_corroboration_summary.txt",
+    "locator": "ewf-corroboration-summary:v1",
+    "tool": "cat",
+    "command": "cat /tmp/vanko_next_out/ewf_corroboration_summary.txt",
+    "output_sha256": "54735348b6034c355afa11eeca0bbd10d78fdd94503cf9e67d666460ebd3637e"
+  },
+  "trusted_execution": {
+    "provenance_tier": "TRUSTED_EXECUTION",
+    "execution_id": "TE-VANKO-NEXT-047c9e6873804ad6",
+    "execution_record_sha256": "047c9e6873804ad6c6b394b4cc70e00b54b401a233c8b4f59eb90abdb7314ee0",
+    "evidence_excerpt_sha256": "9e021911551883b30cc88b35a15454c4e154077c9cee8ed440e1db144ef738fd"
+  },
+  "evidence_excerpt": {
+    "output_sha256": "54735348b6034c355afa11eeca0bbd10d78fdd94503cf9e67d666460ebd3637e",
+    "total_chars": 4089,
+    "excerpt_chars": 1437,
+    "max_chars": 4000,
+    "truncated": true,
+    "cited_tokens_found": {},
+    "excerpt": "VANKO_EWF_CORROBORATION_SUMMARY_V1=1\n===TARGETED_FLS===\nFLS_TARGETED_EWF_START=2026-06-09T17:03:52Z\nr/r 1392-128-3:\tUsers/defaultprinter/AppData/Local/Google/Chrome/User Data/Default/History\nr/r 1393-128-4:\tUsers/defaultprinter/AppData/Local/Google/Chrome/User Data/Default/History-journal\nr/r 48901-128-4:\tUsers/defaultprinter/AppData/Local/Google/Chrome/User Data/Default/History Provider Cache\nr/r 246427-128-3:\tUsers/PC User/AppData/Local/Google/Chrome/User Data/Default/History\nr/r 9587-128-4:\tUsers/PC User/AppData/Local/Google/Chrome/User Data/Default/History Provider Cache\nr/r 246430-128-4:\tUsers/PC User/AppData/Local/Google/Chrome/User Data/Default/History-journal\nr/r 113463-128-3:\tWindows/appcompat/Programs/Amcache.hve\nr/r 113546-128-4:\tWindows/appcompat/Programs/Amcache.hve.LOG1\nr/r 113555-128-4:\tWindows/appcompat/Programs/Amcache.hve.LOG2\nr/r 114124-128-5:\tWindows/System32/sru/SRUDB.dat\nr/r 105262-128-6:\tWindows/System32/winevt/Logs/Application.evtx\nr/r 105453-128-4:\tWindows/System32/winevt/Logs/OAlerts.evtx\nr/r 105301-128-6:\tWindows/System32/winevt/Logs/Security.evtx\nr/r 105149-128-4:\tWindows/System32/winevt/Logs/System.evtx\nFLS_TARGETED_EWF_RC=0\nFLS_TARGETED_EWF_END=2026-06-09T17:05:37Z\n\n===BYTE_COMPARE===\nVANKO_EWF_CYLR_BYTE_COMPARE_V1=1\nCOMPARE_SRUDB_INODE=114124\nCOMPARE_SRUDB_EWF_SHA256=1189b79ab1e99c9bdf8b49caa49d238d479830c06365a282573d17621dfe237c\n[... omitted lines 24-71; full output hash below ...]",
+    "excerpt_sha256": "9e021911551883b30cc88b35a15454c4e154077c9cee8ed440e1db144ef738fd"
+  },
+  "seats": [
+    {
+      "seat": "seat:citation",
+      "lens": "does every cited token resolve in the evidence?",
+      "verdict": "SUPPORTED",
+      "reasoning": "All 9 cited evidence token(s) resolve in the tool output.",
+      "evidence_checked": [
+        {
+          "token": "VANKO_EWF_CORROBORATION_SUMMARY_V1=1",
+          "present": true
+        },
+        {
+          "token": "Users/defaultprinter/AppData/Local/Google/Chrome/User Data/Default/History",
+          "present": true
+        },
+        {
+          "token": "Users/PC User/AppData/Local/Google/Chrome/User Data/Default/History",
+          "present": true
+        },
+        {
+          "token": "Windows/appcompat/Programs/Amcache.hve",
+          "present": true
+        },
+        {
+          "token": "Windows/System32/sru/SRUDB.dat",
+          "present": true
+        },
+        {
+          "token": "Windows/System32/winevt/Logs/Application.evtx",
+          "present": true
+        },
+        {
+          "token": "Windows/System32/winevt/Logs/Security.evtx",
+          "present": true
+        },
+        {
+          "token": "Windows/System32/winevt/Logs/System.evtx",
+          "present": true
+        },
+        {
+          "token": "FLS_TARGETED_EWF_RC=0",
+          "present": true
+        }
+      ]
+    },
+    {
+      "seat": "seat:tool-semantics",
+      "lens": "is the tool output read correctly?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No known tool-output misread detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:contradiction",
+      "lens": "is there an artifact that disproves this?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No contradicting artifact found in the evidence.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:inference",
+      "lens": "does the observation support the interpretation?",
+      "verdict": "SUPPORTED",
+      "reasoning": "Interpretation stays within what the cited artifact supports.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:scope",
+      "lens": "does the artifact support the claimed scope?",
+      "verdict": "SUPPORTED",
+      "reasoning": "No environment-wide/all-host scope overreach detected.",
+      "evidence_checked": null
+    },
+    {
+      "seat": "seat:synthesis",
+      "lens": "adjudicate seat verdicts",
+      "verdict": "COUNCIL_VERIFIED",
+      "reasoning": "All seats SUPPORTED; finding earns a Council Receipt.",
+      "evidence_checked": null
+    }
+  ],
+  "llm_skeptic_panel": {
+    "ran": false,
+    "mode": "disabled",
+    "threshold": 2,
+    "refuteCount": 0,
+    "refute": false,
+    "votes": [],
+    "summary": "LLM skeptic layer disabled (set COUNCIL_LLM_SKEPTIC=1 to enable the additive panel)."
+  },
+  "disposition": "COUNCIL_VERIFIED",
+  "created_at": "2026-06-09T17:06:44.706Z",
+  "prev_receipt_sha256": "49c745e739dc02d1936e66624c880f3345badf7da33d5f1b7b8b85987d3d9f90",
+  "receipt_sha256": "92b9f0d7f683c62ac6029520aac0152ddeb636d6a097af75ab5134550d8e633e"
+}
