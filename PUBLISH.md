@@ -1,6 +1,6 @@
-# Pre-publish checklist (before pushing the public repo for Devpost)
+# Public-repo hygiene checklist
 
-The current submission lineage is clean of `eval/corpus/` (`HEAD`, `origin/main`, and
+The current submission lineage is published and clean of `eval/corpus/` (`HEAD`, `origin/main`, and
 `origin/tier3-pristine-2026-06-05` all verify clean after `git fetch --all --prune`). A **local archive ref**
 (`main-dev-archive`) still contains 36 historical `eval/corpus/` paths. Do **not** push with `--all`,
 `--mirror`, or by copying `.git`; publish only the verified clean branch or a clean orphan snapshot.
@@ -15,7 +15,7 @@ cd ~/council-sift
 git fetch --all --prune
 git log HEAD --name-only --pretty=format: -- eval/corpus | grep eval/corpus && exit 1 || echo "HEAD clean"
 git log origin/main --name-only --pretty=format: -- eval/corpus | grep eval/corpus && exit 1 || echo "origin/main clean"
-# after video URL/docs are final:
+# if any later video-URL/docs edits are committed:
 git push origin HEAD:main
 ```
 **Option A — purge from all local refs (keeps full commit history, only needed if you must publish every ref):**

@@ -138,7 +138,7 @@ then found the actual `StarFury.zip` archive/staging artifact — corroborating 
 
 | Required item | Location / status |
 |---|---|
-| Public code repository | [`https://github.com/davfd/council-sift`](https://github.com/davfd/council-sift) — before final Devpost submission, verify public `main` contains the polished packet commit/artifacts; do not push local archive refs |
+| Public code repository | ✅ [`https://github.com/davfd/council-sift`](https://github.com/davfd/council-sift) — public `main` contains the polished packet/artifacts; do not push local archive refs |
 | **Open-source license (MIT)** | [`LICENSE`](LICENSE) — MIT, detected by GitHub → shown in **About** |
 | README with setup | this file → **[Setup](#setup-step-by-step)** |
 | Step-by-step run instructions against evidence | **[Setup](#setup-step-by-step)** + **[Run the demos](#run-the-demos)** |

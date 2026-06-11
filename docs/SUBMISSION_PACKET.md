@@ -6,7 +6,7 @@ This file is the one-page operator checklist for everything **except recording/u
 
 | Item | Status | Exact artifact / value |
 |---|---:|---|
-| Public repository | ⚠️ push required | https://github.com/davfd/council-sift — public `main` was behind during Council audit; push the current polished `HEAD` and verify `git ls-remote origin refs/heads/main` matches before claiming the public repo contains these updates |
+| Public repository | ✅ live | https://github.com/davfd/council-sift — public `main` contains the polished packet/artifacts |
 | Open-source license | ✅ done | `LICENSE` — MIT, detected by GitHub |
 | README setup + run instructions | ✅ done | `README.md` → Setup, Run the demos, Live autonomous analyst |
 | Written project description | ✅ done | `docs/DEVPOST_SUBMISSION_COPY.md` |
@@ -17,7 +17,7 @@ This file is the one-page operator checklist for everything **except recording/u
 | Structured investigative reports | ✅ done | `reports/` |
 | Demo recording cue card | ✅ done | `docs/FINAL_RECORDING_CUE_CARD.md` |
 | Demo video URL | ⛔ operator-owned | Upload final public YouTube/Vimeo/Youku URL, then paste into Devpost |
-| Credentialed GitHub push | ⛔ operator-owned | Push current polished `HEAD` or a successor containing these files; verify `git ls-remote origin refs/heads/main` matches before final submission |
+| Credentialed GitHub push | ✅ done | Public `main` contains the polished packet/artifacts; if any later edits are made, re-push and re-verify before final submission |
 
 ## Devpost fields to paste
 
@@ -32,7 +32,7 @@ Use `docs/DEVPOST_SUBMISSION_COPY.md` for the long text. Short fields:
 
 ## Eight required FIND EVIL components
 
-1. **Code Repository** — public GitHub, MIT license: ⚠️ repo exists, but push the polished local packet before final submission
+1. **Code Repository** — public GitHub, MIT license: ✅ live on public `main`
 2. **Demo Video** — terminal screencast, audio, self-correction: ⛔ video URL still required
 3. **Architecture Diagram** — agent, SIFT tools, MCP server, evidence sources, output pipeline, boundaries: ✅
 4. **Written Project Description** — Devpost story format: ✅
@@ -54,18 +54,17 @@ Use `docs/DEVPOST_SUBMISSION_COPY.md` for the long text. Short fields:
 
 ## Final operator actions
 
-1. Push the polished local packet or otherwise publish these exact artifacts:
+1. Verify the public repository still points at the final packet before submitting:
    ```bash
    cd /home/exor/council-sift-recording
    local_head=$(git rev-parse HEAD)
-   git push origin HEAD:main
    git ls-remote origin refs/heads/main
    ```
    The final `ls-remote` must show `$local_head`, or a later explicitly approved commit containing the same packet.
 2. Record from `/home/exor/council-sift-recording` using `docs/FINAL_RECORDING_CUE_CARD.md`.
 3. Upload the video publicly.
 4. Paste the video URL into Devpost.
-5. Attach or link `docs/architecture.png` / `docs/architecture.svg`.
+5. Paste `docs/DEVPOST_SUBMISSION_COPY.md` fields into Devpost.
 6. Submit before deadline.
 
-Do **not** spend remaining time rewriting native SIFT integration unless the current SIFT wrapper fails in recording. The current non-video packet is complete **locally**; remaining elimination risks are credentialed GitHub publication of this packet, the public video URL, and final Devpost form submission.
+Do **not** spend remaining time rewriting native SIFT integration unless the current SIFT wrapper fails in recording. The current non-video packet is complete and public on `main`. The only missing submission artifact is the public demo-video URL; final Devpost submit follows once that URL is pasted.
