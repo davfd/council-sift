@@ -65,7 +65,7 @@ causation hardening, `eval/blind_rescore.mjs` rescored that persisted corpus wit
 at high precision and **still name the remaining miss** (the report enumerates the specific `true_holes`). That residual gap
 is exactly what the **additive LLM skeptic panel** addresses: it runs only after the floor passes a finding
 and bounces second-order over-reads no regex enumerates. Panel recall/FP is measured separately from the
-floor's deterministic precision. Outputs: `accuracy-report/blind_redteam_report.json`, `accuracy-report/blind_rescore_report.json` (+ `blind_findings.jsonl`).
+floor's deterministic precision. Outputs: `accuracy-report/blind_redteam_report.json`, `accuracy-report/blind_rescore_report.json` (+ `blind_findings.jsonl`). Public snapshots do **not** redistribute the private derived `eval/corpus/` tool output; `eval/blind_rescore.mjs` therefore fails closed unless that corpus has been regenerated or embedded outputs are present, preserving the committed canonical rescore instead of recomputing from empty evidence.
 
 ## D. External benchmark (supporting evidence, scoped)
 

@@ -60,7 +60,7 @@
   <rect x="780" y="360" width="120" height="36" rx="6" class="seat"/><text x="840" y="383" class="t">Tool-semantics</text>
   <rect x="650" y="404" width="120" height="36" rx="6" class="seat"/><text x="710" y="427" class="t">Contradiction</text>
   <rect x="780" y="404" width="120" height="36" rx="6" class="seat"/><text x="840" y="427" class="t">Synthesis</text>
-  <rect x="912" y="382" width="92" height="40" rx="6" class="seat"/><text x="958" y="400" class="ti">+Inference</text><text x="958" y="414" class="ti">(next)</text>
+  <rect x="912" y="382" width="92" height="40" rx="6" class="seat"/><text x="958" y="407" class="t">Inference</text>
 
   <!-- Receipt + Human -->
   <rect x="636" y="500" width="170" height="56" rx="8" class="rcpt"/>

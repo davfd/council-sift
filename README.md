@@ -143,11 +143,12 @@ then found the actual `StarFury.zip` archive/staging artifact — corroborating 
 | README with setup | this file → **[Setup](#setup-step-by-step)** |
 | Step-by-step run instructions against evidence | **[Setup](#setup-step-by-step)** + **[Run the demos](#run-the-demos)** |
 | Text description (features/functionality) | this README + [`ARCHITECTURE.md`](ARCHITECTURE.md) + [`NOVELTY.md`](NOVELTY.md) |
-| Demonstration video (<5 min, terminal, self-correction) | Operator-owned final URL goes on Devpost; script/runbook ready at [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) |
-| Architecture diagram | [`docs/architecture.svg`](docs/architecture.svg) + mermaid in [`ARCHITECTURE.md`](ARCHITECTURE.md) and below |
+| Demonstration video (<5 min, terminal, self-correction) | Operator-owned final URL goes on Devpost; final cue card ready at [`docs/FINAL_RECORDING_CUE_CARD.md`](docs/FINAL_RECORDING_CUE_CARD.md), longer rationale at [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) |
+| Architecture diagram | [`docs/architecture.png`](docs/architecture.png) + [`docs/architecture.svg`](docs/architecture.svg) + mermaid in [`ARCHITECTURE.md`](ARCHITECTURE.md) and below |
 | Evidence Dataset Documentation | [`evidence-docs/EVIDENCE.md`](evidence-docs/EVIDENCE.md) |
 | Accuracy Report | [`accuracy-report/bench_real_report.md`](accuracy-report/bench_real_report.md) (`node eval/bench_real.mjs` regenerates, at scale on real evidence) |
 | Agent Execution Logs | **[`execution-logs/AGENTIC.md`](execution-logs/AGENTIC.md)** — index of **9 genuine autonomous runs** (real stream-json transcripts: tool calls + timestamps + token usage); structured per-case logs via `node eval/export_execution_log.mjs <case>` |
+| Devpost copy / operator packet | [`docs/DEVPOST_SUBMISSION_COPY.md`](docs/DEVPOST_SUBMISSION_COPY.md) + [`docs/SUBMISSION_PACKET.md`](docs/SUBMISSION_PACKET.md) |
 | Analytical reasoning (structured investigative narrative, not a raw log) | [`reports/`](reports/) — `node eval/narrative_report.mjs <case>` renders verified findings as analyst prose (confidence, what the evidence does *not* support, self-correction record, receipt links) |
 
 **Success metric (per the organizers): *fewer hallucinated findings than Protocol SIFT's baseline.***
@@ -196,7 +197,7 @@ flowchart LR
   RECEIPT -. "COUNCIL_VERIFIED only" .-> HUMAN["Human examiner<br/>(HMAC approve)"]
 ```
 
-Full diagram + data flow: [`ARCHITECTURE.md`](ARCHITECTURE.md) · vector image: [`docs/architecture.svg`](docs/architecture.svg).
+Full diagram + data flow: [`ARCHITECTURE.md`](ARCHITECTURE.md) · raster image: [`docs/architecture.png`](docs/architecture.png) · vector image: [`docs/architecture.svg`](docs/architecture.svg).
 
 ## The loop (bloodstream)
 
@@ -315,8 +316,8 @@ agent**: tool choices and findings are the model's own.)*
 # bounces only on a ≥2/3 skeptic majority, and abstains (no effect) without an authenticated `claude`:
 COUNCIL_LLM_SKEPTIC=1 node council/council.mjs review <finding_id>
 node eval/skeptic_live_demo.mjs              # live: panel bounces second-order evasions the floor passed, 0 FP
-node eval/blind_redteam.mjs                  # held-out non-circular recall: independent LLM attacker; current detector rescore is 98.6% recall @ 98.6% precision (accuracy-report/blind_rescore_report.json)
-node eval/blind_rescore.mjs                  # offline detector-regression gate over the persisted blind corpus (no live attacker; fails on recall/FP regression)
+node eval/blind_redteam.mjs                  # private/auth path: independent LLM attacker over the blind corpus
+node eval/blind_rescore.mjs                  # requires eval/corpus/ or embedded outputs; public snapshot fails closed and preserves the committed report
 node council/run_agentic.mjs <finding_id>    # OpenClaw seat narration view (Claude Agent SDK if authenticated)
 ```
 
@@ -339,7 +340,7 @@ node council/run_agentic.mjs <finding_id>    # OpenClaw seat narration view (Cla
 | `analyst/run.sh`, `analyst/*_demo.sh` | Interactive agent launcher + the deterministic (hardcoded-finding) reproducibility demos. |
 | `bridge/csift.mjs` | `capture` / `record-finding` / `trace [--rerun]` / `refute` / `list` over the engine. `capture` creates local trusted execution records; `record-finding` imports those records and refuses caller-supplied stdout. |
 | `bin/` | `sift` (live identity-kernel gate) / `csift` / `council` PATH wrappers for the agent. |
-| `eval/` | `smoke_lifecycle` · `ablation` (incl. the timestomp **Contradiction** case) · `bench_real` (at-scale injected bench) · **`blind_redteam.mjs`** (held-out non-circular floor recall) · `blind_rescore.mjs` (current detector over persisted blind corpus) · `adversarial_evasions.mjs` (floor regression, 67/67) · `gate_redteam.py` (52/52 live-gate refusals) · `skeptic_panel_test`/`skeptic_live_demo` (panel) · `vigia_score.mjs` (external benchmark) · `narrative_report.mjs` · `redact_agentic.mjs` · `export_execution_log.mjs`. |
+| `eval/` | `smoke_lifecycle` · `ablation` (incl. the timestomp **Contradiction** case) · `bench_real` (at-scale injected bench) · **`blind_redteam.mjs`** (held-out non-circular floor recall, private/auth path) · `blind_rescore.mjs` (detector rescore when `eval/corpus/` or embedded outputs are present; public snapshot fails closed rather than fabricating an empty-output rescore) · `adversarial_evasions.mjs` (floor regression, 67/67) · `gate_redteam.py` (52/52 live-gate refusals) · `skeptic_panel_test`/`skeptic_live_demo` (panel) · `vigia_score.mjs` (external benchmark) · `narrative_report.mjs` · `redact_agentic.mjs` · `export_execution_log.mjs`. |
 | `tests/test_bypass.py` | Identity-kernel bypass suite (13/13). |
 | `evidence-docs/`, `accuracy-report/`, `execution-logs/`, `docs/` | The submission deliverables. |
 

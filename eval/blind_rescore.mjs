@@ -36,9 +36,28 @@ function conf(items) {
   return { tp, fp, fn, tn, recall: tp + fn ? tp / (tp + fn) : 1, precision: tp + fp ? tp / (tp + fp) : 1 };
 }
 
-const rescored = rows.map((f) => {
+const missingEvidence = [];
+const withOutput = rows.map((f) => {
   const p = resolve('eval/corpus', `${f.file}.txt`);
-  const output = existsSync(p) ? readFileSync(p, 'utf8') : (f.output || '');
+  if (existsSync(p)) return { f, output: readFileSync(p, 'utf8') };
+  if (f.output) return { f, output: f.output };
+  missingEvidence.push({ file: f.file, scenario: f.scenario, label: f.ground_truth?.label });
+  return { f, output: null };
+});
+
+// Public snapshots intentionally do not redistribute eval/corpus/ because it is derived from
+// organizer evidence. Older persisted blind_findings.jsonl rows also omit raw output. In that
+// state a rescore would feed empty output into the Citation seat and create bogus false positives,
+// overwriting the canonical report. Fail closed instead; regenerate eval/corpus from SIFT or run
+// eval/blind_redteam.mjs in the private evidence workspace before rescoring.
+if (missingEvidence.length) {
+  console.error(`BLIND_RESCORE_MISSING_EVIDENCE — ${missingEvidence.length}/${rows.length} rows have neither eval/corpus/<file>.txt nor embedded output.`);
+  console.error('This public snapshot keeps the canonical accuracy-report/blind_rescore_report.json but cannot recompute it without the private derived corpus.');
+  console.error('Regenerate eval/corpus with scripts/pull_corpus_from_sift.sh, or run eval/blind_redteam.mjs in the private evidence workspace. Refusing to overwrite the persisted report.');
+  process.exit(2);
+}
+
+const rescored = withOutput.map(({ f, output }) => {
   const finding = { observation: f.observation, interpretation: f.interpretation, cited_tokens: f.cited_tokens, evidence_tool: f.tool, output };
   const { seats, caught } = runSeats(finding);
   const first = seats.find((s) => s.verdict !== 'SUPPORTED');
