@@ -48,7 +48,7 @@ const report = {
   council_panel: { true_positive: tp, false_positive: fp, false_negative: fn, true_negative: tn, precision, recall },
   per_finding: rows,
   honest_notes: [
-    'Four deterministic seats: Citation (every cited token must be in the tool output), Tool-semantics (no over-reading a tool — e.g. psscan/pslist cannot establish C2; Shimcache != execution), Contradiction (timestomp: $SI vs $FN), Inference (no attribution/intent/causation/unjustified-certainty leap from a single artifact).',
+    'Five deterministic refutation seats: Citation (every cited token must be in the tool output), Tool-semantics (no over-reading a tool — e.g. psscan/pslist cannot establish C2; Shimcache != execution), Contradiction (timestomp: $SI vs $FN), Inference (no attribution/intent/causation/unjustified-certainty leap from a single artifact), and Scope (no single-host/single-artifact claim widened beyond the evidence bounds). Synthesis then aggregates the seat verdicts into verify-or-bounce.',
     'Remaining gap: a subtle semantic misinterpretation that matches none of the deterministic rules would still pass. That residue is what the AGENTIC council mode (council/run_agentic.mjs — OpenClaw/LLM seats grounded in these same primitives) is for; it is counted honestly here as not-caught, never as caught.',
     'cited_tokens are analyst-declared; regex auto-extraction is the weaker fallback for free-text claims.',
     'These numbers are on a small hand-crafted set and are NOT generalizable until run against the official dataset and real images.',

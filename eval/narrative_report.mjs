@@ -113,7 +113,7 @@ md += `## Confidence & limitations
 - Confidence is stated per finding (HIGH / MEDIUM / LOW / SPECULATIVE) and reflects what a single artifact
   can bear; nothing here is asserted beyond the cited evidence.
 - "Observation" is the literal tool output; "interpretation" is the analyst's inference. The Council's
-  Citation, Tool-semantics, Contradiction, and Inference seats independently checked the leap between them.
+  Citation, Tool-semantics, Contradiction, Inference, and Scope seats independently checked the leap between them; Synthesis aggregated the verdicts.
 - Every finding traces to its tool execution (\`csift trace ${verified[0]?.fid || '<finding>'}\`); concrete-command
   receipts can additionally be re-executed against evidence with \`csift trace --rerun …\`. Council Receipts are hash-chained.
 - This narrative is generated from the audit substrate, not hand-written — it cannot contain a claim that

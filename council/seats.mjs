@@ -199,7 +199,7 @@ export function citationSeat(finding) {
   return { seat: 'seat:citation', lens: 'does every cited token resolve in the evidence?', verdict, reasoning, evidence_checked: checked };
 }
 
-// Synthesis seat — aggregate verdicts → disposition.
+// Synthesis aggregator — aggregate refutation-seat verdicts → disposition.
 export function synthesisSeat(seatVerdicts) {
   const refuting = seatVerdicts.filter((v) => ['UNSUPPORTED', 'CONTRADICTED', 'MISREAD_TOOL'].includes(v.verdict));
   const disposition = refuting.length === 0 ? 'COUNCIL_VERIFIED' : 'BOUNCE_FOR_CORRECTION';

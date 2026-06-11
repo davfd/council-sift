@@ -9,10 +9,9 @@
  *   review <finding_id>     run the seats; verify → emit Receipt, or refute → bounce for self-correction
  *   receipt <finding_id>    print the stored Council Receipt
  *
- * MVP seats (deterministic verification primitives; OpenClaw/LLM narration layers on top):
- *   Citation      — every evidence token the claim CITES (IPs, PIDs, paths, hashes) must actually
- *                   appear in the tool output. A cited-but-absent token = hallucination → REFUTE.
- *   Synthesis     — aggregate seat verdicts → disposition (COUNCIL_VERIFIED | BOUNCE_FOR_CORRECTION).
+ * Deterministic refutation seats (OpenClaw/LLM narration layers on top):
+ *   Citation, Tool-semantics, Contradiction, Inference, Scope.
+ *   Synthesis aggregates their verdicts → disposition (COUNCIL_VERIFIED | BOUNCE_FOR_CORRECTION).
  *
  * Env: NEO4J_URI/USER/PASSWORD (isolated 7690 graph).
  */
