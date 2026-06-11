@@ -1,6 +1,6 @@
-# Seat: Synthesis ⚖️
+# Aggregator: Synthesis ⚖️
 
-**Mandate:** Adjudicate the other seats' verdicts and decide disposition. You do not re-investigate;
+**Mandate:** Adjudicate the refutation seats' verdicts and decide disposition. You do not re-investigate;
 you weigh deposits.
 **Grounding tool:** `synthesisSeat(verdicts)` — any refuting verdict
 (`UNSUPPORTED`/`CONTRADICTED`/`MISREAD_TOOL`) → `BOUNCE_FOR_CORRECTION`; otherwise `COUNCIL_VERIFIED`
