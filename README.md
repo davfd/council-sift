@@ -138,7 +138,7 @@ then found the actual `StarFury.zip` archive/staging artifact — corroborating 
 
 | Required item | Location / status |
 |---|---|
-| Public code repository | [`https://github.com/davfd/council-sift`](https://github.com/davfd/council-sift) — clean public snapshot on `main`; do not push local archive refs |
+| Public code repository | [`https://github.com/davfd/council-sift`](https://github.com/davfd/council-sift) — before final Devpost submission, verify public `main` contains the polished packet commit/artifacts; do not push local archive refs |
 | **Open-source license (MIT)** | [`LICENSE`](LICENSE) — MIT, detected by GitHub → shown in **About** |
 | README with setup | this file → **[Setup](#setup-step-by-step)** |
 | Step-by-step run instructions against evidence | **[Setup](#setup-step-by-step)** + **[Run the demos](#run-the-demos)** |
@@ -191,9 +191,10 @@ flowchart LR
   ANALYST -- "tool calls via bin/sift" --> KERNEL["Identity Kernel (live at bin/sift)<br/>default-deny tool gate · HMAC caps · refusals · hash-chain audit"]
   KERNEL --> BRIDGE["csift bridge<br/>record · trace · refute"]
   BRIDGE --> MEM[("claw-memory-core MCP server (10 tools)<br/>Neo4j @7690<br/>MemoryClaim · ToolExecution<br/>ConflictRecord · Receipt")]
-  MEM --> COUNCIL["Council seats<br/>Citation · Tool-semantics<br/>Contradiction · Inference · Synthesis"]
-  COUNCIL -- "REFUTE → ConflictRecord" --> ANALYST
-  COUNCIL -- "VERIFIED" --> RECEIPT["Council Receipt<br/>(hash-chained)"]
+  MEM --> COUNCIL["5 deterministic refutation seats<br/>Citation · Tool-semantics<br/>Contradiction · Inference · Scope"]
+  COUNCIL --> SYN["Synthesis aggregator<br/>adjudicate → receipt | bounce"]
+  SYN -- "REFUTE → ConflictRecord" --> ANALYST
+  SYN -- "VERIFIED" --> RECEIPT["Council Receipt<br/>(hash-chained)"]
   RECEIPT -. "COUNCIL_VERIFIED only" .-> HUMAN["Human examiner<br/>(HMAC approve)"]
 ```
 

@@ -6,7 +6,7 @@ This file is the one-page operator checklist for everything **except recording/u
 
 | Item | Status | Exact artifact / value |
 |---|---:|---|
-| Public repository | ✅ done | https://github.com/davfd/council-sift — `main` at `e27617179d28a63ea0b9dfc82874763af3248281` |
+| Public repository | ⚠️ push required | https://github.com/davfd/council-sift — public `main` was behind during Council audit; push the current polished `HEAD` and verify `git ls-remote origin refs/heads/main` matches before claiming the public repo contains these updates |
 | Open-source license | ✅ done | `LICENSE` — MIT, detected by GitHub |
 | README setup + run instructions | ✅ done | `README.md` → Setup, Run the demos, Live autonomous analyst |
 | Written project description | ✅ done | `docs/DEVPOST_SUBMISSION_COPY.md` |
@@ -17,6 +17,7 @@ This file is the one-page operator checklist for everything **except recording/u
 | Structured investigative reports | ✅ done | `reports/` |
 | Demo recording cue card | ✅ done | `docs/FINAL_RECORDING_CUE_CARD.md` |
 | Demo video URL | ⛔ operator-owned | Upload final public YouTube/Vimeo/Youku URL, then paste into Devpost |
+| Credentialed GitHub push | ⛔ operator-owned | Push current polished `HEAD` or a successor containing these files; verify `git ls-remote origin refs/heads/main` matches before final submission |
 
 ## Devpost fields to paste
 
@@ -31,7 +32,7 @@ Use `docs/DEVPOST_SUBMISSION_COPY.md` for the long text. Short fields:
 
 ## Eight required FIND EVIL components
 
-1. **Code Repository** — public GitHub, MIT license: ✅
+1. **Code Repository** — public GitHub, MIT license: ⚠️ repo exists, but push the polished local packet before final submission
 2. **Demo Video** — terminal screencast, audio, self-correction: ⛔ video URL still required
 3. **Architecture Diagram** — agent, SIFT tools, MCP server, evidence sources, output pipeline, boundaries: ✅
 4. **Written Project Description** — Devpost story format: ✅
@@ -53,10 +54,18 @@ Use `docs/DEVPOST_SUBMISSION_COPY.md` for the long text. Short fields:
 
 ## Final operator actions
 
-1. Record from `/home/exor/council-sift-recording` using `docs/FINAL_RECORDING_CUE_CARD.md`.
-2. Upload the video publicly.
-3. Paste the video URL into Devpost.
-4. Attach or link `docs/architecture.png` / `docs/architecture.svg`.
-5. Submit before deadline.
+1. Push the polished local packet or otherwise publish these exact artifacts:
+   ```bash
+   cd /home/exor/council-sift-recording
+   local_head=$(git rev-parse HEAD)
+   git push origin HEAD:main
+   git ls-remote origin refs/heads/main
+   ```
+   The final `ls-remote` must show `$local_head`, or a later explicitly approved commit containing the same packet.
+2. Record from `/home/exor/council-sift-recording` using `docs/FINAL_RECORDING_CUE_CARD.md`.
+3. Upload the video publicly.
+4. Paste the video URL into Devpost.
+5. Attach or link `docs/architecture.png` / `docs/architecture.svg`.
+6. Submit before deadline.
 
-Do **not** spend remaining time rewriting native SIFT integration unless the current SIFT wrapper fails in recording. The current non-video submission packet is complete; the remaining elimination risk is the public video URL and final Devpost form submission.
+Do **not** spend remaining time rewriting native SIFT integration unless the current SIFT wrapper fails in recording. The current non-video packet is complete **locally**; remaining elimination risks are credentialed GitHub publication of this packet, the public video URL, and final Devpost form submission.

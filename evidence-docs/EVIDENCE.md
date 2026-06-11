@@ -107,7 +107,7 @@ rerun-verified evidence.
 
 - Layer A is synthetic (mechanism proof, not accuracy). Accuracy is carried by layers C (at scale, real
   output) and D (external held-out). Absolute numbers generalize only as far as each layer's ground truth.
-- All five seats are implemented (Citation, Tool-semantics, Contradiction, Inference, Synthesis). The
+- All five deterministic refutation seats are implemented (Citation, Tool-semantics, Contradiction, Inference, Scope), with Synthesis as the aggregator that turns seat verdicts into verify-or-bounce. The
   Citation seat catches **absent/fabricated** tokens; **misinterpretation of present** evidence is the
   Tool-semantics / Inference seats' job — and the live SRL self-correction is exactly such a case.
 - MITRE TTP exact-ID coverage (layer D) is weak and reported as such; the verdict is the headline metric.

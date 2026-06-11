@@ -55,12 +55,12 @@
 
   <!-- Council -->
   <rect x="636" y="330" width="380" height="120" rx="10" class="council"/>
-  <text x="650" y="350" class="lbl hdr" fill="#b7791f">Council (seats try to REFUTE)</text>
+  <text x="650" y="350" class="lbl hdr" fill="#b7791f">Council (5 refutation seats try to REFUTE)</text>
   <rect x="650" y="360" width="120" height="36" rx="6" class="seat"/><text x="710" y="383" class="t">Citation</text>
   <rect x="780" y="360" width="120" height="36" rx="6" class="seat"/><text x="840" y="383" class="t">Tool-semantics</text>
   <rect x="650" y="404" width="120" height="36" rx="6" class="seat"/><text x="710" y="427" class="t">Contradiction</text>
-  <rect x="780" y="404" width="120" height="36" rx="6" class="seat"/><text x="840" y="427" class="t">Synthesis</text>
-  <rect x="912" y="382" width="92" height="40" rx="6" class="seat"/><text x="958" y="407" class="t">Inference</text>
+  <rect x="780" y="404" width="120" height="36" rx="6" class="seat"/><text x="840" y="427" class="t">Inference</text>
+  <rect x="912" y="382" width="92" height="40" rx="6" class="seat"/><text x="958" y="407" class="t">Scope</text>
 
   <!-- Receipt + Human -->
   <rect x="636" y="500" width="170" height="56" rx="8" class="rcpt"/>
@@ -85,7 +85,8 @@
 
   <!-- verified down to receipt, then human -->
   <path class="eok" d="M721,450 L721,498" marker-end="url(#arrG)"/>
-  <text x="729" y="478" class="elbl" fill="#2f7d32">VERIFIED</text>
+  <text x="729" y="468" class="elbl" fill="#2f7d32">Synthesis</text>
+  <text x="729" y="484" class="elbl" fill="#2f7d32">VERIFIED</text>
   <path class="eok" d="M806,528 L844,528" marker-end="url(#arrG)"/>
   <text x="690" y="575" class="ti">Only COUNCIL_VERIFIED findings reach the human. HMAC secures *who* approved; the Receipt secures *why* the claim deserved approval.</text>
 </svg>

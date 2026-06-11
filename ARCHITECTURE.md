@@ -20,13 +20,14 @@ flowchart TB
     KERNEL["Identity Kernel<br/>(HMAC capabilities · default-deny tool gate &<br/>prompt-injection refusal · hash-chained audit)"]
     BRIDGE["csift bridge<br/>record-finding · trace · refute"]
     MEM[("claw-memory-core MCP server (10 tools)<br/>Neo4j @ 7690<br/>MemoryClaim · ToolExecution<br/>ConflictRecord · CouncilReceipt")]
-    subgraph COUNCIL["Council seats (5, deterministic)"]
+    subgraph COUNCIL["Deterministic refutation seats (5)"]
       CIT["Citation<br/>(cited tokens resolve?)"]
       TS["Tool-semantics<br/>(psscan≠C2, netscan≠exfil)"]
       CON["Contradiction<br/>($SI vs $FN timestomp)"]
       INF["Inference<br/>(no attribution/intent leap)"]
-      SYN["Synthesis<br/>(adjudicate → Receipt | bounce)"]
+      SCOPE["Scope<br/>(host/IP/artifact bounds)"]
     end
+    SYN["Synthesis aggregator<br/>(adjudicate → Receipt | bounce)"]
     RECEIPT["Council Receipt<br/>(hash-chained)"]
   end
 
@@ -35,19 +36,19 @@ flowchart TB
   ANALYST -- "SIFT tool calls via bin/sift (live gate)" --> KERNEL
   KERNEL --> BRIDGE
   BRIDGE -- "4-part finding + DERIVED_FROM provenance" --> MEM
-  MEM --> COUNCIL
-  COUNCIL -- "REFUTE → mark_wrong → ConflictRecord" --> ANALYST
-  COUNCIL -- "VERIFIED" --> RECEIPT --> MEM
+  MEM --> COUNCIL --> SYN
+  SYN -- "REFUTE → mark_wrong → ConflictRecord" --> ANALYST
+  SYN -- "VERIFIED" --> RECEIPT --> MEM
   RECEIPT -. "COUNCIL_VERIFIED only" .-> HUMAN
 
   classDef store fill:#eef,stroke:#88a;
   class MEM store;
 ```
 
-\* The five seats are the **deterministic precision floor** (`council/seats.mjs`): Citation
+\* The five refutation seats are the **deterministic precision floor** (`council/seats.mjs`): Citation
 (token-boundary matching — a fabricated token embedded in a larger real one is still ABSENT),
 Tool-semantics and Inference (clause-local hedging — a stray negation elsewhere no longer disables the
-check), Contradiction, Synthesis. On top, an **additive LLM skeptic panel** (`council/llm_skeptic.mjs`)
+check), Contradiction, and Scope. Synthesis is the aggregator that turns seat verdicts into verify-or-bounce. On top, an **additive LLM skeptic panel** (`council/llm_skeptic.mjs`)
 runs ONLY on findings the floor passed; three independent skeptics (distinct lenses) must reach a
 **≥2/3 majority** to add a bounce. It can never overturn a floor refute, and abstains (no effect)
 without an authenticated Claude Agent SDK, so the reproducible baseline is unchanged. `run_agentic.mjs`
@@ -82,12 +83,12 @@ is the OpenClaw seat-narration view of the floor verdicts.
    a 10-tool Model Context Protocol (MCP) server for review/memory operations, imports
    stdout from that verified capture, refuses caller-supplied `output`, and attaches a
    `ToolExecution` provenance node (`DERIVED_FROM`) holding the exact command + output + `output_sha256`.
-4. **Council review (two tiers).** *Floor:* five deterministic seats try to refute. **Citation** —
+4. **Council review (two tiers).** *Floor:* five deterministic refutation seats try to refute. **Citation** —
    every cited token must appear in the tool output **as a standalone token** (absent = hallucination →
    REFUTE). **Tool-semantics** — the tool isn't over-read (psscan≠C2, netscan≠exfil, shimcache≠execution),
    judged **clause-locally** so a disclaimer only excuses the clause it sits in. **Contradiction** — a
    disproving artifact ($SI vs $FN timestomp). **Inference** — no attribution/intent/causation/certainty
-   over-reach (negation-only hedge). **Synthesis** aggregates → verify or bounce. *Additive tier:* if the
+   over-reach (negation-only hedge). **Scope** — no single-host/single-artifact claim is widened beyond the evidence. **Synthesis** aggregates → verify or bounce. *Additive tier:* if the
    floor passed, the **LLM skeptic panel** (`llm_skeptic.mjs`) runs — a ≥2/3 majority of independent
    skeptics can **add** a bounce for an over-read the regex floor cannot enumerate; it never rescues a
    refuted finding. Its recall and false-positive behavior are measured separately from the deterministic

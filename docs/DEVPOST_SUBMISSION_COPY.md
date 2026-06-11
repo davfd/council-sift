@@ -79,7 +79,7 @@ Autonomy is not only tool use. In DFIR, autonomy must include disciplined refusa
 
 ## Required links / artifacts
 
-- Public repo: https://github.com/davfd/council-sift
+- Public repo: https://github.com/davfd/council-sift — before final submission, verify public `main` contains the polished packet commit/artifacts
 - Demo video: **paste final public video URL before submitting**
 - Architecture diagram: `docs/architecture.png` and `docs/architecture.svg`
 - Evidence documentation: `evidence-docs/EVIDENCE.md`
@@ -97,6 +97,8 @@ The public repo README contains the full setup. The short path:
 3. Build `claw-memory-core` and run `scripts/migrate.sh`.
 4. Run no-key checks: `node eval/smoke_lifecycle.mjs`, `node eval/ablation.mjs`, `node eval/adversarial_evasions.mjs`, `node eval/trusted_execution_test.mjs`, `node eval/skeptic_panel_test.mjs`, and `python3 tests/test_bypass.py`.
 5. If a SIFT workstation and official evidence are available, set `SIFT_WRAPPER`, mount evidence read-only, run `bash analyst/srl_memory_demo.sh`, and trace the verified finding.
+
+Operator note: if preparing from `/home/exor/council-sift-recording`, push the current polished `HEAD` before using the public GitHub URL as the artifact source. During the Council audit, public `main` lagged the local packet; verify with `git rev-parse HEAD` and `git ls-remote origin refs/heads/main` before final submission.
 
 ## Key judging points
 
