@@ -345,24 +345,25 @@ node council/run_agentic.mjs <finding_id>    # OpenClaw seat narration view (Cla
 | `tests/test_bypass.py` | Identity-kernel bypass suite (13/13). |
 | `evidence-docs/`, `accuracy-report/`, `execution-logs/`, `docs/` | The submission deliverables. |
 
-## The forensic seats
+## The forensic refutation seats and synthesis aggregator
 
-| Seat | Refutation question | Verdict |
+| Refutation seat | Refutation question | Verdict |
 |---|---|---|
 | **Citation** | Does every evidence token the claim *cites* appear in the tool output? | `UNSUPPORTED` (lists the absent/fabricated token) |
 | **Tool-semantics** | Is the tool read correctly? (psscan ≠ C2, Shimcache ≠ execution…) — negation-aware | `MISREAD_TOOL` |
 | **Contradiction** | Is there a disproving artifact? (e.g. timestomp `$SI` vs `$FN`) | `CONTRADICTED` |
 | **Inference** | Does the interpretation over-reach? (attribution / intent / causation / unjustified certainty) | `UNSUPPORTED` |
 | **Scope** | Does one artifact get stretched into all-hosts / environment-wide / organization-wide impact? | `UNSUPPORTED` |
-| **Synthesis** | Adjudicate the panel → disposition | `COUNCIL_VERIFIED` \| `BOUNCE_FOR_CORRECTION` |
 
-The five refutation seats above are the **deterministic floor** (`council/seats.mjs`, no API key). On top
+The five refutation seats above are the **deterministic floor** (`council/seats.mjs`, no API key). The
+**Synthesis aggregator** adjudicates the five seat verdicts into `COUNCIL_VERIFIED` or
+`BOUNCE_FOR_CORRECTION`. On top
 sits the **additive LLM skeptic panel** (`council/llm_skeptic.mjs`), consulted **only on findings the
 floor already passed**:
 
 | Tier | What it does | Guarantee |
 |---|---|---|
-| **Deterministic floor** | The 5 refutation seats + Synthesis above; mechanical refutations | Reproducible; FP=0 on the injected-class regression supported set; blind red-team precision reported separately |
+| **Deterministic floor** | The 5 refutation seats + Synthesis aggregator; mechanical refutations | Reproducible; FP=0 on the injected-class regression supported set; blind red-team precision reported separately |
 | **LLM skeptic panel** (additive) | 3 independent skeptics (tool-semantics / inference / scope lenses) catch over-reads with no regex trigger | **Only adds** a bounce to a floor-passed finding (never rescues); needs a **≥2/3 majority**; panel recall/FP is measured separately |
 
 ## Accuracy & honesty
