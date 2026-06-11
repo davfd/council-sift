@@ -17,8 +17,8 @@ hackathon-preferred frameworks — Claude Code (analyst) + OpenClaw (Council) �
 
 ## Protocol (shared)
 
-- A finding is dispatched to all seats; each deposits **independently** (no waiting, no synthesizing
-  "what others would say" — that is the Synthesis seat's job).
+- A finding is dispatched to the deterministic refutation seats; each deposits **independently** (no
+  waiting, no synthesizing "what others would say" — Synthesis is the aggregator's job).
 - Verdict shape: `SUPPORTED | UNSUPPORTED | CONTRADICTED | MISREAD_TOOL` + one-line reasoning +
   `evidence_checked` (what the seat verified).
 - Synthesis adjudicates: any refuting verdict → **BOUNCE_FOR_CORRECTION** (analyst self-corrects);
@@ -33,4 +33,5 @@ hackathon-preferred frameworks — Claude Code (analyst) + OpenClaw (Council) �
 | `tool-semantics.md` | Tool-semantics | `toolSemanticsSeat` — no over-reading a tool (psscan≠C2, netscan≠exfil) |
 | `contradiction.md` | Contradiction | `contradictionSeat` — disproving artifact (timestomp $SI vs $FN) |
 | `inference.md` | Inference | `inferenceSeat` — no attribution/intent/causation/certainty over-reach |
-| `synthesis.md` | Synthesis | `synthesisSeat` — adjudicate → Receipt or bounce |
+| deterministic floor | Scope | `scopeSeat` — no single-host/single-artifact claim widened beyond evidence bounds |
+| `synthesis.md` | Synthesis aggregator | `synthesisSeat` — adjudicate the refutation-seat verdicts → Receipt or bounce |

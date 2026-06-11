@@ -22,7 +22,7 @@ The loop is:
 
 1. The analyst agent examines real evidence with SIFT tools such as Sleuth Kit, Volatility 3, Plaso/log2timeline, and psort.
 2. The analyst drafts a finding with observation, interpretation, confidence, and provenance.
-3. Council seats try to refute the claim for citation grounding, tool semantics, inference boundaries, contradictions, and synthesis.
+3. Five deterministic Council seats try to refute the claim for citation grounding, tool semantics, contradictions, inference boundaries, and scope boundaries; Synthesis aggregates those verdicts into verify-or-bounce.
 4. Unsupported claims bounce back to the analyst and are recorded as self-corrections.
 5. Supported claims receive hash-chained Council receipts.
 6. Reports and execution logs let a practitioner trace every finding back to the exact tool execution and output hash.
@@ -35,7 +35,7 @@ The demo’s central example is official SRL-2018 memory evidence: a plausible `
 - **SIFT integration:** `bin/sift` gates forensic commands before execution and dispatches read-only SIFT tooling through the SIFT workstation wrapper.
 - **Identity kernel:** default-deny authorization, HMAC-scoped and expiring capabilities, no analyst self-approval, forbidden-tool refusal, prompt-injection refusal, and tamper-evident audit events.
 - **MCP-backed memory/review layer:** a 10-tool `claw-memory-core` Model Context Protocol server backed by Neo4j stores claims, tool executions, conflicts, receipts, and content hashes.
-- **Council verifier:** deterministic seats check citation grounding, tool semantics, contradiction, inference boundaries, and synthesis; an optional additive LLM skeptic panel can bounce second-order overreads after the deterministic floor passes.
+- **Council verifier:** deterministic refutation seats check citation grounding, tool semantics, contradiction, inference boundaries, and scope boundaries; Synthesis aggregates those seat verdicts into verify-or-bounce. An optional additive LLM skeptic panel can bounce second-order overreads after the deterministic floor passes.
 - **Receipt and report pipeline:** `csift capture`, `record-finding`, `trace`, narrative report generation, accuracy reports, and structured agent logs make every claim reviewable.
 
 ## Challenges we ran into
