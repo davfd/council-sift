@@ -243,7 +243,9 @@ evidence → `csift capture` runs the forensic command through `bin/sift` and wr
 - SIFT execution can be **no-SSH local** (clone/run this repo inside the SIFT workstation and set
   `SIFT_WRAPPER=$PWD/bin/sift-local`) or a VM bridge (set `SIFT_WRAPPER` to your own SSH/QEMU wrapper).
   In both modes the analyst calls `bin/sift` first, so the Council-SIFT identity kernel gates the command
-  before the underlying SIFT executor runs.
+  before the underlying SIFT executor runs. The audited end-to-end official-evidence recording path uses
+  the VM bridge; no-SSH local SIFT is supported and gate-verified, but this packet did not separately
+  re-run the full official-evidence demo from a fresh clone inside SIFT.
 
 ```bash
 # 1. clone
@@ -261,6 +263,8 @@ printf 'NEO4J_URI=bolt://localhost:7690\nNEO4J_USER=neo4j\nNEO4J_PASSWORD=counci
 
 # 5. apply the schema (runs cypher-shell inside the container — no host install needed)
 bash scripts/migrate.sh
+# Re-running against a reused graph may report an equivalent constraint already exists.
+# For a clean restart: docker rm -f councilsift-neo4j, then repeat steps 2–5.
 ```
 
 ### Run the demos
@@ -292,7 +296,10 @@ export PATH="$PWD/bin:$PATH"
 bash analyst/sift_demo.sh            # synthetic image, real Sleuth Kit, full self-correction loop
 # official evidence (mount read-only first; nothing is copied):
 #   no-SSH local SIFT: mount/provide the organizer evidence at /mnt/evidence as read-only
+#     from inside SIFT before running these demos. Do not use scripts/mount_evidence.sh for this mode;
+#     that helper delegates through a VM bridge and raw local sift-local will correctly refuse it.
 #   VM bridge: launch with -virtfs local,path=<EVIDENCE_DIR>,mount_tag=evidence,security_model=none,readonly=on
+#     or run the helper below if your bridge supports it.
 bash scripts/mount_evidence.sh
 bash analyst/rocba_demo.sh           # official ROCBA disk (Sleuth Kit)
 bash analyst/srl_memory_demo.sh      # official SRL-2018 memory (Volatility 3)

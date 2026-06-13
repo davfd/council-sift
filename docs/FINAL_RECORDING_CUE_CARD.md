@@ -15,7 +15,7 @@ export PATH="$PWD/bin:$PATH"
 set -a; source claw-memory-core/.env; set +a
 ```
 
-Note: this recording uses our local SIFT VM bridge. A judge can run the same gated path without SSH by cloning the repo directly inside SIFT and setting `SIFT_WRAPPER=$PWD/bin/sift-local`; `bin/sift` remains the authorization boundary in both modes.
+Note: this recording uses our local SIFT VM bridge. A judge can run the same gated path without SSH by cloning the repo directly inside SIFT and setting `SIFT_WRAPPER=$PWD/bin/sift-local`; `bin/sift` remains the authorization boundary in both modes. Proof scope: the audited official-evidence end-to-end recording run used the VM bridge; no-SSH local SIFT is supported and gate-verified, but was not separately re-run end-to-end from a fresh clone inside SIFT in this audit.
 
 Target: **under 5 minutes**. Terminal screencast + audio narration. No slides.
 
