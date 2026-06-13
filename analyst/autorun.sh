@@ -10,6 +10,9 @@
 #   → execution-logs/AGENTIC-<CASE-ID>.jsonl  (raw live transcript)
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 export PATH="$HERE/bin:$PATH"
+# Underlying executor behind the guarded `sift` command. For no-SSH local SIFT, run this repo
+# inside the SIFT workstation/container and set: SIFT_WRAPPER="$HERE/bin/sift-local".
+# For a VM bridge, set SIFT_WRAPPER to your SSH/QEMU wrapper.
 export SIFT_WRAPPER="${SIFT_WRAPPER:-$HOME/sift-workstation/sift}"
 set -a; . "$HERE/claw-memory-core/.env"; set +a
 cd "$HERE/analyst" || exit 1
@@ -41,7 +44,8 @@ EOF
 echo "[autorun] CASE=$CASE model=${MODEL:-default} timeout=${TMO}s → $LOG"
 ARGS=(-p "$PROMPT" --allowedTools "Bash" --output-format stream-json --verbose)
 [ -n "$MODEL" ] && ARGS+=(--model "$MODEL")
-HOME=/home/exor timeout "$TMO" claude "${ARGS[@]}" > "$LOG" 2>&1
+CLAUDE_HOME="${COUNCILSIFT_CLAUDE_HOME:-$HOME}"
+HOME="$CLAUDE_HOME" timeout "$TMO" claude "${ARGS[@]}" > "$LOG" 2>&1
 rc=$?
 echo "[autorun] $CASE done (rc=$rc); $(wc -l < "$LOG") transcript lines"
 exit 0

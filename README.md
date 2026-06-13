@@ -238,8 +238,12 @@ evidence → `csift capture` runs the forensic command through `bin/sift` and wr
 
 **Prerequisites**
 - **Docker** (for the isolated Neo4j), **Node ≥ 20**, **Python ≥ 3.10**.
-- For the SIFT demos: a **SANS SIFT Workstation** you can reach over SSH, and (for the official-evidence
-  demos) the HACKATHON-2026 datasets. The repo never contains evidence.
+- For the SIFT demos: a **SANS SIFT Workstation** plus, for the official-evidence demos, the
+  HACKATHON-2026 datasets. The repo never contains evidence.
+- SIFT execution can be **no-SSH local** (clone/run this repo inside the SIFT workstation and set
+  `SIFT_WRAPPER=$PWD/bin/sift-local`) or a VM bridge (set `SIFT_WRAPPER` to your own SSH/QEMU wrapper).
+  In both modes the analyst calls `bin/sift` first, so the Council-SIFT identity kernel gates the command
+  before the underlying SIFT executor runs.
 
 ```bash
 # 1. clone
@@ -274,13 +278,21 @@ python3 tests/test_bypass.py         # identity-kernel bypass suite (13/13)
 # Pure no-SIFT checks stop here. `trace --rerun` needs a demo receipt plus SIFT wrapper/evidence path.
 ```
 
-**Forensic demos — point the analyst at your SIFT Workstation.** Edit `bin/sift` so it SSHes to your
-SIFT box (the wrapper is a thin `ssh … "$@"`), then:
+**Forensic demos — run with SIFT, with or without SSH.** The analyst always calls `bin/sift`,
+which runs the identity-kernel allow/deny check before delegating to the underlying SIFT executor.
+Choose one executor:
 ```bash
+# Option A: no SSH — run this repo directly inside the SIFT workstation/container.
+export SIFT_WRAPPER="$PWD/bin/sift-local"
+
+# Option B: VM bridge — keep the repo outside SIFT and delegate into a local SIFT VM.
+# export SIFT_WRAPPER=/path/to/your/sift-ssh-or-qemu-wrapper
+
 export PATH="$PWD/bin:$PATH"
 bash analyst/sift_demo.sh            # synthetic image, real Sleuth Kit, full self-correction loop
 # official evidence (mount read-only first; nothing is copied):
-#   launch the SIFT VM with: -virtfs local,path=<EVIDENCE_DIR>,mount_tag=evidence,security_model=none,readonly=on
+#   no-SSH local SIFT: mount/provide the organizer evidence at /mnt/evidence as read-only
+#   VM bridge: launch with -virtfs local,path=<EVIDENCE_DIR>,mount_tag=evidence,security_model=none,readonly=on
 bash scripts/mount_evidence.sh
 bash analyst/rocba_demo.sh           # official ROCBA disk (Sleuth Kit)
 bash analyst/srl_memory_demo.sh      # official SRL-2018 memory (Volatility 3)

@@ -5,7 +5,7 @@
 # network exfil) -> analyst self-corrects to a data-staging indicator -> COUNCIL_VERIFIED.
 cd "$(dirname "$0")/.."
 set -a; source claw-memory-core/.env; set +a
-SIFT="$HOME/sift-workstation/sift"
+SIFT="${SIFT_WRAPPER:-$HOME/sift-workstation/sift}"
 CASE=SRL-MEM
 NF() { grep -vE 'MEM-TELEMETRY|C1-COST|OPENAI_API_KEY absent|injected env' || true; }
 

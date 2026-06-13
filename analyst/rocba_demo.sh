@@ -4,7 +4,7 @@
 # rocba-cdrive.e01: analyst fabricates a BitLocker container -> Council refutes -> self-corrects -> verified.
 cd "$(dirname "$0")/.."
 set -a; source claw-memory-core/.env; set +a
-SIFT="$HOME/sift-workstation/sift"
+SIFT="${SIFT_WRAPPER:-$HOME/sift-workstation/sift}"
 EV="/mnt/evidence/Standard Forensic Case/rocba-cdrive.e01"
 CASE=ROCBA
 NF() { grep -vE 'MEM-TELEMETRY|C1-COST|OPENAI_API_KEY absent|injected env' || true; }

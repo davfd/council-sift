@@ -15,6 +15,8 @@ export PATH="$PWD/bin:$PATH"
 set -a; source claw-memory-core/.env; set +a
 ```
 
+Note: this recording uses our local SIFT VM bridge. A judge can run the same gated path without SSH by cloning the repo directly inside SIFT and setting `SIFT_WRAPPER=$PWD/bin/sift-local`; `bin/sift` remains the authorization boundary in both modes.
+
 Target: **under 5 minutes**. Terminal screencast + audio narration. No slides.
 
 ---

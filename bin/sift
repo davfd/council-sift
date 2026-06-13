@@ -9,4 +9,6 @@ if ! authz="$(python3 "$HERE/identity-kernel/authorize.py" --scan-command "$*" 2
   echo "[bin/sift] REFUSED by Council-SIFT identity kernel: ${authz}" >&2
   exit 13
 fi
-exec "$SIFT_WRAPPER" "$@"
+# Do not exec: local no-SSH executors can verify their parent is this gated script.
+export COUNCILSIFT_GATE_PARENT="$HERE/bin/sift"
+"$SIFT_WRAPPER" "$@"

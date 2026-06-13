@@ -6,7 +6,8 @@
 # compact, judge-safe KEY=value evidence lines.
 set -euo pipefail
 
-SIFT="${SIFT_WRAPPER:-/home/exor/sift-workstation/sift}"
+cd "$(dirname "$0")/.."
+SIFT="${SIFT_WRAPPER:-$HOME/sift-workstation/sift}"
 
 "$SIFT" 'set -euo pipefail
 IMG="/mnt/evidence/Compromised APT Attack Scenarios/SRL 2018/base-file-cdrive.E01"

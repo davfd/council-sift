@@ -4,7 +4,7 @@
 #   -> analyst self-corrects -> Council verifies -> Receipt + trace.   No human in the loop.
 cd "$(dirname "$0")/.."
 set -a; source claw-memory-core/.env; set +a
-SIFT="$HOME/sift-workstation/sift"
+SIFT="${SIFT_WRAPPER:-$HOME/sift-workstation/sift}"
 CASE=SIFT-DEMO
 NF() { grep -vE 'MEM-TELEMETRY|C1-COST|OPENAI_API_KEY absent|injected env' || true; }
 
@@ -29,7 +29,7 @@ import json, os
 print(json.load(open(os.environ["EXEC_REF"]))["output"], end="")
 PY
 )"
-echo "── REAL SIFT tool output (fls -r -p /tmp/case.img, run inside the VM) ──"; echo "$OUT"; echo
+echo "── REAL SIFT tool output (fls -r -p /tmp/case.img, run inside SIFT) ──"; echo "$OUT"; echo
 
 docker exec councilsift-neo4j cypher-shell -u neo4j -p councilsiftpw \
   "MATCH (n) WHERE n.project_root='$CASE' DETACH DELETE n;" >/dev/null 2>&1 || true

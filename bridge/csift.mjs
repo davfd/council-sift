@@ -237,7 +237,10 @@ async function trace(svc, id, opts = {}) {
     } else if (!r.cmd) {
       independent_rerun = { requested: true, status: 'NO_COMMAND — finding has no recorded command to re-run' };
     } else {
-      const wrapper = process.env.SIFT_WRAPPER || `${process.env.HOME || ''}/sift-workstation/sift`;
+      // Re-run through the Council-SIFT gate by default. The gate (`bin/sift`) may call a local
+      // SIFT executor (`SIFT_WRAPPER=$PWD/bin/sift-local`) or a VM bridge, but SIFT_WRAPPER itself
+      // is the raw executor and should not bypass the gate here.
+      const wrapper = process.env.CSIFT_SIFT_WRAPPER || resolve(__dir, '../bin/sift');
       try {
         const fresh = execFileSync(wrapper, [r.cmd], { encoding: 'utf8', maxBuffer: 1e8, timeout: 180000 });
         const fh = sha(fresh);

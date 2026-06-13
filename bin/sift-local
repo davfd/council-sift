@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Raw local SIFT executor for no-SSH deployments.
+# Use as the *underlying* executor behind the gated bin/sift boundary:
+#   export SIFT_WRAPPER="$PWD/bin/sift-local"
+#   bin/sift 'vol -q -f /path/to/memory.img windows.psscan'
+# bin/sift performs Council-SIFT authorization before this file runs.
+set -euo pipefail
+
+parent_cmdline="$(tr '\0' ' ' < "/proc/${PPID}/cmdline" 2>/dev/null || true)"
+expected_parent="${COUNCILSIFT_GATE_PARENT:-}"
+if [[ -z "$expected_parent" ]] || { [[ "$parent_cmdline" != *"$expected_parent"* ]] && [[ ! "$parent_cmdline" =~ (^|[[:space:]/])bin/sift([[:space:]]|$) ]]; }; then
+  echo "[sift-local] REFUSED: call bin/sift, not the raw local executor" >&2
+  exit 13
+fi
+
+if [ "$#" -eq 0 ]; then
+  exec "${SHELL:-/bin/bash}"
+fi
+if [ "$#" -eq 1 ]; then
+  exec bash -lc "$1"
+fi
+exec "$@"
