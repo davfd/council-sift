@@ -3,7 +3,7 @@
 Council verdict after reading the FIND EVIL website directly:
 
 - Core video is right: **wrong claim → Council bounce → self-correction → receipt → guardrail**.
-- Patch required and now included: show the **actual Accuracy Report**, explicitly name all 3 official scenarios, say evidence is read-only / spoliation-tested, and mention setup/re-run docs.
+- Patch required and now included: show the **actual Accuracy Report**, explicitly name all 3 official scenarios, say evidence is read-only / spoliation-tested, label the no-key replay harness, and hand judges the three-finding trace path.
 
 Record from David’s recording workspace:
 
@@ -36,6 +36,8 @@ sed -n '1,35p' README.md
 > The novel contribution is an adversarial verification Council plus architectural guardrails that make autonomous findings traceable, refutable, and harder to hallucinate. The analyst cites real tool output; the Council tries to refute the claim; unsupported claims bounce back for self-correction; supported claims receive hash-chained receipts.
 >
 > The memory and review layer is a ten-tool Model Context Protocol server backed by Neo4j.
+>
+> This video is orientation; the repo carries the receipts — the accuracy report, execution logs, trace records, and setup path.
 
 ---
 
@@ -63,13 +65,13 @@ bash analyst/srl_memory_demo.sh
 
 **Say while it runs:**
 
-> This is the required self-correction sequence on official SRL-2018 memory evidence. The tool is real Volatility 3 `windows.psscan`. It shows `Rar.exe`, PID 2524, on the file server.
+> This is the no-key replay harness for the required self-correction sequence on official SRL-2018 memory evidence. The findings are hardcoded so judges can rerun the loop without API credentials; the genuine live autonomous self-corrections, with real Claude Code timestamps and token usage, are in `execution-logs/AGENTIC.md` and `execution-logs/AGENTIC-SELFCORRECT.jsonl`. The tool output is real Volatility 3 `windows.psscan`: it shows `Rar.exe`, PID 2524, on the file server.
 >
 > The analyst overreaches. It says `Rar.exe` exfiltrated stolen data to the attacker's C2. That is exactly the kind of plausible but unsupported incident-response claim this system is designed to catch.
 >
 > The Council bounces it. Tool-semantics says a process listing cannot prove network activity or exfiltration. Inference says one process artifact cannot attribute intent to an attacker.
 >
-> Now watch the key moment: no human rewrites the finding. The analyst reads the objection and narrows the claim to what the evidence actually supports. `Rar.exe` is a data-staging indicator that warrants disk and timeline correlation. It is not proof of exfiltration.
+> Now watch the key moment: the claim is narrowed to what the evidence actually supports. `Rar.exe` is a data-staging indicator that warrants disk and timeline correlation. It is not proof of exfiltration.
 >
 > The corrected claim is re-reviewed, supported, traced to tool output, and receives a Council receipt.
 
@@ -90,6 +92,8 @@ sed -n '1,45p' reports/SRL-MEM.md
 **Say:**
 
 > This is the report output. It is not a raw log. It says what the evidence shows, what it does not show, the confidence, and the receipt link. The original C2 and attribution overclaim does not survive into the verified narrative.
+>
+> For the judge's three-finding trace, start with `F-analyst-SRL-MEM-002`: the static trace is here and in `execution-logs/SRL-MEM.md`; after setup, `node bridge/csift.mjs trace --rerun F-analyst-SRL-MEM-002` independently reruns the canonical concrete command.
 
 ---
 
@@ -138,7 +142,7 @@ sed -n '1,50p' accuracy-report/bench_real_report.md
 
 > The challenge asks for fewer hallucinated findings than the Protocol SIFT baseline. This is that measurement on real official-case tool output. With Council off, eighty-five of eighty-five unsupported claims reach review. With Council on, zero of eighty-five reach the human.
 >
-> We also report false positives, misses, and blind red-team precision separately instead of hiding them.
+> That 85/85 number is a scoped regression set, not a claim of global perfection. The blind red-team rescore on unseen findings reports 98.6% recall and 98.6% precision, with one false positive and one miss named in the report.
 
 ---
 
@@ -152,7 +156,7 @@ sed -n '37,56p' README.md
 
 **Say:**
 
-> The README has step-by-step setup, and the demo scripts replay the full loop without an API key, so a judge can re-run this locally on the SIFT workstation.
+> The README has step-by-step setup, a judge quick-trace table, and no-key core checks. Official-evidence replay requires SIFT plus the organizer evidence; this audited recording path uses the local SIFT VM bridge, while no-SSH local SIFT is supported and gate-verified without being separately fresh-clone E2E receipted here.
 >
 > Council-SIFT does not replace the human examiner. The human still decides who signs off; the Council receipt shows why the claim deserved to reach them.
 

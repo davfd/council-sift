@@ -98,6 +98,16 @@ The public repo README contains the full setup. The short path:
 4. Run no-key checks: `node eval/smoke_lifecycle.mjs`, `node eval/ablation.mjs`, `node eval/adversarial_evasions.mjs`, `node eval/trusted_execution_test.mjs`, `node eval/skeptic_panel_test.mjs`, and `python3 tests/test_bypass.py`.
 5. If a SIFT workstation and official evidence are available, set `SIFT_WRAPPER`, mount evidence read-only, run `bash analyst/srl_memory_demo.sh`, and trace the verified finding.
 
+For the judge's non-negotiable three-finding trace, start with these static markdown traces, then use `trace --rerun` for the canonical concrete command after setup:
+
+| Finding | Case | Static trace |
+|---|---|---|
+| `F-analyst-SRL-MEM-002` | SRL-2018 memory self-correction | `reports/SRL-MEM.md` + `execution-logs/SRL-MEM.md` |
+| `F-analyst-SRL18-DC-DISK-001` | SRL-2018 DC disk | `reports/SRL18-DC-DISK.md` + `execution-logs/SRL18-DC-DISK.md` |
+| `F-analyst-SRL2015-NFURY-001` | SRL-2015 memory | `reports/SRL2015-NFURY.md` + `execution-logs/SRL2015-NFURY.md` |
+
+Important video/log caveat: `analyst/srl_memory_demo.sh` and `execution-logs/SRL-MEM.md` are the no-key deterministic replay harness for the SRL memory correction. The genuine live autonomous self-corrections are indexed in `execution-logs/AGENTIC.md` and `execution-logs/AGENTIC-SELFCORRECT.jsonl`.
+
 Operator note: the polished packet has been pushed to public `main`. If any later edits are made before submission, re-push and verify with `git rev-parse HEAD` and `git ls-remote origin refs/heads/main` before final submission.
 
 ## Key judging points

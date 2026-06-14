@@ -7,8 +7,9 @@ For David's final recording, use the tighter cue card at
 [`docs/FINAL_RECORDING_CUE_CARD.md`](FINAL_RECORDING_CUE_CARD.md). This file keeps the longer rationale.
 
 Pre-roll (off camera): `scripts/migrate.sh` has run; the SIFT VM is up (`bin/sift 'echo ok'`); the
-official SRL-2018 evidence is mounted (`scripts/mount_evidence.sh`).
-Set the env once: `cd ~/council-sift && set -a; source claw-memory-core/.env; set +a; export PATH="$PWD/bin:$PATH"`.
+official evidence is mounted read-only. David's recording path uses the local SIFT VM bridge; no-SSH
+local SIFT is supported/gate-verified, but not separately fresh-clone official-evidence E2E receipted
+here. Set the env once: `cd /home/exor/council-sift-recording && set -a; source claw-memory-core/.env; set +a; export PATH="$PWD/bin:$PATH"`.
 
 ---
 
@@ -23,6 +24,9 @@ Neo4j, and the public ROCBA packet is curated from 30+ investigation/correction 
 ### 0:30–2:30 — Self-correction on REAL official evidence (THE required sequence)
 **Run:** `bash analyst/srl_memory_demo.sh`
 **Say (as it runs):**
+- "This is the no-key replay harness: findings are hardcoded so judges can re-run the loop without API
+  credentials. The genuine live autonomous self-corrections are in `execution-logs/AGENTIC.md` and
+  `execution-logs/AGENTIC-SELFCORRECT.jsonl`."
 - "This is the official **SRL-2018** memory image. We run **real Volatility 3 `windows.psscan`** in the
   SIFT VM — there's `Rar.exe`, PID 2524, on the file server."
 - "The analyst over-reaches: it claims `Rar.exe` **exfiltrated data to the attacker's C2**."
@@ -35,8 +39,9 @@ Neo4j, and the public ROCBA packet is curated from 30+ investigation/correction 
 - "Re-review: every seat SUPPORTED → **COUNCIL_VERIFIED**, and a hash-chained **Council Receipt** is emitted."
 
 ### 2:30–3:10 — Trace to the bytes, then the investigative narrative
-**Run:** `csift trace --rerun F-analyst-SRL-MEM-002` then `sed -n '1,40p' reports/SRL-MEM.md`
-**Say:** "Every finding traces to the exact tool execution. `trace --rerun` **independently re-executes**
+**Run:** `node bridge/csift.mjs trace --rerun F-analyst-SRL-MEM-002` then `sed -n '1,40p' reports/SRL-MEM.md`
+**Say:** "Every finding traces to the exact tool execution. For the judge's three-finding trace, start with
+`F-analyst-SRL-MEM-002`, `F-analyst-SRL18-DC-DISK-001`, and `F-analyst-SRL2015-NFURY-001` in the report/log markdown. `trace --rerun` **independently re-executes**
 the recorded `vol3` command through the SIFT VM and compares the **fresh** hash — proving SIFT actually
 produces it, not a fabricated string. And the agent's output isn't a raw log — it's a **structured
 investigative narrative**: what the evidence shows, the confidence, **what it does *not* support** (the
@@ -68,12 +73,12 @@ is tamper-evident."
 **Say:** "Not a one-shot. Across **36 real tool-output artifacts, 185 findings** on the injected-class
 regression benchmark: Council OFF lets **all 85 injected unsupported claims** reach the human; Council ON
 lets **zero** through, with **zero false positives on that template-scoped supported set**. Honest scope:
-the blind red-team report is the unseen precision signal and records 1 FP / 1 FN, and the external
+the blind red-team rescore is the unseen precision signal: 98.6% recall and 98.6% precision, with 1 FP / 1 FN, and the external
 vigia-cases run is supporting evidence rather than the deterministic-seat code path. We report those limits
 instead of hiding them."
 
 ### 4:55–5:00 — Close
-**Say:** "Council-SIFT doesn't replace the human sign-off — it raises the floor on what reaches them. The
+**Say:** "This video is orientation; the repo carries the receipts. Council-SIFT doesn't replace the human sign-off — it raises the floor on what reaches them. The
 approval secures *who* signed off; the Council Receipt secures *why* the claim deserved it. We secure the
 reasoning, before a human is ever asked to trust it."
 

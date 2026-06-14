@@ -44,6 +44,21 @@ node eval/adversarial_evasions.mjs   # expect: 67/67 caught, 0/36 false positive
 python3 tests/test_bypass.py         # expect: identity-kernel bypass suite: 13/13 passed
 ```
 
+**Judge quick trace — 3 minutes, no environment required for the static check:**
+
+| Finding | Case | What it demonstrates | Static trace |
+|---|---|---|---|
+| `F-analyst-SRL-MEM-002` | SRL-2018 memory | memory self-correction: `Rar.exe` is a staging indicator, not exfiltration proof | [`reports/SRL-MEM.md`](reports/SRL-MEM.md) + [`execution-logs/SRL-MEM.md`](execution-logs/SRL-MEM.md) |
+| `F-analyst-SRL18-DC-DISK-001` | SRL-2018 DC disk | disk evidence: `C:\temp` / credential-dump staging trace | [`reports/SRL18-DC-DISK.md`](reports/SRL18-DC-DISK.md) + [`execution-logs/SRL18-DC-DISK.md`](execution-logs/SRL18-DC-DISK.md) |
+| `F-analyst-SRL2015-NFURY-001` | SRL-2015 memory | memory baseline and timestamp grounding for the nfury host | [`reports/SRL2015-NFURY.md`](reports/SRL2015-NFURY.md) + [`execution-logs/SRL2015-NFURY.md`](execution-logs/SRL2015-NFURY.md) |
+
+Each row gives the judge's requested path: claim → tool execution → output hash → Council receipt.
+After full setup with SIFT/evidence present, the canonical concrete-command rerun is:
+
+```bash
+node bridge/csift.mjs trace --rerun F-analyst-SRL-MEM-002
+```
+
 **Six-criterion scorecard in one glance:**
 
 | Criterion | Signal |
