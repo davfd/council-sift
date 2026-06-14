@@ -1,3 +1,5 @@
+![Council-SIFT banner](docs/council-sift-banner.png)
+
 # Council-SIFT
 
 > **An adversarial verification Council for autonomous DFIR.**
